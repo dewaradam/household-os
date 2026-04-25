@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Household OS</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:       #0b0b12;
+      --surface:  #11111c;
+      --card:     #181826;
+      --card-h:   #1d1d30;
+      --border:   #24243a;
+      --border-h: #35355a;
+      --text:     #e8e8f2;
+      --muted:    #6464a0;
+      --dim:      #3a3a60;
+
+      --accent:   #7c6ff7;
+      --accent-d: rgba(124,111,247,.15);
+      --accent-b: rgba(124,111,247,.35);
+
+      --low:    #22c55e;
+      --med:    #eab308;
+      --high:   #f97316;
+      --risk:   #ef4444;
+
+      --low-d:  rgba(34,197,94,.12);
+      --med-d:  rgba(234,179,8,.12);
+      --high-d: rgba(249,115,22,.12);
+      --risk-d: rgba(239,68,68,.15);
+
+      --r:  12px;
+      --rs: 8px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      padding-bottom: 40px;
+    }
+
+    /* ── Header ── */
+    .hdr {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      gap: 12px;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo-icon {
+      width: 34px; height: 34px;
+      background: linear-gradient(135deg, #7c6ff7, #5b4de0);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 12px rgba(124,111,247,.4);
+    }
+    .logo-name { font-size: 17px; font-weight: 800; letter-spacing: -.4px; }
+    .logo-sub  { font-size: 10px; color: var(--muted); letter-spacing: .3px; margin-top: 1px; }
+
+    .sync-btn {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 8px 14px;
+      border-radius: var(--rs);
+      cursor: pointer;
+      font-size: 13px; font-weight: 500;
+      white-space: nowrap;
+      transition: all .18s;
+    }
+    .sync-btn:hover { border-color: var(--border-h); color: var(--text); }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 16px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tab {
+      padding: 13px 16px;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 13px; font-weight: 600;
+      border-bottom: 2px solid transparent;
+      transition: all .18s;
+      white-space: nowrap;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .tab.active    { color: var(--accent); border-bottom-color: var(--accent); }
+    .tab:hover:not(.active) { color: var(--text); }
+
+    .tbadge {
+      padding: 2px 7px;
+      border-radius: 12px;
+      font-size: 10px; font-weight: 700;
+      background: var(--risk); color: #fff;
+    }
+    .tbadge.done { background: var(--accent-d); color: var(--accent); }
+
+    /* ── Content wrapper ── */
+    .content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 20px 16px;
+    }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ── Stats bar ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 400px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--rs);
+      padding: 12px 10px;
+      text-align: center;
+    }
+    .stat-n { font-size: 26px; font-weight: 800; line-height: 1; }
+    .stat-l { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-top: 4px; }
+
+    /* ── Add task button ── */
+    .add-btn {
+      width: 100%;
+      padding: 13px;
+      background: transparent;
+      border: 2px dashed var(--border);
+      border-radius: var(--r);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px; font-weight: 500;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-bottom: 18px;
+      transition: all .18s;
+    }
+    .add-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-d); }
+    .add-btn svg { flex-shrink: 0; }
+
+    /* ── Task list ── */
+    .tlist { display: flex; flex-direction: column; gap: 10px; }
+
+    /* ── Task card ── */
+    .tcard {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--dim);
+      border-radius: var(--r);
+      padding: 14px 14px 12px;
+      transition: border-color .18s, background .18s;
+      animation: fadeIn .25s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .tcard:hover { background: var(--card-h); border-color: var(--border-h); }
+    .tcard.p-low          { border-left-color: var(--low); }
+    .tcard.p-medium       { border-left-color: var(--med); }
+    .tcard.p-high         { border-left-color: var(--high); }
+    .tcard.p-marital_risk { border-left-color: var(--risk); }
+
+    .tcard.done {
+      opacity: .55;
+      border-left-color: var(--dim) !important;
+    }
+    .tcard.done .tname { text-decoration: line-through; color: var(--muted); }
+
+    .thead { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 9px; }
+    .tname { font-size: 15px; font-weight: 600; line-height: 1.35; flex: 1; }
+
+    .risk-wrap { display: flex; flex-direction: column; align-items: center; min-width: 40px; }
+    .risk-n { font-size: 22px; font-weight: 900; line-height: 1; }
+    .risk-l { font-size: 9px; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); margin-top: 1px; }
+
+    .tmeta { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+
+    .badge {
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 11px; font-weight: 600;
+      border: 1px solid transparent;
+    }
+    .b-req  { background: var(--accent-d); color: var(--accent); border-color: var(--accent-b); }
+    .b-days { background: var(--card); color: var(--muted); border-color: var(--border); }
+    .b-time { background: rgba(78,205,196,.1); color: #4ecdc4; border-color: rgba(78,205,196,.2); }
+    .b-p-low          { background: var(--low-d);  color: var(--low);  border-color: rgba(34,197,94,.25); }
+    .b-p-medium       { background: var(--med-d);  color: var(--med);  border-color: rgba(234,179,8,.25); }
+    .b-p-high         { background: var(--high-d); color: var(--high); border-color: rgba(249,115,22,.25); }
+    .b-p-marital_risk { background: var(--risk-d); color: var(--risk); border-color: rgba(239,68,68,.3); }
+    .b-done { background: rgba(255,255,255,.04); color: var(--muted); border-color: var(--border); }
+
+    .tnotes {
+      font-size: 12px; color: var(--muted); line-height: 1.5;
+      margin-bottom: 10px;
+      padding: 8px 10px;
+      background: rgba(255,255,255,.03);
+      border-radius: 6px;
+      border-left: 2px solid var(--border);
+    }
+
+    .tfoot { display: flex; justify-content: flex-end; }
+    .done-btn {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--low-d);
+      border: 1px solid rgba(34,197,94,.3);
+      color: var(--low);
+      padding: 7px 14px;
+      border-radius: var(--rs);
+      cursor: pointer;
+      font-size: 12px; font-weight: 600;
+      transition: all .18s;
+    }
+    .done-btn:hover { background: rgba(34,197,94,.22); }
+
+    /* ── Empty state ── */
+    .empty {
+      text-align: center;
+      padding: 56px 20px;
+      color: var(--muted);
+    }
+    .empty-icon { font-size: 44px; margin-bottom: 14px; }
+    .empty h3 { font-size: 15px; color: var(--dim); margin-bottom: 6px; }
+    .empty p  { font-size: 13px; }
+
+    /* ── Quick match ── */
+    .qm-head { margin-bottom: 18px; }
+    .qm-title { font-size: 19px; font-weight: 800; margin-bottom: 4px; }
+    .qm-sub   { font-size: 13px; color: var(--muted); }
+
+    .time-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+    @media (max-width: 380px) { .time-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .tbtn {
+      padding: 13px 6px;
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: var(--rs);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 12px; font-weight: 600;
+      text-align: center;
+      transition: all .18s;
+    }
+    .tbtn .t-icon { font-size: 20px; margin-bottom: 5px; }
+    .tbtn:hover          { border-color: var(--border-h); color: var(--text); }
+    .tbtn.active         { background: var(--accent-d); border-color: var(--accent); color: var(--accent); }
+
+    /* ── Modal overlay ── */
+    .overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.72);
+      z-index: 200;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s;
+    }
+    .overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r) var(--r) 0 0;
+      width: 100%; max-width: 680px;
+      padding: 22px 18px 30px;
+      transform: translateY(100%);
+      transition: transform .3s cubic-bezier(.4,0,.2,1);
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+    .overlay.open .modal { transform: translateY(0); }
+
+    @media (min-width: 680px) {
+      .overlay { align-items: center; }
+      .modal {
+        border-radius: var(--r);
+        transform: translateY(24px) scale(.97);
+        max-height: 88vh;
+      }
+      .overlay.open .modal { transform: translateY(0) scale(1); }
+    }
+
+    .mhdr {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .mtitle { font-size: 17px; font-weight: 800; }
+    .xbtn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      transition: all .18s;
+    }
+    .xbtn:hover { color: var(--text); background: var(--card-h); }
+
+    /* ── Form ── */
+    .fg { margin-bottom: 14px; }
+    .fl {
+      display: block;
+      font-size: 11px; font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase; letter-spacing: .8px;
+      margin-bottom: 6px;
+    }
+    input[type=text], textarea, select {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--rs);
+      color: var(--text);
+      padding: 10px 12px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color .18s;
+      font-family: inherit;
+    }
+    input[type=text]:focus, textarea:focus, select:focus { border-color: var(--accent); }
+    input[type=text]::placeholder, textarea::placeholder { color: var(--dim); }
+    textarea { resize: vertical; min-height: 74px; }
+    select option { background: var(--card); }
+
+    /* Priority grid */
+    .pg { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .po {
+      padding: 10px 4px;
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: var(--rs);
+      cursor: pointer;
+      text-align: center;
+      font-size: 11px; font-weight: 700;
+      line-height: 1.3;
+      transition: all .18s;
+      text-transform: uppercase; letter-spacing: .3px;
+    }
+    .po[data-p=low]          { color: var(--low); }
+    .po[data-p=medium]       { color: var(--med); }
+    .po[data-p=high]         { color: var(--high); }
+    .po[data-p=marital_risk] { color: var(--risk); }
+    .po.sel[data-p=low]          { background: var(--low-d);  border-color: var(--low); }
+    .po.sel[data-p=medium]       { background: var(--med-d);  border-color: var(--med); }
+    .po.sel[data-p=high]         { background: var(--high-d); border-color: var(--high); }
+    .po.sel[data-p=marital_risk] { background: var(--risk-d); border-color: var(--risk); }
+
+    .submit {
+      width: 100%;
+      padding: 13px;
+      background: var(--accent);
+      border: none;
+      border-radius: var(--rs);
+      color: #fff;
+      font-size: 14px; font-weight: 700;
+      cursor: pointer;
+      margin-top: 18px;
+      transition: all .18s;
+      letter-spacing: .2px;
+    }
+    .submit:hover  { background: #6b5ce7; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(124,111,247,.4); }
+    .submit:active { transform: translateY(0); box-shadow: none; }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--rs);
+      padding: 10px 18px;
+      font-size: 13px; font-weight: 500;
+      z-index: 400;
+      transition: transform .28s cubic-bezier(.4,0,.2,1), opacity .28s;
+      opacity: 0;
+      white-space: nowrap;
+      box-shadow: 0 4px 24px rgba(0,0,0,.4);
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ── Section label ── */
+    .slabel {
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px;
+      color: var(--dim);
+      margin-bottom: 10px;
+      padding: 0 2px;
+    }
+
+    /* Completing animation */
+    .completing { animation: completing .35s ease forwards; }
+    @keyframes completing {
+      0%  { transform: scale(1); opacity: 1; }
+      40% { transform: scale(1.02); }
+      100%{ transform: scale(.96); opacity: 0; height: 0; padding: 0; margin: 0; overflow: hidden; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="hdr">
+  <div class="logo">
+    <div class="logo-icon">🏠</div>
+    <div>
+      <div class="logo-name">Household OS</div>
+      <div class="logo-sub">Task Command Center</div>
+    </div>
+  </div>
+  <button class="sync-btn" onclick="skylightSync()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    Skylight Sync
+  </button>
+</header>
+
+<!-- ── TABS ── -->
+<nav class="tabs">
+  <div class="tab active" id="tab-tasks" onclick="switchTab('tasks')">
+    Open Tasks
+    <span class="tbadge" id="badge-open" style="display:none"></span>
+  </div>
+  <div class="tab" id="tab-quick" onclick="switchTab('quick')">
+    Quick Match
+  </div>
+  <div class="tab" id="tab-done" onclick="switchTab('done')">
+    Completed
+    <span class="tbadge done" id="badge-done" style="display:none"></span>
+  </div>
+</nav>
+
+<!-- ── OPEN TASKS PANEL ── -->
+<div id="panel-tasks" class="panel active">
+  <div class="content">
+    <div class="stats" id="stats"></div>
+
+    <button class="add-btn" onclick="openModal()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add New Task
+    </button>
+
+    <div id="tlist-open" class="tlist"></div>
+  </div>
+</div>
+
+<!-- ── QUICK MATCH PANEL ── -->
+<div id="panel-quick" class="panel">
+  <div class="content">
+    <div class="qm-head">
+      <div class="qm-title">What can I do right now?</div>
+      <div class="qm-sub">Select how much time you have</div>
+    </div>
+    <div class="time-grid">
+      <button class="tbtn" data-min="15" onclick="pickTime(this)">
+        <div class="t-icon">⚡</div>15 min
+      </button>
+      <button class="tbtn" data-min="30" onclick="pickTime(this)">
+        <div class="t-icon">🕐</div>30 min
+      </button>
+      <button class="tbtn" data-min="60" onclick="pickTime(this)">
+        <div class="t-icon">⏰</div>1 hour
+      </button>
+      <button class="tbtn" data-min="9999" onclick="pickTime(this)">
+        <div class="t-icon">📅</div>2 hrs+
+      </button>
+    </div>
+    <div id="tlist-quick" class="tlist"></div>
+  </div>
+</div>
+
+<!-- ── DONE PANEL ── -->
+<div id="panel-done" class="panel">
+  <div class="content">
+    <div id="tlist-done" class="tlist"></div>
+  </div>
+</div>
+
+<!-- ── ADD TASK MODAL ── -->
+<div class="overlay" id="overlay" onclick="overlayClick(event)">
+  <div class="modal" id="modal">
+    <div class="mhdr">
+      <div class="mtitle">New Task</div>
+      <button class="xbtn" onclick="closeModal()">✕</button>
+    </div>
+
+    <div class="fg">
+      <label class="fl">Task Name <span style="color:var(--risk)">*</span></label>
+      <input type="text" id="f-name" placeholder="What needs to get done?" />
+    </div>
+
+    <div class="fg">
+      <label class="fl">Notes</label>
+      <textarea id="f-notes" placeholder="Any extra context or details…"></textarea>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+      <div class="fg" style="margin-bottom:0">
+        <label class="fl">Requested By</label>
+        <input type="text" id="f-req" value="Wife" />
+      </div>
+      <div class="fg" style="margin-bottom:0">
+        <label class="fl">Estimated Time</label>
+        <select id="f-time">
+          <option value="15">15 minutes</option>
+          <option value="30">30 minutes</option>
+          <option value="60" selected>1 hour</option>
+          <option value="120">2 hours</option>
+          <option value="180">3+ hours</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="fg" style="margin-top:14px">
+      <label class="fl">Priority</label>
+      <div class="pg">
+        <div class="po" data-p="low"          onclick="selPriority('low')">Low</div>
+        <div class="po sel" data-p="medium"   onclick="selPriority('medium')">Medium</div>
+        <div class="po" data-p="high"         onclick="selPriority('high')">High</div>
+        <div class="po" data-p="marital_risk" onclick="selPriority('marital_risk')">⚠️ Marital Risk</div>
+      </div>
+    </div>
+
+    <button class="submit" onclick="addTask()">Add Task</button>
+  </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── State ──────────────────────────────────────────────────────────────
+  let tasks = JSON.parse(localStorage.getItem('hos-tasks') || '[]');
+  let activePriority = 'medium';
+  let activeTime = null;
+
+  const PRIORITY_RANK  = { marital_risk: 4, high: 3, medium: 2, low: 1 };
+  const PRIORITY_LABEL = { low: 'Low', medium: 'Medium', high: 'High', marital_risk: '⚠️ Marital Risk' };
+  const TIME_LABEL     = { 15: '15 min', 30: '30 min', 60: '1 hour', 120: '2 hours', 180: '3+ hours' };
+
+  // ── Persistence ────────────────────────────────────────────────────────
+  function save() { localStorage.setItem('hos-tasks', JSON.stringify(tasks)); }
+
+  // ── Utilities ──────────────────────────────────────────────────────────
+  function esc(s) {
+    const d = document.createElement('div');
+    d.textContent = s || '';
+    return d.innerHTML;
+  }
+
+  function daysAgoLabel(ts) {
+    const d = Math.floor((Date.now() - ts) / 86400000);
+    if (d === 0) return 'Added today';
+    if (d === 1) return '1 day ago';
+    return `${d} days ago`;
+  }
+
+  function sortOpen(list) {
+    return [...list].sort((a, b) => {
+      const pd = (PRIORITY_RANK[b.priority] || 0) - (PRIORITY_RANK[a.priority] || 0);
+      return pd !== 0 ? pd : b.createdAt - a.createdAt;
+    });
+  }
+
+  function risk(t) {
+    const base     = { low: 1, medium: 3, high: 5, marital_risk: 8 }[t.priority] || 1;
+    const mult     = /wife/i.test(t.requester) ? 1.5 : 1;
+    const days     = Math.floor((Date.now() - t.createdAt) / 86400000);
+    const dayBonus = Math.min(days * 0.5, 4.5);
+    return Math.min(10, Math.round(base * mult + dayBonus));
+  }
+
+  function riskColor(n) {
+    if (n <= 2) return '#22c55e';
+    if (n <= 4) return '#a3e635';
+    if (n <= 6) return '#eab308';
+    if (n <= 8) return '#f97316';
+    return '#ef4444';
+  }
+
+  // ── Card HTML ──────────────────────────────────────────────────────────
+  function cardHTML(t, opts = {}) {
+    const { showRisk = true, showComplete = true } = opts;
+    const r = risk(t);
+    const rc = riskColor(r);
+
+    return `
+    <div class="tcard p-${t.priority}${t.completed ? ' done' : ''}" id="card-${t.id}">
+      <div class="thead">
+        <div class="tname">${esc(t.name)}</div>
+        ${showRisk ? `
+        <div class="risk-wrap">
+          <div class="risk-n" style="color:${rc}">${r}</div>
+          <div class="risk-l">risk</div>
+        </div>` : ''}
+      </div>
+      <div class="tmeta">
+        <span class="badge b-req">${esc(t.requester)}</span>
+        <span class="badge b-days">${daysAgoLabel(t.createdAt)}</span>
+        <span class="badge b-time">🕐 ${TIME_LABEL[t.estimatedTime] || t.estimatedTime + ' min'}</span>
+        <span class="badge b-p-${t.priority}">${PRIORITY_LABEL[t.priority] || t.priority}</span>
+        ${t.completed ? `<span class="badge b-done">✓ Done ${daysAgoLabel(t.completedAt)}</span>` : ''}
+      </div>
+      ${t.notes ? `<div class="tnotes">${esc(t.notes)}</div>` : ''}
+      ${showComplete && !t.completed ? `
+      <div class="tfoot">
+        <button class="done-btn" onclick="completeTask('${t.id}')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Mark Complete
+        </button>
+      </div>` : ''}
+    </div>`;
+  }
+
+  // ── Render ─────────────────────────────────────────────────────────────
+  function render() {
+    const open = sortOpen(tasks.filter(t => !t.completed));
+    const done = tasks.filter(t => t.completed).sort((a, b) => b.completedAt - a.completedAt);
+
+    // Badges
+    const highRisk = open.filter(t => risk(t) >= 8).length;
+    const bo = document.getElementById('badge-open');
+    const bd = document.getElementById('badge-done');
+
+    if (open.length) {
+      bo.style.display = '';
+      bo.textContent = open.length;
+      bo.style.background = highRisk ? 'var(--risk)' : 'var(--accent)';
+    } else {
+      bo.style.display = 'none';
+    }
+
+    if (done.length) { bd.style.display = ''; bd.textContent = done.length; }
+    else             { bd.style.display = 'none'; }
+
+    // Stats
+    document.getElementById('stats').innerHTML = [
+      { n: open.length, l: 'Open',          c: 'var(--accent)' },
+      { n: open.filter(t => t.priority === 'marital_risk').length, l: 'Marital Risk', c: 'var(--risk)' },
+      { n: open.filter(t => t.priority === 'high').length,         l: 'High',         c: 'var(--high)' },
+      { n: done.length, l: 'Completed',     c: 'var(--low)' },
+    ].map(s => `
+      <div class="stat">
+        <div class="stat-n" style="color:${s.c}">${s.n}</div>
+        <div class="stat-l">${s.l}</div>
+      </div>
+    `).join('');
+
+    // Open tasks list
+    const el = document.getElementById('tlist-open');
+    el.innerHTML = open.length ? open.map(t => cardHTML(t)).join('') : `
+      <div class="empty">
+        <div class="empty-icon">🎉</div>
+        <h3>All caught up!</h3>
+        <p>No open tasks. Click <strong>Add New Task</strong> to get started.</p>
+      </div>`;
+
+    // Done list
+    const dl = document.getElementById('tlist-done');
+    dl.innerHTML = done.length ? done.map(t => cardHTML(t, { showRisk: false, showComplete: false })).join('') : `
+      <div class="empty">
+        <div class="empty-icon">📋</div>
+        <h3>Nothing completed yet</h3>
+        <p>Finished tasks will appear here.</p>
+      </div>`;
+
+    // Quick match (if time selected)
+    if (activeTime !== null) renderQuick(activeTime);
+  }
+
+  function renderQuick(minutes) {
+    const fits = { 15: [15], 30: [15,30], 60: [15,30,60], 9999: [15,30,60,120,180] };
+    const allowed = fits[minutes] || [];
+    const open  = sortOpen(tasks.filter(t => !t.completed));
+    const matched = open.filter(t => allowed.includes(Number(t.estimatedTime)));
+
+    document.getElementById('tlist-quick').innerHTML = matched.length
+      ? matched.map(t => cardHTML(t)).join('')
+      : `<div class="empty">
+           <div class="empty-icon">🔍</div>
+           <h3>No matching tasks</h3>
+           <p>No open tasks fit in this time window.</p>
+         </div>`;
+  }
+
+  // ── Tab switching ──────────────────────────────────────────────────────
+  function switchTab(id) {
+    ['tasks','quick','done'].forEach(t => {
+      document.getElementById(`tab-${t}`).classList.toggle('active', t === id);
+      document.getElementById(`panel-${t}`).classList.toggle('active', t === id);
+    });
+  }
+
+  // ── Quick match time ───────────────────────────────────────────────────
+  function pickTime(btn) {
+    document.querySelectorAll('.tbtn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeTime = Number(btn.dataset.min);
+    renderQuick(activeTime);
+  }
+
+  // ── Modal ──────────────────────────────────────────────────────────────
+  function openModal() {
+    document.getElementById('overlay').classList.add('open');
+    setTimeout(() => document.getElementById('f-name').focus(), 300);
+  }
+  function closeModal() { document.getElementById('overlay').classList.remove('open'); }
+  function overlayClick(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
+
+  // ── Priority selector ──────────────────────────────────────────────────
+  function selPriority(p) {
+    activePriority = p;
+    document.querySelectorAll('.po').forEach(el =>
+      el.classList.toggle('sel', el.dataset.p === p));
+  }
+
+  // ── Add task ───────────────────────────────────────────────────────────
+  function addTask() {
+    const name = document.getElementById('f-name').value.trim();
+    if (!name) {
+      const el = document.getElementById('f-name');
+      el.style.borderColor = 'var(--risk)';
+      el.focus();
+      setTimeout(() => el.style.borderColor = '', 1800);
+      return;
+    }
+
+    tasks.push({
+      id:            crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2),
+      name,
+      notes:         document.getElementById('f-notes').value.trim(),
+      requester:     document.getElementById('f-req').value.trim() || 'Wife',
+      priority:      activePriority,
+      estimatedTime: Number(document.getElementById('f-time').value),
+      createdAt:     Date.now(),
+      completed:     false,
+      completedAt:   null,
+    });
+
+    save();
+    render();
+    closeModal();
+    resetForm();
+    toast('✓ Task added');
+  }
+
+  function resetForm() {
+    document.getElementById('f-name').value  = '';
+    document.getElementById('f-notes').value = '';
+    document.getElementById('f-req').value   = 'Wife';
+    document.getElementById('f-time').value  = '60';
+    selPriority('medium');
+  }
+
+  // ── Complete task ──────────────────────────────────────────────────────
+  function completeTask(id) {
+    const t = tasks.find(x => x.id === id);
+    if (!t) return;
+
+    const card = document.getElementById('card-' + id);
+    if (card) {
+      card.classList.add('completing');
+      card.addEventListener('animationend', () => {
+        t.completed   = true;
+        t.completedAt = Date.now();
+        save();
+        render();
+      }, { once: true });
+    } else {
+      t.completed   = true;
+      t.completedAt = Date.now();
+      save();
+      render();
+    }
+    toast('🎉 Task complete!');
+  }
+
+  // ── Toast ──────────────────────────────────────────────────────────────
+  let toastTimer;
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+  }
+
+  // ── Skylight sync ──────────────────────────────────────────────────────
+  function skylightSync() { toast('☀️ Skylight sync coming soon'); }
+
+  // ── Keyboard shortcuts ─────────────────────────────────────────────────
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openModal(); }
+    if (e.key === 'Enter' && document.activeElement.id === 'f-name') addTask();
+  });
+
+  // ── Init ───────────────────────────────────────────────────────────────
+  render();
+</script>
+</body>
+</html>

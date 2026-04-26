@@ -433,6 +433,76 @@
       40% { transform: scale(1.02); }
       100%{ transform: scale(.96); opacity: 0; height: 0; padding: 0; margin: 0; overflow: hidden; }
     }
+
+    /* ── Brittany reaction ── */
+    .b-reaction {
+      display: flex; align-items: flex-start; gap: 8px;
+      margin-top: 8px; padding: 8px 10px;
+      background: rgba(255,182,193,.07);
+      border: 1px solid rgba(255,182,193,.18);
+      border-radius: 8px;
+    }
+    .b-reaction-emoji { font-size: 18px; line-height: 1.1; flex-shrink: 0; }
+    .b-reaction-body { flex: 1; }
+    .b-reaction-label { font-size: 10px; color: #ffb6c1; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 3px; }
+    .b-reaction-note { font-size: 12px; color: #f0c4cf; line-height: 1.45; font-style: italic; }
+
+    /* ── Share modal ── */
+    .share-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.72);
+      z-index: 300;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s;
+    }
+    .share-overlay.open { opacity: 1; pointer-events: all; }
+    .share-modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      width: 100%; max-width: 420px;
+      padding: 22px 20px 24px;
+      transform: scale(.95);
+      transition: transform .25s cubic-bezier(.4,0,.2,1);
+    }
+    .share-overlay.open .share-modal { transform: scale(1); }
+    .share-title { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+    .share-task-name {
+      font-size: 13px; color: var(--muted);
+      margin-bottom: 14px; line-height: 1.4;
+      padding: 8px 10px;
+      background: var(--card);
+      border-radius: 6px;
+      border-left: 2px solid var(--accent);
+    }
+    .share-sub { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+    .share-link-row {
+      display: flex; gap: 8px; align-items: center;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--rs); padding: 10px 12px;
+      margin-bottom: 12px;
+    }
+    .share-link-text {
+      flex: 1; font-size: 11px; color: var(--muted);
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      font-family: monospace;
+    }
+    .copy-btn {
+      background: var(--accent); border: none; color: #fff;
+      padding: 6px 14px; border-radius: 6px;
+      cursor: pointer; font-size: 12px; font-weight: 600;
+      flex-shrink: 0; transition: opacity .15s;
+    }
+    .copy-btn:hover { opacity: .85; }
+    .share-close {
+      width: 100%; padding: 11px; background: transparent;
+      border: 1px solid var(--border); border-radius: var(--rs);
+      color: var(--muted); cursor: pointer;
+      font-size: 13px; font-weight: 500; transition: all .15s;
+    }
+    .share-close:hover { color: var(--text); border-color: var(--border-h); }
   </style>
 </head>
 <body>
@@ -565,6 +635,20 @@
 <!-- ── TOAST ── -->
 <div class="toast" id="toast"></div>
 
+<!-- ── SHARE MODAL ── -->
+<div class="share-overlay" id="share-overlay" onclick="shareOverlayClick(event)">
+  <div class="share-modal">
+    <div class="share-title">🎉 Task complete!</div>
+    <div class="share-task-name" id="share-task-name"></div>
+    <div class="share-sub">Send Brittany a link so she can react:</div>
+    <div class="share-link-row">
+      <div class="share-link-text" id="share-link-text"></div>
+      <button class="copy-btn" onclick="copyLink()">Copy</button>
+    </div>
+    <button class="share-close" onclick="closeShareModal()">Maybe later</button>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   // ── Supabase ───────────────────────────────────────────────────────────
@@ -585,15 +669,18 @@
   // ── Data mapping ───────────────────────────────────────────────────────
   function rowToTask(row) {
     return {
-      id:            row.id,
-      name:          row.name,
-      notes:         row.notes || '',
-      requester:     row.requester,
-      priority:      row.priority,
-      estimatedTime: row.estimated_minutes,
-      createdAt:     new Date(row.created_at).getTime(),
-      completed:     row.completed,
-      completedAt:   row.completed_at ? new Date(row.completed_at).getTime() : null,
+      id:                row.id,
+      name:              row.name,
+      notes:             row.notes || '',
+      requester:         row.requester,
+      priority:          row.priority,
+      estimatedTime:     row.estimated_minutes,
+      createdAt:         new Date(row.created_at).getTime(),
+      completed:         row.completed,
+      completedAt:       row.completed_at ? new Date(row.completed_at).getTime() : null,
+      brittanyReaction:  row.brittany_reaction || null,
+      brittanyNote:      row.brittany_note || null,
+      brittanyReactedAt: row.brittany_reacted_at ? new Date(row.brittany_reacted_at).getTime() : null,
     };
   }
 
@@ -684,6 +771,14 @@
         ${t.completed ? `<span class="badge b-done">✓ Done ${daysAgoLabel(t.completedAt)}</span>` : ''}
       </div>
       ${t.notes ? `<div class="tnotes">${esc(t.notes)}</div>` : ''}
+      ${t.completed && t.brittanyReaction ? `
+      <div class="b-reaction">
+        <div class="b-reaction-emoji">${esc(t.brittanyReaction)}</div>
+        <div class="b-reaction-body">
+          <div class="b-reaction-label">Brittany reacted</div>
+          ${t.brittanyNote ? `<div class="b-reaction-note">${esc(t.brittanyNote)}</div>` : ''}
+        </div>
+      </div>` : ''}
       ${showComplete && !t.completed ? `
       <div class="tfoot">
         <button class="done-btn" onclick="completeTask('${t.id}')">
@@ -849,6 +944,7 @@
       t.completed   = true;
       t.completedAt = Date.now();
       render();
+      showShareModal(id, t.name);
     };
 
     if (card) {
@@ -870,12 +966,34 @@
     toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
   }
 
+  // ── Share modal ────────────────────────────────────────────────────────
+  let _shareLink = '';
+  function showShareModal(taskId, taskName) {
+    _shareLink = `https://dewaradam.github.io/household-os/brittany.html?task=${taskId}`;
+    document.getElementById('share-task-name').textContent = taskName;
+    document.getElementById('share-link-text').textContent = _shareLink;
+    document.getElementById('share-overlay').classList.add('open');
+  }
+  function closeShareModal() {
+    document.getElementById('share-overlay').classList.remove('open');
+  }
+  function shareOverlayClick(e) {
+    if (e.target === document.getElementById('share-overlay')) closeShareModal();
+  }
+  function copyLink() {
+    navigator.clipboard.writeText(_shareLink).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+    });
+  }
+
   // ── Skylight sync ──────────────────────────────────────────────────────
   function skylightSync() { toast('☀️ Skylight sync coming soon'); }
 
   // ── Keyboard shortcuts ─────────────────────────────────────────────────
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeModal();
+    if (e.key === 'Escape') { closeModal(); closeShareModal(); }
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openModal(); }
     if (e.key === 'Enter' && document.activeElement.id === 'f-name') addTask();
   });

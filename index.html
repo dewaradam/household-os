@@ -565,9 +565,16 @@
 <!-- ── TOAST ── -->
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+  // ── Supabase ───────────────────────────────────────────────────────────
+  const _sb = supabase.createClient(
+    'https://lcghspaeauqyssrkhizu.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjZ2hzcGFlYXVxeXNzcmtoaXp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNTY0ODksImV4cCI6MjA5MjczMjQ4OX0._D6C8MpPpo8hG41BHLEh_7Ahgcdu89AYNvUGPHuEiYY'
+  );
+
   // ── State ──────────────────────────────────────────────────────────────
-  let tasks = JSON.parse(localStorage.getItem('hos-tasks') || '[]');
+  let tasks = [];
   let activePriority = 'medium';
   let activeTime = null;
 
@@ -575,8 +582,46 @@
   const PRIORITY_LABEL = { low: 'Low', medium: 'Medium', high: 'High', marital_risk: '⚠️ Marital Risk' };
   const TIME_LABEL     = { 15: '15 min', 30: '30 min', 60: '1 hour', 120: '2 hours', 180: '3+ hours' };
 
-  // ── Persistence ────────────────────────────────────────────────────────
-  function save() { localStorage.setItem('hos-tasks', JSON.stringify(tasks)); }
+  // ── Data mapping ───────────────────────────────────────────────────────
+  function rowToTask(row) {
+    return {
+      id:            row.id,
+      name:          row.name,
+      notes:         row.notes || '',
+      requester:     row.requester,
+      priority:      row.priority,
+      estimatedTime: row.estimated_minutes,
+      createdAt:     new Date(row.created_at).getTime(),
+      completed:     row.completed,
+      completedAt:   row.completed_at ? new Date(row.completed_at).getTime() : null,
+    };
+  }
+
+  // ── Load & realtime ────────────────────────────────────────────────────
+  async function loadTasks() {
+    const { data, error } = await _sb.from('tasks').select('*').order('created_at', { ascending: true });
+    if (error) { console.error('Load error:', error); return; }
+    tasks = (data || []).map(rowToTask);
+    render();
+  }
+
+  function setupRealtime() {
+    _sb.channel('tasks-rt')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, payload => {
+        if (payload.eventType === 'INSERT') {
+          if (!tasks.find(t => t.id === payload.new.id))
+            tasks.push(rowToTask(payload.new));
+        } else if (payload.eventType === 'UPDATE') {
+          const idx = tasks.findIndex(t => t.id === payload.new.id);
+          if (idx !== -1) tasks[idx] = rowToTask(payload.new);
+          else tasks.push(rowToTask(payload.new));
+        } else if (payload.eventType === 'DELETE') {
+          tasks = tasks.filter(t => t.id !== payload.old.id);
+        }
+        render();
+      })
+      .subscribe();
+  }
 
   // ── Utilities ──────────────────────────────────────────────────────────
   function esc(s) {
@@ -752,7 +797,7 @@
   }
 
   // ── Add task ───────────────────────────────────────────────────────────
-  function addTask() {
+  async function addTask() {
     const name = document.getElementById('f-name').value.trim();
     if (!name) {
       const el = document.getElementById('f-name');
@@ -762,19 +807,19 @@
       return;
     }
 
-    tasks.push({
-      id:            crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2),
+    const { data, error } = await _sb.from('tasks').insert({
       name,
-      notes:         document.getElementById('f-notes').value.trim(),
-      requester:     document.getElementById('f-req').value.trim() || 'Wife',
-      priority:      activePriority,
-      estimatedTime: Number(document.getElementById('f-time').value),
-      createdAt:     Date.now(),
-      completed:     false,
-      completedAt:   null,
-    });
+      notes:             document.getElementById('f-notes').value.trim(),
+      requester:         document.getElementById('f-req').value.trim() || 'Wife',
+      priority:          activePriority,
+      estimated_minutes: Number(document.getElementById('f-time').value),
+      completed:         false,
+      completed_at:      null,
+    }).select().single();
 
-    save();
+    if (error) { console.error('Insert error:', error); toast('❌ Failed to add task'); return; }
+
+    if (!tasks.find(t => t.id === data.id)) tasks.push(rowToTask(data));
     render();
     closeModal();
     resetForm();
@@ -795,19 +840,22 @@
     if (!t) return;
 
     const card = document.getElementById('card-' + id);
-    if (card) {
-      card.classList.add('completing');
-      card.addEventListener('animationend', () => {
-        t.completed   = true;
-        t.completedAt = Date.now();
-        save();
-        render();
-      }, { once: true });
-    } else {
+    const finish = async () => {
+      const now = new Date().toISOString();
+      const { error } = await _sb.from('tasks')
+        .update({ completed: true, completed_at: now })
+        .eq('id', id);
+      if (error) { console.error('Update error:', error); toast('❌ Failed to complete task'); return; }
       t.completed   = true;
       t.completedAt = Date.now();
-      save();
       render();
+    };
+
+    if (card) {
+      card.classList.add('completing');
+      card.addEventListener('animationend', finish, { once: true });
+    } else {
+      finish();
     }
     toast('🎉 Task complete!');
   }
@@ -833,7 +881,8 @@
   });
 
   // ── Init ───────────────────────────────────────────────────────────────
-  render();
+  loadTasks();
+  setupRealtime();
 </script>
 </body>
 </html>

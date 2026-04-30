@@ -1,393 +1,886 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Brittany's Reaction</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
-<style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Lato', sans-serif; background: #F5E8ED; min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 20px 0 60px; }
-.page { max-width: 400px; width: 100%; background: #FDF0F3; border-radius: 28px; overflow: hidden; box-shadow: 0 8px 40px rgba(100,30,50,0.12); }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Wifey's App 💕</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --rose:       #C96B7A;
+      --rose-deep:  #A84F5E;
+      --rose-light: #F7E8EB;
+      --rose-pale:  #FDF4F5;
+      --rose-border:rgba(201,107,122,0.25);
+      --blush:      #EFC9CE;
+      --sage:       #7A9E87;
+      --sage-light: #E8F2EB;
+      --cream:      #FBF7F4;
+      --warm-white: #FFFFFF;
+      --text-dark:  #2E1A20;
+      --text-mid:   #6B4450;
+      --text-soft:  #9C7280;
+      --text-faint: #C4A9B0;
+      --gold:       #C49A2A;
+      --gold-light: #F5E6B8;
+      --amber:      #D4880A;
+      --amber-light:#FEF3DC;
+      --red:        #E24B4A;
+      --red-light:  #FCEBEB;
+      --border:     rgba(201,107,122,0.15);
+      --border-mid: rgba(201,107,122,0.25);
+      --radius-sm:  8px;
+      --radius-md:  12px;
+      --radius-lg:  16px;
+      --radius-xl:  22px;
+    }
 
-/* ── HERO ── */
-.hero { background: #F9DDE5; border-bottom: 1px solid #F0C4CF; padding: 36px 24px 28px; text-align: center; }
-.rose-row { font-size: 24px; margin-bottom: 16px; letter-spacing: 4px; }
-.hero-eyebrow { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #C4738A; margin-bottom: 10px; }
-.hero-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 400; color: #4A1F2E; line-height: 1.3; margin-bottom: 6px; }
-.hero-title em { font-style: italic; color: #A63D5A; }
-.hero-sub { font-size: 13px; font-weight: 300; color: #8A4A5C; line-height: 1.55; }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-/* ── LOADING / ERROR ── */
-.state-msg { padding: 60px 24px; text-align: center; }
-.state-icon { font-size: 40px; margin-bottom: 16px; }
-.state-title { font-family: 'Playfair Display', serif; font-size: 20px; color: #4A1F2E; margin-bottom: 8px; }
-.state-sub { font-size: 13px; font-weight: 300; color: #8A4A5C; line-height: 1.55; }
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-/* ── TASK CARD ── */
-.task-card { margin: 20px 18px 0; background: #fff; border: 1px solid #F0C4CF; border-radius: 16px; padding: 16px 18px; }
-.task-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #C4738A; margin-bottom: 8px; }
-.task-text { font-family: 'Playfair Display', serif; font-size: 15px; color: #3D1525; line-height: 1.4; margin-bottom: 10px; }
-.task-meta { display: flex; gap: 7px; flex-wrap: wrap; }
-.task-pip { font-size: 11px; font-weight: 300; padding: 3px 10px; border-radius: 20px; background: #FDF0F3; border: 1px solid #F0C4CF; color: #8A4A5C; }
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(135deg, #C96B7A 0%, #A84F5E 60%, #8C3D4E 100%);
+      padding: 24px 20px 0;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-inner { max-width: 600px; margin: 0 auto; }
+    .header-eyebrow {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.6);
+      margin-bottom: 4px;
+    }
+    .header-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px; font-weight: 500; color: #fff;
+      line-height: 1.1; margin-bottom: 18px;
+      font-style: italic;
+    }
+    .header-title span { font-style: normal; }
 
-/* ── REACTIONS ── */
-.reaction-section { margin: 22px 18px 0; }
-.reaction-q { font-family: 'Playfair Display', serif; font-size: 17px; font-style: italic; color: #4A1F2E; text-align: center; margin-bottom: 14px; transition: color 0.2s; }
-.reactions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
-.reaction-btn {
-  background: #fff; border: 1.5px solid #F0C4CF; border-radius: 14px;
-  padding: 16px 12px 13px; text-align: center; cursor: pointer;
-  transition: all 0.15s; position: relative; user-select: none;
-}
-.reaction-btn:hover { border-color: #D4839A; background: #FEF6F8; transform: scale(1.02); }
-.reaction-btn.selected { border-color: #A63D5A; background: #F9DDE5; transform: scale(1.02); }
-.reaction-emoji { font-size: 28px; display: block; margin-bottom: 6px; }
-.reaction-name { font-size: 12px; font-weight: 400; color: #6B3045; line-height: 1.3; }
-.reaction-sub { font-size: 10px; font-weight: 300; color: #B4788A; margin-top: 3px; line-height: 1.35; }
-.finally-badge {
-  position: absolute; top: -8px; right: -8px;
-  background: #A63D5A; color: #fff; font-size: 9px;
-  padding: 2px 7px; border-radius: 20px; white-space: nowrap;
-}
+    /* ── TABS ── */
+    .tabs {
+      display: flex; gap: 0;
+      border-bottom: none;
+    }
+    .tab {
+      flex: 1; padding: 10px 4px 14px;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      border: none; background: transparent;
+      cursor: pointer; position: relative;
+      font-family: 'Lato', sans-serif;
+      transition: color 0.15s;
+    }
+    .tab.active { color: #fff; }
+    .tab.active::after {
+      content: '';
+      position: absolute; bottom: 0; left: 10%; right: 10%;
+      height: 2.5px; background: #fff;
+      border-radius: 2px 2px 0 0;
+    }
+    .tab-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      font-size: 10px; font-weight: 700;
+      margin-left: 5px; vertical-align: middle;
+      color: #fff;
+    }
+    .tab.active .tab-badge { background: rgba(255,255,255,0.4); }
 
-/* ── FINALLY WARNING ── */
-.finally-warning {
-  display: none; margin: 12px 18px 0;
-  background: #fff7ed; border: 1px solid #f5c88a;
-  border-radius: 12px; padding: 12px 16px;
-  font-family: 'Playfair Display', serif; font-style: italic;
-  font-size: 13px; color: #7A4A05; text-align: center; line-height: 1.55;
-}
-.finally-warning.visible { display: block; }
+    /* ── MAIN ── */
+    .main { max-width: 600px; margin: 0 auto; padding: 20px 16px 100px; }
 
-/* ── NOTE SECTION ── */
-.note-section { margin: 18px 18px 0; }
-.note-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #C4738A; margin-bottom: 8px; }
-.note-input-wrap { position: relative; }
-textarea {
-  width: 100%; background: #fff; border: 1px solid #F0C4CF;
-  border-radius: 12px; padding: 11px 13px;
-  font-family: 'Lato', sans-serif; font-size: 13px; font-weight: 300;
-  color: #4A1F2E; resize: none; outline: none; min-height: 68px;
-  transition: border-color 0.15s;
-}
-textarea::placeholder { color: #C4A0AA; }
-textarea:focus { border-color: #D4839A; }
+    /* ── PANEL ── */
+    .panel { display: none; }
+    .panel.active { display: block; }
 
-.note-preview {
-  display: none; margin-top: 10px;
-  background: #F9DDE5; border-radius: 18px 18px 4px 18px;
-  padding: 10px 14px; position: relative;
-}
-.note-preview.visible { display: block; }
-.note-preview-label { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: #C4738A; margin-bottom: 5px; }
-.note-preview-text { font-size: 13px; color: #4A1F2E; line-height: 1.5; font-style: italic; }
-.note-preview-tail {
-  position: absolute; bottom: -6px; left: 14px;
-  width: 14px; height: 14px; background: #F9DDE5;
-  clip-path: polygon(0 0, 100% 0, 0 100%);
-}
+    /* ── ADD TASK PANEL ── */
+    .add-hero {
+      background: var(--warm-white);
+      border: 0.5px solid var(--border-mid);
+      border-radius: var(--radius-xl);
+      padding: 22px 20px 20px;
+      margin-bottom: 16px;
+    }
+    .add-hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; font-weight: 500; font-style: italic;
+      color: var(--text-dark); margin-bottom: 4px;
+    }
+    .add-hero-sub { font-size: 13px; color: var(--text-soft); margin-bottom: 20px; }
 
-/* ── SUBMIT ── */
-.submit-btn {
-  display: block; margin: 18px 18px 0; width: calc(100% - 36px);
-  padding: 14px; background: #A63D5A; color: #fff; border: none;
-  border-radius: 12px; font-family: 'Playfair Display', serif;
-  font-size: 16px; cursor: pointer; transition: opacity 0.15s;
-}
-.submit-btn:hover { opacity: 0.88; }
-.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .form-group { margin-bottom: 14px; }
+    .form-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.07em;
+      text-transform: uppercase; color: var(--text-mid);
+      display: block; margin-bottom: 6px;
+    }
+    .form-textarea, .form-input, .form-select {
+      width: 100%; padding: 11px 13px;
+      border: 0.5px solid var(--border-mid);
+      border-radius: var(--radius-sm);
+      background: var(--rose-pale);
+      font-family: 'Lato', sans-serif; font-size: 14px;
+      color: var(--text-dark); outline: none;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .form-textarea { resize: vertical; min-height: 80px; }
+    .form-textarea:focus, .form-input:focus, .form-select:focus {
+      border-color: var(--rose); background: var(--warm-white);
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-/* ── FOOTER ── */
-.footer { text-align: center; padding: 24px 20px 28px; }
-.footer-roses { font-size: 18px; letter-spacing: 5px; color: #D4A0B0; margin-bottom: 8px; }
-.footer-note { font-size: 11px; font-weight: 300; color: #C4A0AA; font-style: italic; }
+    /* Priority pills */
+    .priority-row { display: flex; gap: 6px; flex-wrap: wrap; }
+    .priority-btn {
+      padding: 7px 13px; border-radius: 20px;
+      border: 1.5px solid var(--border-mid);
+      background: transparent; font-family: 'Lato', sans-serif;
+      font-size: 12px; font-weight: 700; cursor: pointer;
+      color: var(--text-soft); transition: all 0.15s;
+    }
+    .priority-btn.sel-low    { background: var(--sage-light); border-color: var(--sage); color: #3B6B4A; }
+    .priority-btn.sel-medium { background: var(--gold-light); border-color: var(--gold); color: #7A5808; }
+    .priority-btn.sel-high   { background: var(--amber-light); border-color: var(--amber); color: #7A4505; }
+    .priority-btn.sel-critical { background: var(--red-light); border-color: var(--red); color: #8C1F1F; }
 
-/* ── THANK YOU ── */
-.thankyou { display: none; padding: 48px 24px 50px; text-align: center; }
-.thankyou.visible { display: block; }
-.ty-big { font-size: 52px; margin-bottom: 18px; }
-.ty-title { font-family: 'Playfair Display', serif; font-size: 24px; color: #4A1F2E; font-style: italic; margin-bottom: 10px; }
-.ty-sub { font-size: 13px; font-weight: 300; color: #8A4A5C; line-height: 1.65; }
+    .btn-submit {
+      width: 100%; padding: 13px;
+      background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
+      color: #fff; border: none; border-radius: var(--radius-md);
+      font-family: 'Playfair Display', serif; font-size: 17px;
+      font-style: italic; cursor: pointer;
+      transition: opacity 0.15s; margin-top: 6px;
+    }
+    .btn-submit:hover { opacity: 0.88; }
+    .btn-submit:disabled { opacity: 0.5; cursor: default; }
 
-.ty-note-bubble {
-  display: none; margin: 20px auto 0; max-width: 280px;
-  background: #F9DDE5; border-radius: 18px 18px 4px 18px;
-  padding: 12px 16px; text-align: left; position: relative;
-}
-.ty-note-bubble.visible { display: block; }
-.ty-note-label { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: #C4738A; margin-bottom: 6px; }
-.ty-note-text { font-size: 13px; color: #4A1F2E; line-height: 1.5; font-style: italic; }
-.ty-note-tail {
-  position: absolute; bottom: -6px; left: 16px;
-  width: 14px; height: 14px; background: #F9DDE5;
-  clip-path: polygon(0 0, 100% 0, 0 100%);
-}
+    /* ── HIS LIST PANEL ── */
+    .list-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .list-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; font-style: italic; color: var(--text-dark);
+    }
+    .list-subtitle { font-size: 12px; color: var(--text-soft); margin-top: 2px; }
 
-.ty-roses { font-size: 20px; letter-spacing: 6px; color: #D4A0B0; margin-top: 28px; }
-</style>
+    .task-card {
+      background: var(--warm-white);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      margin-bottom: 8px;
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+    .task-card:hover { border-color: var(--rose-border); }
+
+    .task-card-body { padding: 13px 14px 11px; }
+    .task-card-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 7px; }
+    .task-priority-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px;
+    }
+    .dot-low      { background: var(--sage); }
+    .dot-medium   { background: var(--gold); }
+    .dot-high     { background: var(--amber); }
+    .dot-critical { background: var(--red); }
+    .dot-none     { background: var(--text-faint); }
+
+    .task-card-title {
+      font-size: 14px; line-height: 1.4; color: var(--text-dark); flex: 1;
+    }
+    .task-card-meta {
+      display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px;
+    }
+    .meta-chip {
+      font-size: 10px; padding: 2px 8px; border-radius: 20px;
+      background: var(--rose-pale); color: var(--text-mid);
+      border: 0.5px solid var(--rose-border);
+    }
+    .meta-chip.due-soon { background: var(--amber-light); color: #7A4505; border-color: rgba(212,136,10,0.3); }
+    .meta-chip.overdue  { background: var(--red-light); color: #8C1F1F; border-color: rgba(226,75,74,0.3); }
+    .meta-chip.priority-critical { background: var(--red-light); color: #8C1F1F; border-color: rgba(226,75,74,0.3); }
+
+    /* Action buttons */
+    .task-actions {
+      display: flex; gap: 5px; flex-wrap: wrap;
+      padding: 9px 14px 11px;
+      border-top: 0.5px solid var(--border);
+      background: var(--rose-pale);
+    }
+    .action-btn {
+      flex: 1; min-width: 0; padding: 7px 6px;
+      border-radius: var(--radius-sm); border: 0.5px solid var(--border-mid);
+      background: var(--warm-white); color: var(--text-mid);
+      font-family: 'Lato', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.03em; text-transform: uppercase;
+      cursor: pointer; text-align: center;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .action-btn:hover { background: var(--rose-light); border-color: var(--rose-border); color: var(--rose-deep); }
+    .action-btn.btn-top { color: var(--rose-deep); border-color: var(--rose-border); }
+    .action-btn.btn-top:hover { background: var(--rose-light); }
+    .action-btn.btn-delete { color: var(--red); border-color: rgba(226,75,74,0.25); }
+    .action-btn.btn-delete:hover { background: var(--red-light); border-color: rgba(226,75,74,0.5); }
+
+    /* ── COMPLETED PANEL ── */
+    .completed-card {
+      background: var(--warm-white);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      margin-bottom: 8px; overflow: hidden;
+    }
+    .completed-card-body { padding: 13px 14px; }
+    .completed-title {
+      font-size: 14px; line-height: 1.4;
+      text-decoration: line-through; color: var(--text-soft);
+      margin-bottom: 6px;
+    }
+    .completed-meta { font-size: 11px; color: var(--text-faint); margin-bottom: 8px; }
+
+    .reaction-block {
+      background: var(--rose-pale);
+      border: 0.5px solid var(--rose-border);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px; margin-bottom: 8px;
+    }
+    .reaction-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.07em; color: var(--rose); margin-bottom: 5px;
+    }
+
+    .react-row { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 8px; }
+    .react-btn {
+      padding: 5px 10px; border-radius: 20px;
+      border: 1px solid var(--rose-border);
+      background: var(--warm-white); font-size: 13px;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .react-btn:hover { background: var(--rose-light); border-color: var(--rose); }
+    .react-btn.selected { background: var(--rose-light); border-color: var(--rose); transform: scale(1.1); }
+
+    .reaction-textarea {
+      width: 100%; padding: 8px 10px;
+      border: 0.5px solid var(--border-mid);
+      border-radius: var(--radius-sm);
+      background: var(--warm-white);
+      font-family: 'Lato', sans-serif; font-size: 13px;
+      color: var(--text-dark); outline: none; resize: none;
+      min-height: 52px;
+      transition: border-color 0.15s;
+    }
+    .reaction-textarea:focus { border-color: var(--rose); }
+    .reaction-textarea::placeholder { color: var(--text-faint); }
+
+    .btn-react-submit {
+      width: 100%; padding: 9px; margin-top: 8px;
+      background: var(--rose); color: #fff; border: none;
+      border-radius: var(--radius-sm);
+      font-family: 'Lato', sans-serif; font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: opacity 0.15s;
+    }
+    .btn-react-submit:hover { opacity: 0.88; }
+
+    .already-reacted {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 10px; background: var(--rose-pale);
+      border-radius: var(--radius-sm);
+      font-size: 13px; color: var(--text-mid);
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      text-align: center; padding: 48px 24px;
+      color: var(--text-faint);
+    }
+    .empty-state-icon { font-size: 36px; margin-bottom: 12px; }
+    .empty-state-text { font-size: 14px; line-height: 1.6; }
+
+    /* ── PRIORITY MODAL ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(46,26,32,0.6);
+      align-items: flex-end; justify-content: center;
+    }
+    .modal-overlay.visible { display: flex; }
+    .modal {
+      background: var(--warm-white);
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      width: 100%; max-width: 600px;
+      padding: 24px 20px 40px;
+      animation: slideUp 0.22s ease-out;
+    }
+    @keyframes slideUp { from { transform: translateY(60px); opacity:0; } to { transform: translateY(0); opacity:1; } }
+    .modal-handle { width: 36px; height: 4px; background: var(--border-mid); border-radius: 2px; margin: 0 auto 18px; }
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; font-weight: 500; margin-bottom: 16px;
+    }
+    .modal-priority-row { display: flex; gap: 8px; margin-bottom: 16px; }
+    .modal-priority-btn {
+      flex: 1; padding: 10px 6px;
+      border-radius: var(--radius-sm); border: 1.5px solid var(--border-mid);
+      background: transparent; font-family: 'Lato', sans-serif;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.04em; cursor: pointer; color: var(--text-soft);
+      transition: all 0.15s; text-align: center;
+    }
+    .modal-priority-btn:hover { border-color: var(--rose); color: var(--rose); }
+    .btn-modal-cancel {
+      width: 100%; padding: 10px; background: transparent;
+      color: var(--text-faint); border: none;
+      font-family: 'Lato', sans-serif; font-size: 13px; cursor: pointer;
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: var(--text-dark); color: #fff;
+      padding: 10px 18px; border-radius: 30px;
+      font-size: 13px; z-index: 300;
+      border: 1px solid var(--rose-border);
+      transition: transform 0.25s, opacity 0.25s;
+      opacity: 0; pointer-events: none; white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    /* ── LOADING ── */
+    .loading-spinner {
+      text-align: center; padding: 40px 20px;
+      color: var(--text-faint); font-size: 13px;
+    }
+    .spinner {
+      width: 24px; height: 24px; border: 2px solid var(--rose-light);
+      border-top-color: var(--rose); border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--rose-border); border-radius: 2px; }
+  </style>
 </head>
 <body>
-<div class="page">
 
-  <div id="loading">
-    <div class="state-msg">
-      <div class="state-icon">🌸</div>
-      <div class="state-title">One moment…</div>
-      <div class="state-sub">Loading task details</div>
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-eyebrow">Household OS</div>
+    <div class="header-title"><span>Wifey's</span> App 💕</div>
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('add', this)">✍️ Add Task</button>
+      <button class="tab" onclick="switchTab('list', this)">📋 His List <span class="tab-badge" id="badge-list">0</span></button>
+      <button class="tab" onclick="switchTab('done', this)">✅ Done <span class="tab-badge" id="badge-done">0</span></button>
     </div>
   </div>
-
-  <div id="error" style="display:none">
-    <div class="state-msg">
-      <div class="state-icon">🥀</div>
-      <div class="state-title">Task not found</div>
-      <div class="state-sub">This link may be invalid or the task was removed.</div>
-    </div>
-  </div>
-
-  <div id="main" style="display:none">
-    <div class="hero">
-      <div class="rose-row">🌸 🌹 🌷 🌸 🌹</div>
-      <div class="hero-eyebrow">Adam wanted you to know</div>
-      <div class="hero-title">He took care of<br><em>something for you</em> 🌿</div>
-      <div class="hero-sub">One tap to let him know<br>how it made you feel</div>
-    </div>
-
-    <div class="task-card">
-      <div class="task-label">What he did</div>
-      <div class="task-text" id="task-name"></div>
-      <div class="task-meta" id="task-meta"></div>
-    </div>
-
-    <div class="reaction-section">
-      <div class="reaction-q" id="reaction-q">How does this make you feel?</div>
-      <div class="reactions-grid" id="reactions-grid"></div>
-    </div>
-
-    <div class="finally-warning" id="finally-warning"></div>
-
-    <div class="note-section">
-      <div class="note-label">Leave him a note (optional)</div>
-      <div class="note-input-wrap">
-        <textarea id="note-input" placeholder="Okay fine, I'm impressed..." oninput="updatePreview()"></textarea>
-        <div class="note-preview" id="note-preview">
-          <div class="note-preview-label">Adam will see</div>
-          <div class="note-preview-text" id="note-preview-text"></div>
-          <div class="note-preview-tail"></div>
-        </div>
-      </div>
-    </div>
-
-    <button class="submit-btn" id="submit-btn" onclick="submit()">Send my reaction 🌹</button>
-
-    <div class="footer">
-      <div class="footer-roses">🌸 🌿 🌸</div>
-      <div class="footer-note">Your reaction goes straight to Adam's app</div>
-    </div>
-  </div>
-
-  <div class="thankyou" id="thankyou">
-    <div class="ty-big">🌹</div>
-    <div class="ty-title">He's going to love this.</div>
-    <div class="ty-sub">Your reaction has been sent to Adam.<br>He'll see it next time he opens the app.<br><br>💛</div>
-    <div class="ty-note-bubble" id="ty-note-bubble">
-      <div class="ty-note-label">Your note to him</div>
-      <div class="ty-note-text" id="ty-note-final"></div>
-      <div class="ty-note-tail"></div>
-    </div>
-    <div class="ty-roses">🌸 🌿 🌹</div>
-  </div>
-
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ── ADD TASK PANEL ── -->
+  <div class="panel active" id="panel-add">
+    <div class="add-hero">
+      <div class="add-hero-title">Add something for Adam</div>
+      <div class="add-hero-sub">He'll see it at the top of his list, sorted by importance.</div>
+
+      <div class="form-group">
+        <label class="form-label">What needs doing?</label>
+        <textarea class="form-textarea" id="add-desc" placeholder="e.g. Get the dryer vent cleaned out before it's a fire hazard 😅"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">How important is this?</label>
+        <div class="priority-row" id="priority-row">
+          <button class="priority-btn" data-val="low"      onclick="selectPriority(this)">🌿 Low</button>
+          <button class="priority-btn" data-val="medium"   onclick="selectPriority(this)">✨ Medium</button>
+          <button class="priority-btn" data-val="high"     onclick="selectPriority(this)">⚡ High</button>
+          <button class="priority-btn" data-val="critical" onclick="selectPriority(this)">🚨 Critical</button>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Where does it happen?</label>
+          <select class="form-select" id="add-location">
+            <option value="indoors">Indoors</option>
+            <option value="outdoors">Outdoors</option>
+            <option value="errand">Errand / out</option>
+            <option value="online">Online / phone</option>
+            <option value="anywhere">Anywhere</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Due date (optional)</label>
+          <input class="form-input" id="add-deadline" type="date">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Times mentioned</label>
+        <select class="form-select" id="add-mentions">
+          <option value="1">1st time asking</option>
+          <option value="2">2nd time asking</option>
+          <option value="3">3rd time asking</option>
+          <option value="4">4th+ time asking 😤</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Any notes for him?</label>
+        <input class="form-input" id="add-note" placeholder="Optional context or details…">
+      </div>
+
+      <button class="btn-submit" id="btn-add-submit" onclick="submitTask()">Add to his list 💕</button>
+    </div>
+  </div>
+
+  <!-- ── HIS LIST PANEL ── -->
+  <div class="panel" id="panel-list">
+    <div class="list-header">
+      <div>
+        <div class="list-title">Adam's Active Tasks</div>
+        <div class="list-subtitle" id="list-subtitle">Loading…</div>
+      </div>
+    </div>
+    <div id="task-list-container">
+      <div class="loading-spinner"><div class="spinner"></div>Loading his list…</div>
+    </div>
+  </div>
+
+  <!-- ── COMPLETED PANEL ── -->
+  <div class="panel" id="panel-done">
+    <div class="list-header">
+      <div>
+        <div class="list-title">Things he got done ✨</div>
+        <div class="list-subtitle">Leave him a little note when he finishes something.</div>
+      </div>
+    </div>
+    <div id="done-list-container">
+      <div class="loading-spinner"><div class="spinner"></div>Loading…</div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- PRIORITY CHANGE MODAL -->
+<div class="modal-overlay" id="priority-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="priority-modal-title">Change priority</div>
+    <div class="modal-priority-row">
+      <button class="modal-priority-btn" onclick="setPriority('low')">🌿 Low</button>
+      <button class="modal-priority-btn" onclick="setPriority('medium')">✨ Medium</button>
+      <button class="modal-priority-btn" onclick="setPriority('high')">⚡ High</button>
+      <button class="modal-priority-btn" onclick="setPriority('critical')">🚨 Critical</button>
+    </div>
+    <button class="btn-modal-cancel" onclick="closePriorityModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
 <script>
-// ── Supabase ──────────────────────────────────────────────────────────────────
-const _sb = supabase.createClient(
-  'https://lcghspaeauqyssrkhizu.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjZ2hzcGFlYXVxeXNzcmtoaXp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNTY0ODksImV4cCI6MjA5MjczMjQ4OX0._D6C8MpPpo8hG41BHLEh_7Ahgcdu89AYNvUGPHuEiYY'
-);
+// ─────────────────────────────────────────────
+// SUPABASE CONFIG
+// ─────────────────────────────────────────────
+const SUPABASE_URL = 'https://lcghspaeauqyssrkhizu.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjZ2hzcGFlYXVxeXNzcmtoaXp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNTY0ODksImV4cCI6MjA5MjczMjQ4OX0._D6C8MpPpo8hG41BHLEh_7Ahgcdu89AYNvUGPHuEiYY';
 
-// ── REACTION SETS ─────────────────────────────────────────────────────────────
-const SETS = [
-  [
-    { emoji:"🥹", name:"Emotionally Solvent",        sub:"my heart has filed zero complaints",          id:"love"      },
-    { emoji:"🔬", name:"Empirically Impressive",      sub:"the data fully supports you",                id:"impressed" },
-    { emoji:"🏛️", name:"Historically Significant",   sub:"this will be in the archives",               id:"grateful"  },
-    { emoji:"⏳", name:"Cosmically Overdue",          sub:"the continental shelf moved faster",         id:"finally", isFinally:true }
-  ],
-  [
-    { emoji:"🧠", name:"Deeply Processing",           sub:"give me a moment, I am genuinely moved",     id:"love"      },
-    { emoji:"📈", name:"Bullish on You",              sub:"strong buy, long-term position",             id:"impressed" },
-    { emoji:"🌱", name:"Witnessing Evolution",        sub:"natural selection smiles upon you today",    id:"grateful"  },
-    { emoji:"🦕", name:"Jurassic Response Time",      sub:"several species went extinct while waiting", id:"finally", isFinally:true }
-  ],
-  [
-    { emoji:"🫀", name:"Cardiovascularly Moved",      sub:"the ventricles have officially spoken",      id:"love"      },
-    { emoji:"🎖️", name:"Valor Recognized",           sub:"ribbon incoming, citation to follow",        id:"impressed" },
-    { emoji:"🧘", name:"Inner Peace Achieved",        sub:"the list is shorter, I am calmer",           id:"grateful"  },
-    { emoji:"🗓️", name:"Calendar-Defying Feat",      sub:"this predates several sitting presidents",   id:"finally", isFinally:true }
-  ],
-  [
-    { emoji:"🌊", name:"Positively Overwhelmed",      sub:"the good kind of drowning, truly",           id:"love"      },
-    { emoji:"🎓", name:"PhD in Follow-Through",       sub:"thesis approved, summa cum laude",           id:"impressed" },
-    { emoji:"☕",  name:"Serenely Satisfied",          sub:"this is my roman empire now",                id:"grateful"  },
-    { emoji:"🧊", name:"Post-Ice-Age Completion",     sub:"the glaciers fully receded first, but still",id:"finally", isFinally:true }
-  ]
-];
+async function sbFetch(path, opts = {}) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': opts.prefer || 'return=representation',
+      ...opts.headers,
+    },
+    ...opts,
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Supabase error: ${err}`);
+  }
+  const text = await res.text();
+  return text ? JSON.parse(text) : null;
+}
 
-const FINALLY_MSGS = [
-  "…noted. 😏",
-  "Twice now. We're keeping track. 😏",
-  "Third time on this button. We see you, Brittany. 👀",
-  "At this point we're considering a cooldown timer on this option. 😂",
-  "This button is now under federal review. We'll be in touch. 🚨"
-];
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let activeTasks = [];
+let doneTasks   = [];
+let selectedPriority = null;
+let priorityTargetId = null;
+let reactionState = {}; // taskId → { emoji, note }
 
-// ── STATE ─────────────────────────────────────────────────────────────────────
-let finallyCount = parseInt(localStorage.getItem('dtm_finally_count') || '0');
-let picked = null;
-let pickedEmoji = null;
-let currentSet = null;
-let taskId = null;
+// ─────────────────────────────────────────────
+// LOAD DATA
+// ─────────────────────────────────────────────
+async function loadTasks() {
+  try {
+    const data = await sbFetch('tasks?order=created_at.asc');
+    activeTasks = (data || []).filter(t => !t.completed).sort((a, b) => {
+      const pOrder = { critical: 0, high: 1, medium: 2, low: 3, null: 4, undefined: 4 };
+      const pa = pOrder[a.notes?.priority] ?? 4;
+      const pb = pOrder[b.notes?.priority] ?? 4;
+      return pa !== pb ? pa - pb : (b.marital_risk || 0) - (a.marital_risk || 0);
+    });
+    doneTasks = (data || []).filter(t => t.completed).sort((a, b) => new Date(b.completed_at||0) - new Date(a.completed_at||0));
+    updateBadges();
+    renderList();
+    renderDone();
+  } catch(e) {
+    console.error('Load error', e);
+    showToast('Couldn\'t load tasks — check connection');
+  }
+}
 
-// ── INIT ──────────────────────────────────────────────────────────────────────
-(async function init() {
-  // Build reaction grid
-  const idx = Math.floor(Math.random() * SETS.length);
-  currentSet = SETS[idx];
-  document.getElementById('reactions-grid').innerHTML = currentSet.map(r => `
-    <div class="reaction-btn" onclick="pick(this,'${r.id}','${r.emoji}')" data-id="${r.id}">
-      <span class="reaction-emoji">${r.emoji}</span>
-      <div class="reaction-name">${r.name}</div>
-      <div class="reaction-sub">${r.sub}</div>
-    </div>`).join('');
+function updateBadges() {
+  document.getElementById('badge-list').textContent = activeTasks.length;
+  document.getElementById('badge-done').textContent = doneTasks.length;
+  const sub = activeTasks.length === 0
+    ? 'His list is clear! 🎉'
+    : `${activeTasks.length} task${activeTasks.length !== 1 ? 's' : ''} on his list`;
+  document.getElementById('list-subtitle').textContent = sub;
+}
 
-  // Get task ID from URL
-  taskId = new URLSearchParams(location.search).get('task');
-  if (!taskId) { showError(); return; }
+// ─────────────────────────────────────────────
+// RENDER LIST
+// ─────────────────────────────────────────────
+function renderList() {
+  const el = document.getElementById('task-list-container');
+  if (!activeTasks.length) {
+    el.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🎉</div><div class="empty-state-text">His list is completely clear!<br>He's been crushing it. 💕</div></div>`;
+    return;
+  }
 
-  // Fetch task from Supabase
-  const { data: task, error } = await _sb
-    .from('tasks')
-    .select('*')
-    .eq('id', taskId)
-    .single();
+  el.innerHTML = activeTasks.map(t => {
+    const notes = t.notes || {};
+    const priority = notes.priority || null;
+    const dotClass = priority ? `dot-${priority}` : 'dot-none';
+    const priorityLabel = priority ? capitalize(priority) : 'No priority';
+    const daysOld = Math.floor((Date.now() - new Date(t.created_at)) / 86400000);
+    const location = notes.location ? capitalize(notes.location) : null;
+    const mentions = notes.mentions ? parseInt(notes.mentions) : 1;
+    const deadline = t.deadline || notes.deadline || null;
 
-  if (error || !task) { showError(); return; }
-
-  // Already reacted — skip straight to thank you
-  if (task.brittany_reaction) {
-    const note = task.brittany_note || '';
-    if (note) {
-      document.getElementById('ty-note-final').textContent = note;
-      document.getElementById('ty-note-bubble').classList.add('visible');
+    let deadlineChip = '';
+    if (deadline) {
+      const daysLeft = Math.floor((new Date(deadline) - Date.now()) / 86400000);
+      if (daysLeft < 0) {
+        deadlineChip = `<span class="meta-chip overdue">⚠️ Overdue</span>`;
+      } else if (daysLeft <= 3) {
+        deadlineChip = `<span class="meta-chip due-soon">🔥 Due in ${daysLeft}d</span>`;
+      } else {
+        deadlineChip = `<span class="meta-chip">📅 Due in ${daysLeft}d</span>`;
+      }
     }
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('thankyou').classList.add('visible');
+
+    const criticalChip = priority === 'critical' ? `<span class="meta-chip priority-critical">🚨 Critical</span>` : '';
+    const mentionChip  = mentions > 1 ? `<span class="meta-chip">Mentioned ${mentions}×</span>` : '';
+    const daysChip     = daysOld > 0 ? `<span class="meta-chip">${daysOld === 1 ? 'Added yesterday' : `${daysOld} days ago`}</span>` : '';
+    const locChip      = location ? `<span class="meta-chip">${location}</span>` : '';
+    const noteText     = notes.brittany_note ? `<div style="font-size:12px;color:var(--text-soft);margin-top:6px;font-style:italic;">Your note: "${escHtml(notes.brittany_note)}"</div>` : '';
+
+    return `
+      <div class="task-card" id="tc-${t.id}">
+        <div class="task-card-body">
+          <div class="task-card-top">
+            <div class="task-priority-dot ${dotClass}"></div>
+            <div class="task-card-title">${escHtml(t.name || t.description || '')}</div>
+          </div>
+          <div class="task-card-meta">
+            ${criticalChip}${deadlineChip}${mentionChip}${locChip}${daysChip}
+          </div>
+          ${noteText}
+        </div>
+        <div class="task-actions">
+          <button class="action-btn" onclick="requestInfo(${t.id})">💬 Need info</button>
+          <button class="action-btn btn-top" onclick="moveToTop(${t.id})">⬆️ Move up</button>
+          <button class="action-btn" onclick="openPriorityModal(${t.id}, '${escHtml(t.name || '')}')">🔄 Priority</button>
+          <button class="action-btn btn-delete" onclick="removeTask(${t.id})">🗑️ Remove</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────────
+// RENDER DONE
+// ─────────────────────────────────────────────
+function renderDone() {
+  const el = document.getElementById('done-list-container');
+  if (!doneTasks.length) {
+    el.innerHTML = `<div class="empty-state"><div class="empty-state-icon">⏳</div><div class="empty-state-text">Nothing completed yet.<br>Check back soon!</div></div>`;
     return;
   }
 
-  // Populate task card
-  document.getElementById('task-name').textContent = task.name;
+  el.innerHTML = doneTasks.map(t => {
+    const notes = t.notes || {};
+    const doneDate = t.completed_at ? new Date(t.completed_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Recently';
+    const hasReacted = t.brittany_reaction;
+    const rs = reactionState[t.id] || {};
 
-  const completedAt = task.completed_at ? new Date(task.completed_at) : new Date();
-  const daysAgo = Math.floor((Date.now() - completedAt.getTime()) / 86400000);
-  const completedLabel = daysAgo === 0 ? '✓ Completed today'
-    : daysAgo === 1 ? '✓ Completed 1 day ago'
-    : `✓ Completed ${daysAgo} days ago`;
+    const reactionHTML = hasReacted
+      ? `<div class="already-reacted">${t.brittany_reaction} ${escHtml(t.brittany_note || 'You already reacted 💕')}</div>`
+      : `
+        <div class="reaction-block">
+          <div class="reaction-label">Leave a reaction 💕</div>
+          <div class="react-row">
+            ${['😍','🥰','🙌','💛','👏','🎉','😂','🫶'].map(e =>
+              `<button class="react-btn ${rs.emoji === e ? 'selected' : ''}" onclick="selectReaction(${t.id}, '${e}')">${e}</button>`
+            ).join('')}
+          </div>
+          <textarea class="reaction-textarea" id="rnote-${t.id}" placeholder="Leave him a little note… (optional)"
+            oninput="reactionState[${t.id}] = reactionState[${t.id}] || {}; reactionState[${t.id}].note = this.value;">${rs.note || ''}</textarea>
+          <button class="btn-react-submit" onclick="submitReaction(${t.id})">Send reaction 💌</button>
+        </div>`;
 
-  const TIME_LABEL = { 15: '15 min', 30: '30 min', 60: '1 hr', 120: '2 hrs', 180: '3+ hrs' };
-  const timeLabel = TIME_LABEL[task.estimated_minutes] || `${task.estimated_minutes} min`;
-
-  document.getElementById('task-meta').innerHTML = `
-    <span class="task-pip">${completedLabel}</span>
-    ${task.requester ? `<span class="task-pip">${task.requester} requested</span>` : ''}
-    <span class="task-pip">🕐 ${timeLabel}</span>`;
-
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('main').style.display = 'block';
-})();
-
-function showError() {
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('error').style.display = 'block';
+    return `
+      <div class="completed-card" id="dc-${t.id}">
+        <div class="completed-card-body">
+          <div class="completed-title">${escHtml(t.name || t.description || '')}</div>
+          <div class="completed-meta">✅ Done on ${doneDate}</div>
+          ${reactionHTML}
+        </div>
+      </div>`;
+  }).join('');
 }
 
-// ── PICK ──────────────────────────────────────────────────────────────────────
-function pick(btn, id, emoji) {
-  if (picked) picked.classList.remove('selected');
-  btn.classList.add('selected');
-  picked = btn;
-  pickedEmoji = emoji;
+// ─────────────────────────────────────────────
+// ADD TASK
+// ─────────────────────────────────────────────
+function selectPriority(btn) {
+  selectedPriority = btn.dataset.val;
+  document.querySelectorAll('#priority-row .priority-btn').forEach(b => {
+    b.className = 'priority-btn';
+    if (b.dataset.val === selectedPriority) b.classList.add(`sel-${selectedPriority}`);
+  });
+}
 
-  const warning = document.getElementById('finally-warning');
-  const q = document.getElementById('reaction-q');
+async function submitTask() {
+  const desc = document.getElementById('add-desc').value.trim();
+  if (!desc) { showToast('Tell him what needs doing first! 😄'); return; }
 
-  if (id === 'finally') {
-    finallyCount++;
-    localStorage.setItem('dtm_finally_count', finallyCount);
-    const msg = FINALLY_MSGS[Math.min(finallyCount - 1, FINALLY_MSGS.length - 1)];
-    warning.innerHTML = msg.replace(/\n\n/g, '<br><br>');
-    warning.classList.add('visible');
-    q.textContent = "...really.";
-    q.style.color = '#A63D5A';
-  } else {
-    warning.classList.remove('visible');
-    q.textContent = "How does this make you feel?";
-    q.style.color = '#4A1F2E';
+  const btn = document.getElementById('btn-add-submit');
+  btn.disabled = true; btn.textContent = 'Adding…';
+
+  const deadline = document.getElementById('add-deadline').value || null;
+  const mentions = parseInt(document.getElementById('add-mentions').value);
+  const location = document.getElementById('add-location').value;
+  const note     = document.getElementById('add-note').value.trim();
+  const priority = selectedPriority;
+
+  try {
+    await sbFetch('tasks', {
+      method: 'POST',
+      prefer: 'return=minimal',
+      body: JSON.stringify({
+        name: desc,
+        description: desc,
+        requester: 'Brittany',
+        completed: false,
+        deadline: deadline,
+        notes: {
+          location, mentions, priority,
+          brittany_note: note || null,
+        }
+      })
+    });
+
+    // reset form
+    document.getElementById('add-desc').value = '';
+    document.getElementById('add-note').value = '';
+    document.getElementById('add-deadline').value = '';
+    document.getElementById('add-mentions').selectedIndex = 0;
+    document.getElementById('add-location').selectedIndex = 0;
+    selectedPriority = null;
+    document.querySelectorAll('#priority-row .priority-btn').forEach(b => b.className = 'priority-btn');
+
+    showToast('Added to his list 💕');
+    await loadTasks();
+    switchTab('list', document.querySelectorAll('.tab')[1]);
+  } catch(e) {
+    console.error(e);
+    showToast('Couldn\'t add task — try again');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Add to his list 💕';
   }
 }
 
-// ── NOTE PREVIEW ──────────────────────────────────────────────────────────────
-function updatePreview() {
-  const val = document.getElementById('note-input').value.trim();
-  const preview = document.getElementById('note-preview');
-  const previewText = document.getElementById('note-preview-text');
-  if (val.length > 0) {
-    previewText.textContent = val;
-    preview.classList.add('visible');
-  } else {
-    preview.classList.remove('visible');
-  }
+// ─────────────────────────────────────────────
+// TASK ACTIONS
+// ─────────────────────────────────────────────
+async function moveToTop(id) {
+  try {
+    // Boost marital risk to push it to top of his list
+    await sbFetch(`tasks?id=eq.${id}`, {
+      method: 'PATCH',
+      prefer: 'return=minimal',
+      body: JSON.stringify({ marital_risk: 10 })
+    });
+    showToast('Moved to top of his list ⬆️');
+    await loadTasks();
+  } catch(e) { showToast('Couldn\'t update — try again'); }
 }
 
-// ── SUBMIT ────────────────────────────────────────────────────────────────────
-async function submit() {
-  if (!picked) {
-    const firstBtn = document.querySelector('.reaction-btn');
-    pick(firstBtn, currentSet[0].id, currentSet[0].emoji);
-  }
-
-  const note = document.getElementById('note-input').value.trim();
-  const btn = document.getElementById('submit-btn');
-  btn.disabled = true;
-  btn.textContent = 'Sending…';
-
-  const { error } = await _sb.from('tasks').update({
-    brittany_reaction:   pickedEmoji,
-    brittany_note:       note || null,
-    brittany_reacted_at: new Date().toISOString(),
-  }).eq('id', taskId);
-
-  if (error) {
-    console.error('Reaction save error:', error);
-    btn.disabled = false;
-    btn.textContent = 'Send my reaction 🌹';
-    return;
-  }
-
-  document.getElementById('main').style.display = 'none';
-  const ty = document.getElementById('thankyou');
-  ty.classList.add('visible');
-
-  if (note.length > 0) {
-    document.getElementById('ty-note-final').textContent = note;
-    document.getElementById('ty-note-bubble').classList.add('visible');
-  }
+async function removeTask(id) {
+  if (!confirm('Remove this task from his list?')) return;
+  try {
+    await sbFetch(`tasks?id=eq.${id}`, {
+      method: 'DELETE',
+      prefer: 'return=minimal',
+    });
+    showToast('Task removed 🗑️');
+    await loadTasks();
+  } catch(e) { showToast('Couldn\'t remove — try again'); }
 }
+
+function requestInfo(id) {
+  const task = activeTasks.find(t => t.id === id);
+  if (!task) return;
+  // Flag the task with a "needs discussion" note
+  const taskName = task.name || task.description || 'this task';
+  showToast('💬 Flagged for discussion — he\'ll see it');
+  sbFetch(`tasks?id=eq.${id}`, {
+    method: 'PATCH',
+    prefer: 'return=minimal',
+    body: JSON.stringify({
+      notes: { ...(task.notes || {}), needs_discussion: true }
+    })
+  }).then(() => loadTasks()).catch(() => {});
+}
+
+// Priority modal
+function openPriorityModal(id, name) {
+  priorityTargetId = id;
+  document.getElementById('priority-modal-title').textContent = `Change priority for: ${name.substring(0, 40)}`;
+  document.getElementById('priority-modal').classList.add('visible');
+}
+function closePriorityModal() {
+  document.getElementById('priority-modal').classList.remove('visible');
+  priorityTargetId = null;
+}
+async function setPriority(priority) {
+  if (!priorityTargetId) return;
+  const task = activeTasks.find(t => t.id === priorityTargetId);
+  if (!task) return;
+  try {
+    await sbFetch(`tasks?id=eq.${priorityTargetId}`, {
+      method: 'PATCH',
+      prefer: 'return=minimal',
+      body: JSON.stringify({
+        notes: { ...(task.notes || {}), priority }
+      })
+    });
+    showToast(`Priority set to ${capitalize(priority)} 👍`);
+    closePriorityModal();
+    await loadTasks();
+  } catch(e) { showToast('Couldn\'t update — try again'); }
+}
+
+// ─────────────────────────────────────────────
+// REACTIONS
+// ─────────────────────────────────────────────
+function selectReaction(id, emoji) {
+  reactionState[id] = reactionState[id] || {};
+  reactionState[id].emoji = emoji;
+  renderDone(); // re-render to show selection
+}
+
+async function submitReaction(id) {
+  const rs = reactionState[id] || {};
+  if (!rs.emoji) { showToast('Pick an emoji first! 😄'); return; }
+  const rawNote = (document.getElementById(`rnote-${id}`)?.value || rs.note || '').trim();
+
+  // Soften the note via AI
+  let finalNote = rawNote;
+  if (rawNote) {
+    try {
+      const r = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 200,
+          messages: [{
+            role: 'user',
+            content: `Rephrase this message from a wife to her husband to be warm, loving, and gentle while keeping the original meaning. Keep it short (1-2 sentences max). Return ONLY the rephrased text, nothing else.\n\nOriginal: "${rawNote}"`
+          }]
+        })
+      });
+      const d = await r.json();
+      finalNote = d.content?.[0]?.text?.trim() || rawNote;
+    } catch(e) {
+      finalNote = rawNote; // fallback to original
+    }
+  }
+
+  try {
+    await sbFetch(`tasks?id=eq.${id}`, {
+      method: 'PATCH',
+      prefer: 'return=minimal',
+      body: JSON.stringify({
+        brittany_reaction: rs.emoji,
+        brittany_note: finalNote || null,
+        brittany_reacted_at: new Date().toISOString(),
+      })
+    });
+    showToast('Reaction sent 💌');
+    delete reactionState[id];
+    await loadTasks();
+  } catch(e) { showToast('Couldn\'t save reaction — try again'); }
+}
+
+// ─────────────────────────────────────────────
+// TABS
+// ─────────────────────────────────────────────
+function switchTab(panelId, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(`panel-${panelId}`).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ─────────────────────────────────────────────
+// UTILS
+// ─────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('visible'); });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('visible'));
+});
+
+// Boot
+loadTasks();
 </script>
 </body>
 </html>

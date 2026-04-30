@@ -414,21 +414,15 @@
         </div>
       </div>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Where does it happen?</label>
-          <select class="form-select" id="add-location">
-            <option value="indoors">Indoors</option>
-            <option value="outdoors">Outdoors</option>
-            <option value="errand">Errand / out</option>
-            <option value="online">Online / phone</option>
-            <option value="anywhere">Anywhere</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Due date (optional)</label>
-          <input class="form-input" id="add-deadline" type="date">
-        </div>
+      <div class="form-group">
+        <label class="form-label">Where does it happen?</label>
+        <select class="form-select" id="add-location">
+          <option value="indoors">Indoors</option>
+          <option value="outdoors">Outdoors</option>
+          <option value="errand">Errand / out</option>
+          <option value="online">Online / phone</option>
+          <option value="anywhere">Anywhere</option>
+        </select>
       </div>
 
       <div class="form-group">
@@ -539,8 +533,8 @@ async function loadTasks() {
     const data = await sbFetch('tasks?order=created_at.asc');
     activeTasks = (data || []).filter(t => !t.completed).sort((a, b) => {
       const pOrder = { critical: 0, high: 1, medium: 2, low: 3, null: 4, undefined: 4 };
-      const pa = pOrder[a.notes?.priority] ?? 4;
-      const pb = pOrder[b.notes?.priority] ?? 4;
+      const pa = pOrder[a.priority] ?? 4;
+      const pb = pOrder[b.priority] ?? 4;
       return pa !== pb ? pa - pb : (b.marital_risk || 0) - (a.marital_risk || 0);
     });
     doneTasks = (data || []).filter(t => t.completed).sort((a, b) => new Date(b.completed_at||0) - new Date(a.completed_at||0));
@@ -574,13 +568,12 @@ function renderList() {
 
   el.innerHTML = activeTasks.map(t => {
     const notes = t.notes || {};
-    const priority = notes.priority || null;
+    const priority = t.priority || notes.priority || null;
     const dotClass = priority ? `dot-${priority}` : 'dot-none';
-    const priorityLabel = priority ? capitalize(priority) : 'No priority';
     const daysOld = Math.floor((Date.now() - new Date(t.created_at)) / 86400000);
     const location = notes.location ? capitalize(notes.location) : null;
     const mentions = notes.mentions ? parseInt(notes.mentions) : 1;
-    const deadline = t.deadline || notes.deadline || null;
+    const deadline = null; // deadline column not yet in schema
 
     let deadlineChip = '';
     if (deadline) {
@@ -682,11 +675,10 @@ async function submitTask() {
   const btn = document.getElementById('btn-add-submit');
   btn.disabled = true; btn.textContent = 'Adding…';
 
-  const deadline = document.getElementById('add-deadline').value || null;
   const mentions = parseInt(document.getElementById('add-mentions').value);
   const location = document.getElementById('add-location').value;
   const note     = document.getElementById('add-note').value.trim();
-  const priority = selectedPriority;
+  const priority = selectedPriority || 'medium';
 
   try {
     await sbFetch('tasks', {
@@ -694,12 +686,13 @@ async function submitTask() {
       prefer: 'return=minimal',
       body: JSON.stringify({
         name: desc,
-        description: desc,
         requester: 'Brittany',
+        priority: priority,
         completed: false,
-        deadline: deadline,
         notes: {
-          location, mentions, priority,
+          location,
+          mentions,
+          snoozed: false,
           brittany_note: note || null,
         }
       })
@@ -786,9 +779,7 @@ async function setPriority(priority) {
     await sbFetch(`tasks?id=eq.${priorityTargetId}`, {
       method: 'PATCH',
       prefer: 'return=minimal',
-      body: JSON.stringify({
-        notes: { ...(task.notes || {}), priority }
-      })
+      body: JSON.stringify({ priority })
     });
     showToast(`Priority set to ${capitalize(priority)} 👍`);
     closePriorityModal();

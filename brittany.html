@@ -543,7 +543,7 @@ async function loadTasks() {
     renderDone();
   } catch(e) {
     console.error('Load error', e);
-    showToast('Couldn\'t load tasks — check connection');
+    showToast('Couldn\'t load tasks -- check connection');
   }
 }
 
@@ -713,7 +713,7 @@ async function submitTask() {
     switchTab('list', document.querySelectorAll('.tab')[1]);
   } catch(e) {
     console.error(e);
-    showToast('Couldn\'t add task — try again');
+    showToast('Couldn\'t add task -- try again');
   } finally {
     btn.disabled = false; btn.textContent = 'Add to his list 💕';
   }
@@ -729,9 +729,9 @@ async function moveToTop(id) {
       prefer: 'return=minimal',
       body: JSON.stringify({ priority: 'critical' })
     });
-    showToast('Moved to top — marked Critical ⬆️');
+    showToast('Moved to top -- marked Critical ⬆️');
     await loadTasks();
-  } catch(e) { showToast('Couldn\'t update — try again'); }
+  } catch(e) { showToast('Couldn\'t update -- try again'); }
 }
 
 async function removeTask(id) {
@@ -762,7 +762,7 @@ async function confirmRemove(id) {
     });
     showToast('Task removed 🗑️');
     await loadTasks();
-  } catch(e) { showToast('Couldn\'t remove — try again'); }
+  } catch(e) { showToast('Couldn\'t remove -- try again'); }
 }
 
 async function requestInfo(id) {
@@ -776,9 +776,9 @@ async function requestInfo(id) {
         notes: { ...(task.notes || {}), needs_discussion: true }
       })
     });
-    showToast('💬 Flagged — Adam will see this on his list');
+    showToast('💬 Flagged -- Adam will see this on his list');
     await loadTasks();
-  } catch(e) { showToast('Couldn\'t flag — try again'); }
+  } catch(e) { showToast('Couldn\'t flag -- try again'); }
 }
 
 // Priority modal
@@ -804,7 +804,7 @@ async function setPriority(priority) {
     showToast(`Priority set to ${capitalize(priority)} 👍`);
     closePriorityModal();
     await loadTasks();
-  } catch(e) { showToast('Couldn\'t update — try again'); }
+  } catch(e) { showToast('Couldn\'t update -- try again'); }
 }
 
 // ─────────────────────────────────────────────
@@ -833,7 +833,7 @@ async function submitReaction(id) {
   const btn = document.querySelector(`#dc-${id} .btn-react-submit`);
   if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
 
-  // Try AI softening — silent fallback to raw note if it fails
+  // Try AI softening -- silent fallback to raw note if it fails
   let finalNote = rawNote;
   if (rawNote) {
     try {
@@ -854,7 +854,7 @@ async function submitReaction(id) {
         finalNote = d.content?.[0]?.text?.trim() || rawNote;
       }
     } catch(e) {
-      // Silent fallback — use raw note as-is
+      // Silent fallback -- use raw note as-is
       finalNote = rawNote;
     }
   }
@@ -874,7 +874,7 @@ async function submitReaction(id) {
     await loadTasks();
   } catch(e) {
     console.error('Reaction save error:', e);
-    showToast('Couldn\'t save reaction — try again');
+    showToast('Couldn\'t save reaction -- try again');
     if (btn) { btn.disabled = false; btn.textContent = 'Send reaction 💌'; }
   }
 }

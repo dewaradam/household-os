@@ -47,7 +47,7 @@
       overflow-x: hidden;
     }
 
-    /* ── HEADER ── */
+    /* -- HEADER -- */
     .header {
       background: linear-gradient(135deg, #C96B7A 0%, #A84F5E 60%, #8C3D4E 100%);
       padding: 24px 20px 0;
@@ -67,7 +67,7 @@
     }
     .header-title span { font-style: normal; }
 
-    /* ── TABS ── */
+    /* -- TABS -- */
     .tabs {
       display: flex; gap: 0;
       border-bottom: none;
@@ -99,14 +99,14 @@
     }
     .tab.active .tab-badge { background: rgba(255,255,255,0.4); }
 
-    /* ── MAIN ── */
+    /* -- MAIN -- */
     .main { max-width: 600px; margin: 0 auto; padding: 20px 16px 100px; }
 
-    /* ── PANEL ── */
+    /* -- PANEL -- */
     .panel { display: none; }
     .panel.active { display: block; }
 
-    /* ── ADD TASK PANEL ── */
+    /* -- ADD TASK PANEL -- */
     .add-hero {
       background: var(--warm-white);
       border: 0.5px solid var(--border-mid);
@@ -167,7 +167,7 @@
     .btn-submit:hover { opacity: 0.88; }
     .btn-submit:disabled { opacity: 0.5; cursor: default; }
 
-    /* ── HIS LIST PANEL ── */
+    /* -- HIS LIST PANEL -- */
     .list-header {
       display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 14px;
@@ -237,7 +237,7 @@
     .action-btn.btn-delete { color: var(--red); border-color: rgba(226,75,74,0.25); }
     .action-btn.btn-delete:hover { background: var(--red-light); border-color: rgba(226,75,74,0.5); }
 
-    /* ── COMPLETED PANEL ── */
+    /* -- COMPLETED PANEL -- */
     .completed-card {
       background: var(--warm-white);
       border: 0.5px solid var(--border);
@@ -302,7 +302,7 @@
       font-size: 13px; color: var(--text-mid);
     }
 
-    /* ── EMPTY STATE ── */
+    /* -- EMPTY STATE -- */
     .empty-state {
       text-align: center; padding: 48px 24px;
       color: var(--text-faint);
@@ -310,7 +310,7 @@
     .empty-state-icon { font-size: 36px; margin-bottom: 12px; }
     .empty-state-text { font-size: 14px; line-height: 1.6; }
 
-    /* ── PRIORITY MODAL ── */
+    /* -- PRIORITY MODAL -- */
     .modal-overlay {
       display: none; position: fixed; inset: 0; z-index: 200;
       background: rgba(46,26,32,0.6);
@@ -346,7 +346,7 @@
       font-family: 'Lato', sans-serif; font-size: 13px; cursor: pointer;
     }
 
-    /* ── TOAST ── */
+    /* -- TOAST -- */
     .toast {
       position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
       background: var(--text-dark); color: #fff;
@@ -358,7 +358,7 @@
     }
     .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-    /* ── LOADING ── */
+    /* -- LOADING -- */
     .loading-spinner {
       text-align: center; padding: 40px 20px;
       color: var(--text-faint); font-size: 13px;
@@ -393,7 +393,7 @@
 <!-- MAIN -->
 <div class="main">
 
-  <!-- ── ADD TASK PANEL ── -->
+  <!-- -- ADD TASK PANEL -- -->
   <div class="panel active" id="panel-add">
     <div class="add-hero">
       <div class="add-hero-title">Add something for Adam</div>
@@ -444,7 +444,7 @@
     </div>
   </div>
 
-  <!-- ── HIS LIST PANEL ── -->
+  <!-- -- HIS LIST PANEL -- -->
   <div class="panel" id="panel-list">
     <div class="list-header">
       <div>
@@ -457,7 +457,7 @@
     </div>
   </div>
 
-  <!-- ── COMPLETED PANEL ── -->
+  <!-- -- COMPLETED PANEL -- -->
   <div class="panel" id="panel-done">
     <div class="list-header">
       <div>
@@ -491,9 +491,9 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 // SUPABASE CONFIG
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 const SUPABASE_URL = 'https://lcghspaeauqyssrkhizu.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjZ2hzcGFlYXVxeXNzcmtoaXp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNTY0ODksImV4cCI6MjA5MjczMjQ4OX0._D6C8MpPpo8hG41BHLEh_7Ahgcdu89AYNvUGPHuEiYY';
 
@@ -516,18 +516,18 @@ async function sbFetch(path, opts = {}) {
   return text ? JSON.parse(text) : null;
 }
 
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 // STATE
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 let activeTasks = [];
 let doneTasks   = [];
 let selectedPriority = null;
 let priorityTargetId = null;
 let reactionState = {}; // taskId → { emoji, note }
 
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 // LOAD DATA
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 async function loadTasks() {
   try {
     const data = await sbFetch('tasks?select=*&order=created_at.asc');
@@ -556,9 +556,9 @@ function updateBadges() {
   document.getElementById('list-subtitle').textContent = sub;
 }
 
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 // RENDER LIST
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 function renderList() {
   const el = document.getElementById('task-list-container');
   if (!activeTasks.length) {
@@ -617,9 +617,9 @@ function renderList() {
   }).join('');
 }
 
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 // RENDER DONE
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 function renderDone() {
   const el = document.getElementById('done-list-container');
   if (!doneTasks.length) {
@@ -659,9 +659,9 @@ function renderDone() {
   }).join('');
 }
 
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 // ADD TASK
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 function selectPriority(btn) {
   selectedPriority = btn.dataset.val;
   document.querySelectorAll('#priority-row .priority-btn').forEach(b => {
@@ -719,9 +719,9 @@ async function submitTask() {
   }
 }
 
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 // TASK ACTIONS
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 async function moveToTop(id) {
   try {
     await sbFetch(`tasks?id=eq.${id}`, {
@@ -807,9 +807,9 @@ async function setPriority(priority) {
   } catch(e) { showToast('Couldn\'t update -- try again'); }
 }
 
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 // REACTIONS
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 function selectReaction(id, emoji) {
   // Save current textarea value before re-render wipes it
   const existing = document.getElementById(`rnote-${id}`);
@@ -879,9 +879,9 @@ async function submitReaction(id) {
   }
 }
 
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 // TABS
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 function switchTab(panelId, btn) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -889,9 +889,9 @@ function switchTab(panelId, btn) {
   btn.classList.add('active');
 }
 
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 // UTILS
-// ─────────────────────────────────────────────
+// ---------------------------------------------
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.classList.add('show');

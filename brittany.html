@@ -530,7 +530,7 @@ let reactionState = {}; // taskId → { emoji, note }
 // ─────────────────────────────────────────────
 async function loadTasks() {
   try {
-    const data = await sbFetch('tasks?order=created_at.asc');
+    const data = await sbFetch('tasks?select=*&order=created_at.asc');
     activeTasks = (data || []).filter(t => !t.completed).sort((a, b) => {
       const pOrder = { critical: 0, high: 1, medium: 2, low: 3, null: 4, undefined: 4 };
       const pa = pOrder[a.priority] ?? 4;
@@ -593,6 +593,8 @@ function renderList() {
     const locChip      = location ? `<span class="meta-chip">${location}</span>` : '';
     const noteText     = notes.brittany_note ? `<div style="font-size:12px;color:var(--text-soft);margin-top:6px;font-style:italic;">Your note: "${escHtml(notes.brittany_note)}"</div>` : '';
 
+    const discussChip = notes.needs_discussion ? `<span class="meta-chip" style="background:#EEF2FF;color:#3730A3;border-color:rgba(99,102,241,0.3);">💬 Brittany wants to discuss</span>` : '';
+
     return `
       <div class="task-card" id="tc-${t.id}">
         <div class="task-card-body">
@@ -601,7 +603,7 @@ function renderList() {
             <div class="task-card-title">${escHtml(t.name || t.description || '')}</div>
           </div>
           <div class="task-card-meta">
-            ${criticalChip}${deadlineChip}${mentionChip}${locChip}${daysChip}
+            ${criticalChip}${deadlineChip}${discussChip}${mentionChip}${locChip}${daysChip}
           </div>
           ${noteText}
         </div>
@@ -722,19 +724,37 @@ async function submitTask() {
 // ─────────────────────────────────────────────
 async function moveToTop(id) {
   try {
-    // Boost marital risk to push it to top of his list
     await sbFetch(`tasks?id=eq.${id}`, {
       method: 'PATCH',
       prefer: 'return=minimal',
-      body: JSON.stringify({ marital_risk: 10 })
+      body: JSON.stringify({ priority: 'critical' })
     });
-    showToast('Moved to top of his list ⬆️');
+    showToast('Moved to top — marked Critical ⬆️');
     await loadTasks();
   } catch(e) { showToast('Couldn\'t update — try again'); }
 }
 
 async function removeTask(id) {
-  if (!confirm('Remove this task from his list?')) return;
+  const card = document.getElementById(`tc-${id}`);
+  if (!card) return;
+  // Check if confirm row already showing
+  if (card.querySelector('.confirm-row')) {
+    card.querySelector('.confirm-row').remove();
+    return;
+  }
+  const row = document.createElement('div');
+  row.className = 'confirm-row';
+  row.style.cssText = 'padding:10px 14px;background:var(--red-light);display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:0.5px solid rgba(226,75,74,0.2);';
+  row.innerHTML = `
+    <span style="font-size:13px;color:#8C1F1F;">Remove this task?</span>
+    <div style="display:flex;gap:8px;">
+      <button onclick="confirmRemove(${id})" style="padding:6px 14px;background:var(--red);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;font-family:Lato,sans-serif;">Yes, remove</button>
+      <button onclick="this.closest('.confirm-row').remove()" style="padding:6px 12px;background:transparent;color:var(--text-soft);border:0.5px solid var(--border-mid);border-radius:6px;font-size:12px;cursor:pointer;font-family:Lato,sans-serif;">Cancel</button>
+    </div>`;
+  card.appendChild(row);
+}
+
+async function confirmRemove(id) {
   try {
     await sbFetch(`tasks?id=eq.${id}`, {
       method: 'DELETE',
@@ -745,19 +765,20 @@ async function removeTask(id) {
   } catch(e) { showToast('Couldn\'t remove — try again'); }
 }
 
-function requestInfo(id) {
+async function requestInfo(id) {
   const task = activeTasks.find(t => t.id === id);
   if (!task) return;
-  // Flag the task with a "needs discussion" note
-  const taskName = task.name || task.description || 'this task';
-  showToast('💬 Flagged for discussion — he\'ll see it');
-  sbFetch(`tasks?id=eq.${id}`, {
-    method: 'PATCH',
-    prefer: 'return=minimal',
-    body: JSON.stringify({
-      notes: { ...(task.notes || {}), needs_discussion: true }
-    })
-  }).then(() => loadTasks()).catch(() => {});
+  try {
+    await sbFetch(`tasks?id=eq.${id}`, {
+      method: 'PATCH',
+      prefer: 'return=minimal',
+      body: JSON.stringify({
+        notes: { ...(task.notes || {}), needs_discussion: true }
+      })
+    });
+    showToast('💬 Flagged — Adam will see this on his list');
+    await loadTasks();
+  } catch(e) { showToast('Couldn\'t flag — try again'); }
 }
 
 // Priority modal
@@ -790,9 +811,18 @@ async function setPriority(priority) {
 // REACTIONS
 // ─────────────────────────────────────────────
 function selectReaction(id, emoji) {
+  // Save current textarea value before re-render wipes it
+  const existing = document.getElementById(`rnote-${id}`);
+  if (existing) {
+    reactionState[id] = reactionState[id] || {};
+    reactionState[id].note = existing.value;
+  }
   reactionState[id] = reactionState[id] || {};
   reactionState[id].emoji = emoji;
-  renderDone(); // re-render to show selection
+  renderDone();
+  // Restore textarea value after re-render
+  const restored = document.getElementById(`rnote-${id}`);
+  if (restored && reactionState[id]?.note) restored.value = reactionState[id].note;
 }
 
 async function submitReaction(id) {
@@ -800,7 +830,10 @@ async function submitReaction(id) {
   if (!rs.emoji) { showToast('Pick an emoji first! 😄'); return; }
   const rawNote = (document.getElementById(`rnote-${id}`)?.value || rs.note || '').trim();
 
-  // Soften the note via AI
+  const btn = document.querySelector(`#dc-${id} .btn-react-submit`);
+  if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+
+  // Try AI softening — silent fallback to raw note if it fails
   let finalNote = rawNote;
   if (rawNote) {
     try {
@@ -816,10 +849,13 @@ async function submitReaction(id) {
           }]
         })
       });
-      const d = await r.json();
-      finalNote = d.content?.[0]?.text?.trim() || rawNote;
+      if (r.ok) {
+        const d = await r.json();
+        finalNote = d.content?.[0]?.text?.trim() || rawNote;
+      }
     } catch(e) {
-      finalNote = rawNote; // fallback to original
+      // Silent fallback — use raw note as-is
+      finalNote = rawNote;
     }
   }
 
@@ -833,10 +869,14 @@ async function submitReaction(id) {
         brittany_reacted_at: new Date().toISOString(),
       })
     });
-    showToast('Reaction sent 💌');
+    showToast('Reaction sent! 💌');
     delete reactionState[id];
     await loadTasks();
-  } catch(e) { showToast('Couldn\'t save reaction — try again'); }
+  } catch(e) {
+    console.error('Reaction save error:', e);
+    showToast('Couldn\'t save reaction — try again');
+    if (btn) { btn.disabled = false; btn.textContent = 'Send reaction 💌'; }
+  }
 }
 
 // ─────────────────────────────────────────────

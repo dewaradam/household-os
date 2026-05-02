@@ -26,6 +26,9 @@
       --teal-light: #E1F5EE;
       --amber: #D4880A;
       --amber-light: #FEF3DC;
+      --rose: #C96B7A;
+      --rose-light: #F7E8EB;
+      --rose-border: rgba(201,107,122,0.25);
       --page-bg: #F4F6F9;
       --card-bg: #FFFFFF;
       --text-primary: #1A1A2E;
@@ -49,7 +52,6 @@
       overflow-x: hidden;
     }
 
-    /* ── TOP BAR ── */
     .topbar {
       background: var(--navy);
       padding: 20px 20px 18px;
@@ -72,7 +74,6 @@
     }
     .icon-btn:hover { background: rgba(196,154,42,0.2); border-color: rgba(196,154,42,0.6); }
 
-    /* ── MOMENTUM BANNER ── */
     .momentum {
       max-width: 600px; margin: 0 auto;
       background: var(--navy-mid);
@@ -84,10 +85,8 @@
     .momentum-text { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.5; }
     .momentum-text strong { color: var(--gold-light); font-weight: 500; }
 
-    /* ── MAIN SCROLL ── */
     .main { max-width: 600px; margin: 0 auto; padding: 20px 16px 120px; }
 
-    /* ── SECTION LABELS ── */
     .section-label {
       font-size: 10px; font-weight: 500; letter-spacing: 0.1em;
       text-transform: uppercase; color: var(--text-tertiary);
@@ -95,7 +94,7 @@
     }
     .section-label:first-child { margin-top: 0; }
 
-    /* ── FOCUS CARD ── */
+    /* Focus card */
     .focus-card {
       background: var(--card-bg);
       border: 1.5px solid var(--red);
@@ -166,7 +165,19 @@
     }
     .btn-snooze:hover { background: var(--page-bg); }
 
-    /* ── RELATIONSHIP CARD ── */
+    /* Brittany flag */
+    .brittany-flag {
+      background: var(--rose-light);
+      border: 0.5px solid var(--rose-border);
+      border-radius: var(--radius-sm);
+      padding: 8px 11px;
+      margin-bottom: 10px;
+      display: flex; align-items: flex-start; gap: 8px;
+    }
+    .brittany-flag-text { font-size: 12px; color: #6B2535; line-height: 1.4; flex: 1; }
+    .brittany-flag-text strong { font-weight: 500; }
+
+    /* Relationship card */
     .relationship-card {
       background: var(--gold-pale);
       border: 0.5px solid var(--gold-border);
@@ -192,16 +203,8 @@
       transition: background 0.15s;
     }
     .rel-add-btn:hover { background: rgba(196,154,42,0.08); }
-    .rel-delete {
-      flex-shrink: 0; width: 22px; height: 22px;
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      font-size: 16px; line-height: 1; color: rgba(92,66,10,0.35);
-      cursor: pointer; transition: color 0.15s, background 0.15s;
-      margin-left: 4px;
-    }
-    .rel-delete:hover { color: var(--red); background: var(--red-light); }
 
-    /* ── TASK LIST ── */
+    /* Task list */
     .task-list { display: flex; flex-direction: column; gap: 1px; }
     .task-item {
       background: var(--card-bg);
@@ -215,6 +218,7 @@
     .task-item:hover { border-color: var(--border-mid); }
     .task-item:active { transform: scale(0.995); }
     .task-item.completing { opacity: 0.4; transform: scale(0.98); transition: all 0.3s; }
+    .task-item.has-flag { border-color: var(--rose-border); }
 
     .task-check {
       width: 19px; height: 19px; border-radius: 50%;
@@ -226,7 +230,7 @@
     }
     .task-check:hover { border-color: var(--teal); }
     .task-check.checked { background: var(--teal); border-color: var(--teal); }
-    .task-check.checked::after { content: '✓'; font-size: 11px; color: #fff; font-weight: 500; }
+    .task-check.checked::after { content: '\2713'; font-size: 11px; color: #fff; font-weight: 500; }
     .task-check.urgent { border-color: var(--amber); }
     .task-check.smart-ready { border-color: var(--blue-action); }
 
@@ -241,6 +245,7 @@
     }
     .task-chip.smart-chip { background: var(--blue-light); color: #1A4A62; border-color: var(--blue-border); }
     .task-chip.urgent-chip { background: var(--amber-light); color: #7A4A05; border-color: rgba(212,136,10,0.3); }
+    .task-chip.flag-chip { background: var(--rose-light); color: #6B2535; border-color: var(--rose-border); }
 
     .task-score {
       font-family: 'Fraunces', serif;
@@ -250,7 +255,7 @@
     .task-score.high { color: var(--amber); }
     .task-score.critical { color: var(--red); }
 
-    /* ── COMPLETED SECTION ── */
+    /* Completed section */
     .completed-toggle {
       display: flex; align-items: center; gap: 8px;
       padding: 12px 4px; cursor: pointer; color: var(--text-tertiary);
@@ -264,7 +269,18 @@
     .task-item.done-item { opacity: 0.55; }
     .task-item.done-item:hover { opacity: 0.75; }
 
-    /* ── GROUP HEADER ── */
+    /* Brittany reaction on completed */
+    .reaction-bubble {
+      margin-top: 6px;
+      background: var(--rose-light);
+      border: 0.5px solid var(--rose-border);
+      border-radius: var(--radius-sm);
+      padding: 5px 9px;
+      font-size: 11px; color: #6B2535;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+
+    /* Group header */
     .group-header {
       display: flex; align-items: center; justify-content: space-between;
       padding: 18px 4px 8px;
@@ -272,7 +288,7 @@
     .group-title { font-size: 12px; font-weight: 500; color: var(--text-secondary); }
     .group-count { font-size: 11px; color: var(--text-tertiary); }
 
-    /* ── ADD ROW ── */
+    /* Add row */
     .add-row {
       background: var(--card-bg);
       border: 0.5px dashed var(--border-mid);
@@ -293,7 +309,7 @@
     }
     .add-row:hover .add-circle { border-color: var(--gold); }
 
-    /* ── STATS ROW ── */
+    /* Stats */
     .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 4px; }
     .stat-card {
       background: var(--navy); border-radius: var(--radius-md);
@@ -307,7 +323,7 @@
     .stat-num.red { color: #F09595; }
     .stat-label { font-size: 11px; color: rgba(255,255,255,0.45); }
 
-    /* ── MODAL ── */
+    /* Modal */
     .modal-overlay {
       display: none;
       position: fixed; inset: 0; z-index: 200;
@@ -321,6 +337,8 @@
       width: 100%; max-width: 600px;
       padding: 24px 20px 36px;
       animation: slideUp 0.22s ease-out;
+      max-height: 90vh;
+      overflow-y: auto;
     }
     @keyframes slideUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     .modal-handle { width: 36px; height: 4px; background: var(--border-mid); border-radius: 2px; margin: 0 auto 20px; }
@@ -340,7 +358,7 @@
     .form-textarea { resize: vertical; min-height: 70px; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-    .requester-row { display: flex; gap: 8px; }
+    .requester-row { display: flex; gap: 8px; flex-wrap: wrap; }
     .requester-btn {
       flex: 1; padding: 8px; border-radius: var(--radius-sm);
       border: 0.5px solid var(--border-mid); background: transparent;
@@ -359,6 +377,7 @@
       margin-top: 8px;
     }
     .btn-submit:hover { opacity: 0.88; }
+    .btn-submit:disabled { opacity: 0.5; cursor: default; }
     .btn-cancel {
       width: 100%; padding: 10px;
       background: transparent; color: var(--text-tertiary);
@@ -366,7 +385,6 @@
       cursor: pointer; margin-top: 6px;
     }
 
-    /* ── RELATIONSHIP MODAL ── */
     .rel-type-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; }
     .rel-type-btn {
       padding: 6px 12px; border-radius: 20px;
@@ -377,24 +395,7 @@
     }
     .rel-type-btn.selected { background: var(--gold-pale); border-color: var(--gold-border); color: #5C420A; }
 
-    /* ── TOAST ── */
-    .toast {
-      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
-      background: var(--navy); color: #fff;
-      padding: 10px 18px; border-radius: 30px;
-      font-size: 13px; z-index: 500;
-      border: 1px solid var(--gold-border);
-      transition: transform 0.25s ease-out, opacity 0.25s;
-      opacity: 0; pointer-events: none; white-space: nowrap;
-    }
-    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-
-    /* ── EMPTY STATE ── */
-    .empty-state { text-align: center; padding: 40px 20px; color: var(--text-tertiary); }
-    .empty-state-icon { font-size: 32px; margin-bottom: 12px; }
-    .empty-state-text { font-size: 14px; line-height: 1.5; }
-
-    /* ── TASK DETAIL ── */
+    /* Detail modal extras */
     .detail-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
     .detail-chip {
       font-size: 12px; padding: 4px 10px; border-radius: 20px;
@@ -429,142 +430,63 @@
       font-family: 'DM Sans', sans-serif;
     }
 
-    /* ── SCROLLBAR ── */
+    /* Brittany needs info block in detail */
+    .detail-flag-block {
+      background: var(--rose-light);
+      border: 1px solid var(--rose-border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .detail-flag-label {
+      font-size: 11px; font-weight: 500; color: var(--rose);
+      text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px;
+    }
+    .detail-flag-text { font-size: 13px; color: #6B2535; margin-bottom: 10px; line-height: 1.4; }
+    .detail-reply-input {
+      width: 100%; padding: 8px 10px;
+      border: 0.5px solid var(--rose-border);
+      border-radius: var(--radius-sm);
+      background: #fff; font-family: 'DM Sans', sans-serif;
+      font-size: 13px; color: var(--text-primary);
+      outline: none; resize: none; min-height: 52px;
+      transition: border-color 0.15s;
+    }
+    .detail-reply-input:focus { border-color: var(--rose); }
+    .btn-reply {
+      margin-top: 8px; padding: 8px 16px;
+      background: var(--rose); color: #fff;
+      border: none; border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif; font-size: 13px;
+      font-weight: 500; cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn-reply:hover { opacity: 0.88; }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: var(--navy); color: #fff;
+      padding: 10px 18px; border-radius: 30px;
+      font-size: 13px; z-index: 300;
+      border: 1px solid var(--gold-border);
+      transition: transform 0.25s ease-out, opacity 0.25s;
+      opacity: 0; pointer-events: none; white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    /* Empty state */
+    .empty-state { text-align: center; padding: 40px 20px; color: var(--text-tertiary); }
+    .empty-state-icon { font-size: 32px; margin-bottom: 12px; }
+    .empty-state-text { font-size: 14px; line-height: 1.5; }
+
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 2px; }
-
-    /* ── GMAIL DIGEST ── */
-    .gmail-digest {
-      background: var(--card-bg);
-      border: 0.5px solid var(--border-mid);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      margin-bottom: 6px;
-    }
-    .gmail-digest-header {
-      background: var(--navy);
-      padding: 10px 14px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .gmail-digest-title { font-size: 12px; font-weight: 500; color: var(--gold-light); display: flex; align-items: center; gap: 8px; }
-    .gmail-digest-meta { font-size: 11px; color: rgba(255,255,255,0.4); }
-    .gmail-task-row {
-      padding: 11px 14px;
-      border-bottom: 0.5px solid var(--border);
-      display: flex; align-items: flex-start; gap: 10px;
-    }
-    .gmail-task-row:last-child { border-bottom: none; }
-    .gmail-task-source {
-      font-size: 10px; font-weight: 500; padding: 2px 8px;
-      border-radius: 20px; flex-shrink: 0; margin-top: 1px;
-      white-space: nowrap;
-    }
-    .gmail-task-source.brittany { background: #FCE4EC; color: #880E4F; }
-    .gmail-task-source.rylee { background: var(--blue-light); color: #1A4A62; }
-    .gmail-task-source.georgia { background: var(--teal-light); color: #0D5C42; }
-    .gmail-task-source.daisy { background: var(--amber-light); color: #7A4A05; }
-    .gmail-task-source.school { background: var(--gold-pale); color: #5C420A; }
-    .gmail-task-text { font-size: 13px; flex: 1; line-height: 1.4; color: var(--text-primary); }
-    .gmail-task-add {
-      font-size: 11px; font-weight: 500; color: var(--blue-action);
-      cursor: pointer; flex-shrink: 0; margin-top: 2px; white-space: nowrap;
-      border: none; background: none; font-family: 'DM Sans', sans-serif;
-      padding: 0;
-    }
-    .gmail-task-add:hover { text-decoration: underline; }
-    .gmail-task-add.added { color: var(--teal); cursor: default; }
-    .gmail-empty {
-      padding: 16px 14px; font-size: 13px; color: var(--text-tertiary);
-      text-align: center;
-    }
-    .gmail-scanning {
-      padding: 14px; text-align: center;
-      font-size: 13px; color: var(--text-secondary);
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .spin { display: inline-block; animation: spin 1s linear infinite; }
-    .gmail-add-all {
-      width: 100%; padding: 9px; border: none;
-      background: var(--navy); color: var(--gold-light);
-      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
-      cursor: pointer; transition: opacity 0.15s;
-    }
-    .gmail-add-all:hover { opacity: 0.88; }
-    .gmail-next-scan {
-      padding: 8px 14px; font-size: 11px; color: var(--text-tertiary);
-      text-align: center; border-top: 0.5px solid var(--border);
-      background: var(--page-bg);
-    }
-    .icon-btn.scanning { animation: spin 1s linear infinite; }
-
-    /* ── SHARE MODAL ── */
-    .share-overlay {
-      position: fixed; inset: 0; z-index: 400;
-      background: rgba(10,15,25,0.65);
-      display: flex; align-items: center; justify-content: center;
-      padding: 20px;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.25s;
-    }
-    .share-overlay.open { opacity: 1; pointer-events: all; }
-    .share-modal {
-      background: var(--card-bg);
-      border-radius: var(--radius-xl);
-      width: 100%; max-width: 420px;
-      padding: 24px 20px 26px;
-      transform: scale(0.95);
-      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-    }
-    .share-overlay.open .share-modal { transform: scale(1); }
-    .share-title {
-      font-family: 'Fraunces', serif;
-      font-size: 20px; font-weight: 500;
-      color: var(--text-primary); margin-bottom: 6px;
-    }
-    .share-task-name {
-      font-size: 13px; color: var(--text-secondary);
-      margin-bottom: 14px; line-height: 1.4;
-      padding: 8px 10px;
-      background: var(--page-bg);
-      border-radius: var(--radius-sm);
-      border-left: 2px solid var(--gold-border);
-    }
-    .share-sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 10px; }
-    .share-link-row {
-      display: flex; gap: 8px; align-items: center;
-      background: var(--page-bg); border: 0.5px solid var(--border-mid);
-      border-radius: var(--radius-sm); padding: 10px 12px;
-      margin-bottom: 12px;
-    }
-    .share-link-text {
-      flex: 1; font-size: 11px; color: var(--text-tertiary);
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-      font-family: monospace;
-    }
-    .share-copy-btn {
-      background: var(--navy); border: none; color: var(--gold-light);
-      padding: 6px 14px; border-radius: var(--radius-sm);
-      cursor: pointer; font-size: 12px; font-weight: 500;
-      flex-shrink: 0; transition: opacity 0.15s;
-      font-family: 'DM Sans', sans-serif;
-    }
-    .share-copy-btn:hover { opacity: 0.85; }
-    .share-close-btn {
-      width: 100%; padding: 10px; background: transparent;
-      border: 0.5px solid var(--border-mid); border-radius: var(--radius-sm);
-      color: var(--text-tertiary); cursor: pointer;
-      font-size: 13px; font-family: 'DM Sans', sans-serif;
-      transition: all 0.15s;
-    }
-    .share-close-btn:hover { color: var(--text-primary); border-color: var(--border-mid); }
   </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
 <div id="topbar-wrap" style="background:var(--navy);">
   <div class="topbar" style="padding-bottom:14px;">
     <div class="topbar-inner">
@@ -574,21 +496,17 @@
       </div>
       <div class="topbar-actions">
         <div class="icon-btn" onclick="openRelModal()" title="Add date to remember">📅</div>
-        <div class="icon-btn" onclick="runGmailScan()" title="Scan Gmail for tasks" id="scan-btn">📬</div>
         <div class="icon-btn" onclick="openAddModal()" title="Add task">+</div>
       </div>
     </div>
   </div>
   <div class="momentum" id="momentum-bar">
     <div class="momentum-icon">✨</div>
-    <div class="momentum-text" id="momentum-text">Loading your streak...</div>
+    <div class="momentum-text" id="momentum-text">Loading your list...</div>
   </div>
 </div>
 
-<!-- MAIN -->
 <div class="main" id="main-content">
-
-  <!-- STATS -->
   <div class="stats-row" id="stats-row">
     <div class="stat-card">
       <div class="stat-num gold" id="stat-active">0</div>
@@ -603,22 +521,10 @@
       <div class="stat-label">Done this week</div>
     </div>
   </div>
-
-  <!-- GMAIL DIGEST -->
-  <div id="gmail-digest-section"></div>
-
-  <!-- FOCUS CARD -->
   <div id="focus-section"></div>
-
-  <!-- RELATIONSHIP MOMENTS -->
   <div id="relationship-section"></div>
-
-  <!-- TASK LIST -->
   <div id="task-list-section"></div>
-
-  <!-- COMPLETED -->
   <div id="completed-section"></div>
-
 </div>
 
 <!-- ADD TASK MODAL -->
@@ -626,12 +532,10 @@
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title">What needs doing?</div>
-
     <div class="form-group">
       <label class="form-label">Describe the task</label>
       <textarea class="form-textarea" id="task-description" placeholder="e.g. Get the HVAC looked at before summer heats up"></textarea>
     </div>
-
     <div class="form-group">
       <label class="form-label">Who asked for this?</label>
       <div class="requester-row">
@@ -641,7 +545,6 @@
         <button class="requester-btn" data-val="other" onclick="selectRequester(this)">📋 Other</button>
       </div>
     </div>
-
     <div class="form-row">
       <div class="form-group">
         <label class="form-label">Where does it happen?</label>
@@ -663,8 +566,7 @@
         </select>
       </div>
     </div>
-
-    <button class="btn-submit" onclick="submitTask()">Add to list</button>
+    <button class="btn-submit" id="btn-add-submit" onclick="submitTask()">Add to list</button>
     <button class="btn-cancel" onclick="closeAddModal()">Cancel</button>
   </div>
 </div>
@@ -674,12 +576,10 @@
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title">Add a date to remember</div>
-
     <div class="form-group">
       <label class="form-label">What's the occasion?</label>
-      <input class="form-input" id="rel-title" placeholder="e.g. Anniversary, Brittany's birthday, Mom's birthday">
+      <input class="form-input" id="rel-title" placeholder="e.g. Anniversary, Brittany's birthday">
     </div>
-
     <div class="form-group">
       <label class="form-label">Type</label>
       <div class="rel-type-row" id="rel-type-row">
@@ -690,12 +590,10 @@
         <button class="rel-type-btn" data-emoji="⭐" onclick="selectRelType(this)">⭐ Other</button>
       </div>
     </div>
-
     <div class="form-group">
       <label class="form-label">Date</label>
       <input class="form-input" id="rel-date" type="date">
     </div>
-
     <div class="form-group">
       <label class="form-label">Remind me how far in advance?</label>
       <select class="form-select" id="rel-remind">
@@ -706,7 +604,6 @@
         <option value="90">3 months before</option>
       </select>
     </div>
-
     <button class="btn-submit" onclick="submitRelDate()">Save date</button>
     <button class="btn-cancel" onclick="closeRelModal()">Cancel</button>
   </div>
@@ -720,92 +617,48 @@
   </div>
 </div>
 
-<!-- SHARE MODAL -->
-<div class="share-overlay" id="share-overlay" onclick="shareOverlayClick(event)">
-  <div class="share-modal">
-    <div class="share-title">🎉 Brittany's going to love this</div>
-    <div class="share-task-name" id="share-task-name"></div>
-    <div class="share-sub">Send her a link so she can react:</div>
-    <div class="share-link-row">
-      <div class="share-link-text" id="share-link-text"></div>
-      <button class="share-copy-btn" onclick="copyShareLink()">Copy</button>
-    </div>
-    <button class="share-close-btn" onclick="closeShareModal()">Maybe later</button>
-  </div>
-</div>
-
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ─────────────────────────────────────────────
+// =============================================
 // SUPABASE
-// ─────────────────────────────────────────────
-const _sb = supabase.createClient(
-  'https://lcghspaeauqyssrkhizu.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjZ2hzcGFlYXVxeXNzcmtoaXp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNTY0ODksImV4cCI6MjA5MjczMjQ4OX0._D6C8MpPpo8hG41BHLEh_7Ahgcdu89AYNvUGPHuEiYY'
-);
+// =============================================
+const SUPABASE_URL = 'https://lcghspaeauqyssrkhizu.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjZ2hzcGFlYXVxeXNzcmtoaXp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNTY0ODksImV4cCI6MjA5MjczMjQ4OX0._D6C8MpPpo8hG41BHLEh_7Ahgcdu89AYNvUGPHuEiYY';
 
-function rowToTask(row) {
-  let meta = {};
-  try { meta = JSON.parse(row.notes || '{}'); } catch(e) {}
-  return {
-    id:           row.id,
-    description:  row.name,
-    requester:    row.requester || 'other',
-    location:     meta.location || 'anywhere',
-    mentions:     meta.mentions || 1,
-    created:      new Date(row.created_at).getTime(),
-    done:         row.completed,
-    completedAt:  row.completed_at ? new Date(row.completed_at).getTime() : null,
-    snoozed:      meta.snoozed || false,
-    snoozedAt:    meta.snoozedAt || null,
-    fromEmail:    meta.fromEmail || false,
-    brittanyReaction: row.brittany_reaction || null,
-    brittanyNote:     row.brittany_note || null,
-  };
+async function sbFetch(path, opts = {}) {
+  const res = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': opts.prefer || 'return=representation',
+      ...(opts.headers || {}),
+    },
+    method: opts.method || 'GET',
+    body: opts.body || undefined,
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error('Supabase error: ' + err);
+  }
+  const text = await res.text();
+  return text ? JSON.parse(text) : null;
 }
 
-async function loadTasks() {
-  const { data, error } = await _sb.from('tasks').select('*').order('created_at', { ascending: true });
-  if (error) { console.error('Load error:', error); render(); return; }
-  tasks = (data || []).map(rowToTask);
-  const weekAgo = Date.now() - 7 * 86400000;
-  completedThisWeek = tasks.filter(t => t.done && t.completedAt && t.completedAt > weekAgo).length;
-  render();
-}
-
-function setupRealtime() {
-  _sb.channel('tasks-rt')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, payload => {
-      if (payload.eventType === 'INSERT') {
-        if (!tasks.find(t => t.id === payload.new.id)) tasks.push(rowToTask(payload.new));
-      } else if (payload.eventType === 'UPDATE') {
-        const idx = tasks.findIndex(t => t.id === payload.new.id);
-        if (idx !== -1) tasks[idx] = rowToTask(payload.new);
-        else tasks.push(rowToTask(payload.new));
-      } else if (payload.eventType === 'DELETE') {
-        tasks = tasks.filter(t => t.id !== payload.old.id);
-      }
-      const weekAgo = Date.now() - 7 * 86400000;
-      completedThisWeek = tasks.filter(t => t.done && t.completedAt && t.completedAt > weekAgo).length;
-      render();
-    })
-    .subscribe();
-}
-
-// ─────────────────────────────────────────────
-// DATA
-// ─────────────────────────────────────────────
+// =============================================
+// STATE
+// =============================================
 let tasks = [];
 let relDates = [];
-let completedThisWeek = 0;
+let weatherData = null;
 let selectedRequester = 'Brittany';
 let selectedRelEmoji = '💍';
-let weatherData = null;
 let currentDetailId = null;
 
+// =============================================
+// DURATION + SMART ACTIONS
+// =============================================
 const DURATION_MAP = [
   { words: ['hvac','furnace','ac','air condition','heat pump','boiler'], mins: 15, label: '~15 min (scheduling)' },
   { words: ['faucet','leak','drip','plumb','pipe','toilet','clog','drain'], mins: 45, label: '~45 min' },
@@ -813,7 +666,7 @@ const DURATION_MAP = [
   { words: ['grocery','groceries','shop','restock','snack','food'], mins: 45, label: '~45 min' },
   { words: ['call','phone','schedule','appoint','book'], mins: 10, label: '~10 min' },
   { words: ['email','text','message','send'], mins: 5, label: '~5 min' },
-  { words: ['garage','attic','basement','cleanout','clean out'], mins: 120, label: '~1–2 hrs' },
+  { words: ['garage','attic','basement','cleanout','clean out'], mins: 120, label: '~1-2 hrs' },
   { words: ['paint','repaint','wall'], mins: 180, label: '~3 hrs' },
   { words: ['mow','lawn','garden','yard','landscap'], mins: 60, label: '~1 hr' },
   { words: ['clean','vacuum','sweep','mop','dust'], mins: 30, label: '~30 min' },
@@ -822,70 +675,60 @@ const DURATION_MAP = [
 ];
 
 function estimateDuration(desc) {
-  const lower = desc.toLowerCase();
+  const lower = (desc || '').toLowerCase();
   for (const entry of DURATION_MAP) {
-    if (entry.words.some(w => lower.includes(w))) return { mins: entry.mins, label: entry.label };
+    if (entry.words.some(function(w) { return lower.includes(w); })) {
+      return { mins: entry.mins, label: entry.label };
+    }
   }
   return { mins: 30, label: '~30 min' };
 }
 
 function smartActions(desc) {
-  const lower = desc.toLowerCase();
+  const lower = (desc || '').toLowerCase();
   const actions = [];
   if (/hvac|furnace|ac\b|air condition|heat pump|boiler|heating|cooling/.test(lower)) {
-    actions.push({ text: 'Found <strong>AirPro HVAC</strong> from your last invoice. Open in 30 min.', cta: 'Call now →', type: 'call' });
-    actions.push({ text: 'Their site has online booking. You\'re free Tue 10am–12pm.', cta: 'Book it →', type: 'book' });
+    actions.push({ text: 'Found <strong>AirPro HVAC</strong> from your last invoice. Open in 30 min.', cta: 'Call now', type: 'call' });
   } else if (/faucet|drip|leak|plumb|pipe|toilet/.test(lower)) {
-    actions.push({ text: 'Found <strong>Westland Plumbing</strong> in your email from last year.', cta: 'Call →', type: 'call' });
+    actions.push({ text: 'Found <strong>Westland Plumbing</strong> in your email from last year.', cta: 'Call', type: 'call' });
   } else if (/oil change|car service|auto service/.test(lower)) {
-    actions.push({ text: 'Quick Lane at Ford Westland has next-day appointments.', cta: 'Book online →', type: 'book' });
-  } else if (/pediatric|doctor|dentist|appoint/.test(lower)) {
-    actions.push({ text: 'Found Dr. Chen\'s number in your contacts.', cta: 'Call →', type: 'call' });
+    actions.push({ text: 'Quick Lane at Ford Westland has next-day appointments.', cta: 'Book online', type: 'book' });
   } else if (/grocery|groceries|restock/.test(lower)) {
-    actions.push({ text: 'Add these items to your Kroger pickup order.', cta: 'Open Kroger →', type: 'link' });
+    actions.push({ text: 'Add these items to your Kroger pickup order.', cta: 'Open Kroger', type: 'link' });
   }
   return actions;
 }
 
+// =============================================
+// RISK SCORING
+// =============================================
 function calcRisk(task) {
-  let score = 0;
-  if (task.requester === 'Brittany') score += 3;
-  const daysOld = Math.floor((Date.now() - task.created) / 86400000);
+  var score = 0;
+  if (task.requester === 'Brittany' || task.requester === 'Wife') score += 3;
+  var created = task.created_at ? new Date(task.created_at).getTime() : Date.now();
+  var daysOld = Math.floor((Date.now() - created) / 86400000);
   score += Math.min(daysOld * 0.4, 3);
-  score += Math.min((task.mentions - 1) * 1.2, 3);
-  if (task.snoozed) score += 0.5;
+  var mentions = (task.notes && task.notes.mentions) ? parseInt(task.notes.mentions) : 1;
+  score += Math.min((mentions - 1) * 1.2, 3);
+  var snoozed = task.notes && task.notes.snoozed;
+  if (snoozed) score += 0.5;
+  // Priority boost
+  var p = task.priority;
+  if (p === 'critical') score += 3;
+  else if (p === 'high') score += 2;
+  else if (p === 'low') score -= 1;
   score += weatherScoreAdjust(task);
   return Math.min(Math.round(score * 10) / 10, 10);
 }
 
-// ─────────────────────────────────────────────
-// STORAGE  (relDates stay in localStorage; tasks go to Supabase)
-// ─────────────────────────────────────────────
-function save() {
-  try {
-    localStorage.setItem('dtm_rel', JSON.stringify(relDates));
-  } catch(e) { console.error('Save failed', e); }
-}
-
-function load() {
-  try {
-    relDates = JSON.parse(localStorage.getItem('dtm_rel') || '[]');
-    const hadSeeds = relDates.some(r => r.id === 1 || r.id === 2);
-    if (hadSeeds) {
-      relDates = relDates.filter(r => r.id !== 1 && r.id !== 2);
-      save();
-    }
-  } catch(e) { relDates = []; }
-}
-
-// ─────────────────────────────────────────────
+// =============================================
 // WEATHER
-// ─────────────────────────────────────────────
+// =============================================
 async function loadWeather() {
   try {
-    const r = await fetch('https://wttr.in/Westland+MI?format=j1');
-    const d = await r.json();
-    const cur = d.current_condition[0];
+    var r = await fetch('https://wttr.in/Westland+MI?format=j1');
+    var d = await r.json();
+    var cur = d.current_condition[0];
     weatherData = {
       temp: Math.round(parseInt(cur.temp_F)),
       feelsLike: Math.round(parseInt(cur.FeelsLikeF)),
@@ -901,9 +744,9 @@ async function loadWeather() {
 }
 
 function deriveWeatherProfile(cur) {
-  const desc = (cur.weatherDesc[0].value || '').toLowerCase();
-  const temp = parseInt(cur.temp_F);
-  const feels = parseInt(cur.FeelsLikeF);
+  var desc = (cur.weatherDesc[0].value || '').toLowerCase();
+  var temp = parseInt(cur.temp_F);
+  var feels = parseInt(cur.FeelsLikeF);
   if (desc.includes('storm') || desc.includes('thunder')) return 'storm';
   if (desc.includes('snow') || desc.includes('blizzard') || temp <= 25) return 'snow';
   if (desc.includes('rain') || desc.includes('drizzle') || desc.includes('shower')) return 'rain';
@@ -922,134 +765,167 @@ function isOutdoorOk() {
 
 function weatherNudge(task) {
   if (!weatherData || !weatherData.profile) return null;
-  const loc = (task.location || '').toLowerCase();
-  const desc = task.description.toLowerCase();
-  const p = weatherData.profile;
-  const temp = weatherData.temp;
-  const feels = weatherData.feelsLike;
+  var loc = ((task.notes && task.notes.location) || '').toLowerCase();
+  var desc = (task.name || '').toLowerCase();
+  var p = weatherData.profile;
+  var temp = weatherData.temp;
+  var feels = weatherData.feelsLike;
   if (loc === 'outdoors' && !isOutdoorOk()) {
-    if (p === 'rain') return '🌧️ Raining today — save this for a dry day';
-    if (p === 'storm') return '⛈️ Storm outside — indoor day';
-    if (p === 'snow') return '❄️ Snow on the ground — not ideal today';
-    if (p === 'cold') return `🥶 ${temp}°F out there — bundle up or wait`;
+    if (p === 'rain') return 'Raining today -- save for a dry day';
+    if (p === 'storm') return 'Storm outside -- indoor day';
+    if (p === 'snow') return 'Snow on the ground -- not ideal today';
+    if (p === 'cold') return temp + 'F out there -- bundle up or wait';
   }
   if (loc === 'outdoors' && (p === 'gorgeous' || p === 'nice')) {
-    return `☀️ ${temp}°F and clear — perfect day for this`;
+    return temp + 'F and clear -- perfect day for this';
   }
-  if (desc.includes('hvac') || desc.includes('furnace') || desc.includes('heat') || desc.includes('ac') || desc.includes('air condition') || desc.includes('cooling')) {
-    if (p === 'hot') return `🌡️ Feels like ${feels}°F — HVAC is urgent right now`;
-    if (p === 'cold' || p === 'snow') return `🥶 ${temp}°F outside — heating tasks matter today`;
+  if (/hvac|furnace|heat|ac|air condition|cooling/.test(desc)) {
+    if (p === 'hot') return 'Feels like ' + feels + 'F -- HVAC is urgent right now';
+    if (p === 'cold' || p === 'snow') return temp + 'F outside -- heating tasks matter today';
   }
   if (loc === 'errand' && !isOutdoorOk()) {
-    if (p === 'rain') return '🌧️ Raining — grab an umbrella or push to tomorrow';
-    if (p === 'snow') return '❄️ Snowy roads — plan extra time';
-    if (p === 'storm') return '⛈️ Storm warning — hold errands if you can';
+    if (p === 'rain') return 'Raining -- grab an umbrella';
+    if (p === 'snow') return 'Snowy roads -- plan extra time';
   }
   return null;
 }
 
 function weatherScoreAdjust(task) {
   if (!weatherData || !weatherData.profile) return 0;
-  const loc = (task.location || '').toLowerCase();
-  const desc = task.description.toLowerCase();
-  const p = weatherData.profile;
+  var loc = ((task.notes && task.notes.location) || '').toLowerCase();
+  var desc = (task.name || '').toLowerCase();
+  var p = weatherData.profile;
   if (['storm','rain','snow'].includes(p)) {
-    if (loc === 'indoors' || loc === 'online') return +1.5;
+    if (loc === 'indoors' || loc === 'online') return 1.5;
     if (loc === 'outdoors') return -2.5;
     if (loc === 'errand') return -1;
   }
   if (p === 'gorgeous' || p === 'nice') {
-    if (loc === 'outdoors') return +2;
+    if (loc === 'outdoors') return 2;
   }
   if (p === 'hot') {
-    if (desc.includes('hvac') || desc.includes('ac') || desc.includes('air condition') || desc.includes('cooling')) return +2.5;
+    if (/hvac|ac|air condition|cooling/.test(desc)) return 2.5;
   }
   if (p === 'cold' || p === 'snow') {
-    if (desc.includes('furnace') || desc.includes('heat') || desc.includes('hvac')) return +2;
+    if (/furnace|heat|hvac/.test(desc)) return 2;
   }
   return 0;
 }
 
 function updateContext() {
-  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const day = days[new Date().getDay()];
-  let ctx = day;
+  var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var day = days[new Date().getDay()];
+  var ctx = day;
   if (weatherData && weatherData.temp) {
-    const icon = getWeatherEmoji(weatherData.description);
-    const feel = weatherData.feelsLike && weatherData.feelsLike !== weatherData.temp
-      ? ` (feels ${weatherData.feelsLike}°)` : '';
-    ctx += ` · ${icon} ${weatherData.temp}°F${feel}`;
+    var icon = getWeatherEmoji(weatherData.description);
+    var feel = (weatherData.feelsLike && weatherData.feelsLike !== weatherData.temp)
+      ? ' (feels ' + weatherData.feelsLike + 'F)' : '';
+    ctx += ' - ' + icon + ' ' + weatherData.temp + 'F' + feel;
   }
   document.getElementById('top-context').textContent = ctx;
 }
 
 function getWeatherEmoji(desc) {
-  const d = (desc || '').toLowerCase();
-  if (d.includes('storm') || d.includes('thunder')) return '⛈️';
-  if (d.includes('snow') || d.includes('blizzard')) return '❄️';
-  if (d.includes('rain') || d.includes('drizzle') || d.includes('shower')) return '🌧️';
-  if (d.includes('fog') || d.includes('mist')) return '🌫️';
-  if (d.includes('overcast')) return '☁️';
-  if (d.includes('cloud')) return '⛅';
-  if (d.includes('clear') || d.includes('sunny')) return '☀️';
-  if (d.includes('partly')) return '⛅';
-  return '🌤️';
+  var d = (desc || '').toLowerCase();
+  if (d.includes('storm') || d.includes('thunder')) return 'Storm';
+  if (d.includes('snow') || d.includes('blizzard')) return 'Snow';
+  if (d.includes('rain') || d.includes('drizzle') || d.includes('shower')) return 'Rain';
+  if (d.includes('fog') || d.includes('mist')) return 'Fog';
+  if (d.includes('overcast')) return 'Cloudy';
+  if (d.includes('cloud')) return 'P.Cloudy';
+  if (d.includes('clear') || d.includes('sunny')) return 'Sunny';
+  return 'Clear';
 }
 
-// ─────────────────────────────────────────────
-// MOMENTUM
-// ─────────────────────────────────────────────
-function getMomentumMessage() {
-  const active = tasks.filter(t => !t.done);
-  const critical = active.filter(t => calcRisk(t) >= 7);
-  const done = completedThisWeek;
-  const p = weatherData && weatherData.profile;
-  const temp = weatherData && weatherData.temp;
+// =============================================
+// LOAD FROM SUPABASE
+// =============================================
+async function loadTasks() {
+  try {
+    var data = await sbFetch('tasks?select=*&order=created_at.asc');
+    tasks = data || [];
+    render();
+  } catch(e) {
+    console.error('Load error', e);
+    showToast('Could not load tasks -- check connection');
+  }
+}
 
-  const weatherPrefix = (() => {
-    if (!p || p === 'neutral') return '';
-    if (p === 'gorgeous') return `${temp}°F and gorgeous outside. `;
-    if (p === 'nice') return `Nice day out there. `;
-    if (p === 'hot') return `Hot one today at ${temp}°F. `;
-    if (p === 'rain') return `Rainy day — perfect for indoor tasks. `;
-    if (p === 'snow') return `Snow day. `;
-    if (p === 'storm') return `Storm outside — stay in and knock something out. `;
-    if (p === 'cold') return `Cold out at ${temp}°F. `;
-    return '';
-  })();
+// =============================================
+// COMPUTED VALUES
+// =============================================
+function getActiveTasks() {
+  return tasks
+    .filter(function(t) { return !t.completed; })
+    .sort(function(a, b) { return calcRisk(b) - calcRisk(a); });
+}
+
+function getDoneTasks() {
+  return tasks
+    .filter(function(t) { return t.completed; })
+    .sort(function(a, b) { return new Date(b.completed_at || 0) - new Date(a.completed_at || 0); });
+}
+
+function getCompletedThisWeek() {
+  var weekAgo = Date.now() - (7 * 86400000);
+  return tasks.filter(function(t) {
+    return t.completed && t.completed_at && new Date(t.completed_at).getTime() > weekAgo;
+  }).length;
+}
+
+// =============================================
+// MOMENTUM
+// =============================================
+function getMomentumMessage() {
+  var active = getActiveTasks();
+  var done = getCompletedThisWeek();
+  var p = weatherData && weatherData.profile;
+  var temp = weatherData && weatherData.temp;
+
+  var weatherPrefix = '';
+  if (p && p !== 'neutral') {
+    if (p === 'gorgeous') weatherPrefix = temp + 'F and gorgeous outside. ';
+    else if (p === 'nice') weatherPrefix = 'Nice day out there. ';
+    else if (p === 'hot') weatherPrefix = 'Hot one today at ' + temp + 'F. ';
+    else if (p === 'rain') weatherPrefix = 'Rainy day -- perfect for indoor tasks. ';
+    else if (p === 'snow') weatherPrefix = 'Snow day. ';
+    else if (p === 'storm') weatherPrefix = 'Storm outside -- stay in and knock something out. ';
+    else if (p === 'cold') weatherPrefix = 'Cold out at ' + temp + 'F. ';
+  }
 
   if (done === 0 && active.length === 0) return { icon: '✨', msg: 'Your list is clear. <strong>Legend.</strong>' };
-  if (done >= 5) return { icon: '🔥', msg: `${weatherPrefix}You've knocked out <strong>${done} tasks this week</strong> — Brittany notices the effort. Keep it rolling.` };
-  if (done >= 2) return { icon: '💪', msg: `${weatherPrefix}<strong>${done} tasks done this week.</strong> You're building real momentum. One more today?` };
-  if (done === 1) return { icon: '✅', msg: `${weatherPrefix}Got one done already. <strong>Every task is a deposit</strong> in your relationship bank.` };
-  if (p === 'gorgeous' || p === 'nice') {
-    const outdoorTasks = active.filter(t => (t.location || '').toLowerCase() === 'outdoors');
-    if (outdoorTasks.length) return { icon: '☀️', msg: `<strong>Great day for outdoor tasks</strong> — you've got ${outdoorTasks.length} waiting. Strike while the sun's out.` };
+  if (done >= 5) return { icon: '🔥', msg: weatherPrefix + 'You\'ve knocked out <strong>' + done + ' tasks this week</strong> -- Brittany notices. Keep it rolling.' };
+  if (done >= 2) return { icon: '💪', msg: weatherPrefix + '<strong>' + done + ' tasks done this week.</strong> You\'re building real momentum. One more today?' };
+  if (done === 1) return { icon: '✅', msg: weatherPrefix + 'Got one done already. <strong>Every task is a deposit</strong> in your relationship bank.' };
+
+  var outdoorTasks = active.filter(function(t) { return ((t.notes && t.notes.location) || '').toLowerCase() === 'outdoors'; });
+  if ((p === 'gorgeous' || p === 'nice') && outdoorTasks.length) {
+    return { icon: '☀️', msg: '<strong>Great day for outdoor tasks</strong> -- you\'ve got ' + outdoorTasks.length + ' waiting.' };
   }
-  if (p === 'rain' || p === 'storm' || p === 'snow') {
-    const indoorTasks = active.filter(t => ['indoors','online'].includes((t.location || '').toLowerCase()));
-    if (indoorTasks.length) return { icon: '🏠', msg: `<strong>Good day to tackle indoor tasks</strong> — ${indoorTasks.length} lined up and nowhere to be.` };
+  var indoorTasks = active.filter(function(t) { return ['indoors','online'].includes(((t.notes && t.notes.location) || '').toLowerCase()); });
+  if ((p === 'rain' || p === 'storm' || p === 'snow') && indoorTasks.length) {
+    return { icon: '🏠', msg: '<strong>Good day to tackle indoor tasks</strong> -- ' + indoorTasks.length + ' lined up.' };
   }
-  if (critical.length > 0) return { icon: '💛', msg: `${weatherPrefix}Fresh start today. <strong>One focused task</strong> can change the whole vibe at home.` };
-  return { icon: '✨', msg: `${weatherPrefix}Your list is looking manageable. <strong>Good time to make a dent.</strong>` };
+  return { icon: '✨', msg: weatherPrefix + 'Your list is looking manageable. <strong>Good time to make a dent.</strong>' };
 }
 
-// ─────────────────────────────────────────────
+// =============================================
 // RENDER
-// ─────────────────────────────────────────────
+// =============================================
 function render() {
-  const activeTasks = tasks.filter(t => !t.done).sort((a,b) => calcRisk(b) - calcRisk(a));
-  const doneTasks   = tasks.filter(t => t.done).sort((a,b) => b.completedAt - a.completedAt);
-  const critical    = activeTasks.filter(t => calcRisk(t) >= 6);
-  const rest        = activeTasks.filter(t => calcRisk(t) < 6);
+  var activeTasks = getActiveTasks();
+  var doneTasks = getDoneTasks();
+  var critical = activeTasks.filter(function(t) { return calcRisk(t) >= 6; });
+  var rest = activeTasks.filter(function(t) { return calcRisk(t) < 6; });
+  var doneCount = getCompletedThisWeek();
 
-  document.getElementById('stat-active').textContent   = activeTasks.length;
+  document.getElementById('stat-active').textContent = activeTasks.length;
   document.getElementById('stat-critical').textContent = critical.length;
-  document.getElementById('stat-done').textContent     = completedThisWeek;
+  document.getElementById('stat-done').textContent = doneCount;
 
-  const { icon, msg } = getMomentumMessage();
-  document.getElementById('momentum-bar').querySelector('.momentum-icon').textContent = icon;
-  document.getElementById('momentum-text').innerHTML = msg;
+  var m = getMomentumMessage();
+  document.getElementById('momentum-bar').querySelector('.momentum-icon').textContent = m.icon;
+  document.getElementById('momentum-text').innerHTML = m.msg;
 
   renderFocusSection(activeTasks[0]);
   renderRelationshipSection();
@@ -1057,584 +933,470 @@ function render() {
 }
 
 function renderFocusSection(topTask) {
-  const el = document.getElementById('focus-section');
+  var el = document.getElementById('focus-section');
   if (!topTask) { el.innerHTML = ''; return; }
 
-  const risk      = calcRisk(topTask);
-  const isCritical = risk >= 7;
-  const duration  = estimateDuration(topTask.description);
-  const actions   = smartActions(topTask.description);
-  const daysOld   = Math.floor((Date.now() - topTask.created) / 86400000);
-  const wNudge    = weatherNudge(topTask);
+  var risk = calcRisk(topTask);
+  var isCritical = risk >= 7;
+  var duration = estimateDuration(topTask.name);
+  var actions = smartActions(topTask.name);
+  var created = topTask.created_at ? new Date(topTask.created_at).getTime() : Date.now();
+  var daysOld = Math.floor((Date.now() - created) / 86400000);
+  var wNudge = weatherNudge(topTask);
+  var mentions = (topTask.notes && topTask.notes.mentions) ? parseInt(topTask.notes.mentions) : 1;
+  var hasFlag = topTask.notes && topTask.notes.needs_discussion;
+  var brittanyNote = topTask.notes && topTask.notes.brittany_note;
 
-  let whyText = '';
-  if (topTask.requester === 'Brittany') {
-    if (topTask.mentions >= 3) whyText = `Brittany has mentioned this ${topTask.mentions} times — it's on her mind.`;
-    else if (daysOld >= 3)    whyText = `This has been waiting ${daysOld} days. Brittany will notice when it's done.`;
-    else                      whyText = `Brittany asked for this. Handling it shows you're listening.`;
+  var whyText = '';
+  if (topTask.requester === 'Brittany' || topTask.requester === 'Wife') {
+    if (mentions >= 3) whyText = 'Brittany has mentioned this ' + mentions + ' times -- it\'s on her mind.';
+    else if (daysOld >= 3) whyText = 'This has been waiting ' + daysOld + ' days. Brittany will notice when it\'s done.';
+    else whyText = 'Brittany asked for this. Handling it shows you\'re listening.';
   } else {
-    whyText = `Highest priority right now based on age and conditions today.`;
+    whyText = 'Highest priority right now based on age and conditions today.';
   }
 
-  const smartHTML = actions.map(a => `
-    <div class="smart-block">
-      <span class="smart-star">✦</span>
-      <span class="smart-text">${a.text}</span>
-      <span class="smart-cta" onclick="showToast('Opening...')">${a.cta}</span>
-    </div>`).join('');
+  var flagHTML = hasFlag ? '<div class="brittany-flag"><span>💬</span><div class="brittany-flag-text"><strong>Brittany wants to discuss this</strong>' + (brittanyNote ? ' -- ' + escHtml(brittanyNote) : '') + '</div></div>' : '';
 
-  el.innerHTML = `
-    <div class="section-label">needs your attention</div>
-    <div class="focus-card ${isCritical ? '' : 'amber-mode'}">
-      <div class="focus-header">
-        <span class="focus-header-label">${isCritical ? 'Partnership trust — worth doing today' : 'Up next for you'}</span>
-        ${topTask.mentions > 1 ? `<span class="mention-badge">mentioned ${topTask.mentions}×</span>` : ''}
-      </div>
-      <div class="focus-body">
-        <div class="focus-task-title">${escHtml(topTask.description)}</div>
-        <div class="focus-why">${whyText}</div>
-        <div class="chips-row">
-          <span class="chip">${duration.label}</span>
-          <span class="chip">${capitalize(topTask.location || 'anywhere')}</span>
-          ${daysOld > 0 ? `<span class="chip">${daysOld === 1 ? 'Added yesterday' : `${daysOld} days on the list`}</span>` : ''}
-          ${wNudge ? `<span class="chip" style="background:var(--gold-pale);color:#5C420A;border-color:var(--gold-border);">${wNudge}</span>` : ''}
-        </div>
-        ${smartHTML}
-        <div class="focus-btns">
-          <button class="btn-done" onclick="completeTask('${topTask.id}', true)">Done ✓</button>
-          <button class="btn-snooze" onclick="snoozeTask('${topTask.id}')">Not now</button>
-        </div>
-      </div>
-    </div>`;
+  var smartHTML = actions.map(function(a) {
+    return '<div class="smart-block"><span class="smart-star">*</span><span class="smart-text">' + a.text + '</span><span class="smart-cta" onclick="showToast(\'Opening...\')">' + a.cta + '</span></div>';
+  }).join('');
+
+  el.innerHTML = '<div class="section-label">needs your attention</div>' +
+    '<div class="focus-card ' + (isCritical ? '' : 'amber-mode') + '">' +
+    '<div class="focus-header">' +
+    '<span class="focus-header-label">' + (isCritical ? 'Partnership trust -- worth doing today' : 'Up next for you') + '</span>' +
+    (mentions > 1 ? '<span class="mention-badge">mentioned ' + mentions + 'x</span>' : '') +
+    '</div>' +
+    '<div class="focus-body">' +
+    '<div class="focus-task-title">' + escHtml(topTask.name || '') + '</div>' +
+    '<div class="focus-why">' + whyText + '</div>' +
+    flagHTML +
+    '<div class="chips-row">' +
+    '<span class="chip">' + duration.label + '</span>' +
+    '<span class="chip">' + capitalize((topTask.notes && topTask.notes.location) || 'anywhere') + '</span>' +
+    (daysOld > 0 ? '<span class="chip">' + (daysOld === 1 ? 'Added yesterday' : daysOld + ' days on the list') + '</span>' : '') +
+    (wNudge ? '<span class="chip" style="background:var(--gold-pale);color:#5C420A;border-color:var(--gold-border);">' + wNudge + '</span>' : '') +
+    '</div>' +
+    smartHTML +
+    '<div class="focus-btns">' +
+    '<button class="btn-done" onclick="completeTask(\'' + topTask.id + '\', true)">Done ✓</button>' +
+    '<button class="btn-snooze" onclick="snoozeTask(\'' + topTask.id + '\')">Not now</button>' +
+    '</div>' +
+    '</div></div>';
 }
 
 function renderRelationshipSection() {
-  const el  = document.getElementById('relationship-section');
-  const now = new Date();
-  const upcoming = relDates
-    .map(r => {
-      const d = new Date(r.date);
-      const daysLeft = Math.round((d - now) / 86400000);
-      return { ...r, daysLeft };
+  var el = document.getElementById('relationship-section');
+  var now = new Date();
+  var upcoming = relDates
+    .map(function(r) {
+      var d = new Date(r.date);
+      var daysLeft = Math.round((d - now) / 86400000);
+      return Object.assign({}, r, { daysLeft: daysLeft });
     })
-    .filter(r => r.daysLeft >= 0 && r.daysLeft <= (r.remind || 60))
-    .sort((a,b) => a.daysLeft - b.daysLeft);
+    .filter(function(r) { return r.daysLeft >= 0 && r.daysLeft <= (r.remind || 60); })
+    .sort(function(a, b) { return a.daysLeft - b.daysLeft; });
 
   if (!upcoming.length) { el.innerHTML = ''; return; }
 
-  const rows = upcoming.map(r => `
-    <div class="rel-row">
-      <div class="rel-icon">${r.emoji}</div>
-      <div class="rel-info">
-        <div class="rel-title">${escHtml(r.title)}</div>
-        <div class="rel-sub">${formatDate(r.date)} · ${r.daysLeft <= 7 ? '⚡ soon!' : 'start planning now'}</div>
-      </div>
-      <div class="rel-days">
-        <div class="rel-days-num">${r.daysLeft}</div>
-        <div class="rel-days-label">days</div>
-      </div>
-      <div class="rel-delete" onclick="deleteRelDate(${r.id})" title="Remove">×</div>
-    </div>`).join('');
+  var rows = upcoming.map(function(r) {
+    return '<div class="rel-row">' +
+      '<div class="rel-icon">' + r.emoji + '</div>' +
+      '<div class="rel-info">' +
+      '<div class="rel-title">' + escHtml(r.title) + '</div>' +
+      '<div class="rel-sub">' + formatDate(r.date) + ' - ' + (r.daysLeft <= 7 ? 'soon!' : 'start planning now') + '</div>' +
+      '</div>' +
+      '<div class="rel-days"><div class="rel-days-num">' + r.daysLeft + '</div><div class="rel-days-label">days</div></div>' +
+      '</div>';
+  }).join('');
 
-  el.innerHTML = `
-    <div class="section-label" style="margin-top:24px;">coming up — just for you</div>
-    <div class="relationship-card">
-      ${rows}
-      <button class="rel-add-btn" onclick="openRelModal()">+ Add another date</button>
-    </div>`;
+  el.innerHTML = '<div class="section-label" style="margin-top:24px;">coming up -- just for you</div>' +
+    '<div class="relationship-card">' + rows +
+    '<button class="rel-add-btn" onclick="openRelModal()">+ Add another date</button>' +
+    '</div>';
 }
 
 function renderTaskList(rest, doneTasks) {
-  const el     = document.getElementById('task-list-section');
-  const doneEl = document.getElementById('completed-section');
+  var el = document.getElementById('task-list-section');
+  var doneEl = document.getElementById('completed-section');
+  var activeTasks = getActiveTasks();
 
-  if (!rest.length && !tasks.filter(t => !t.done).length) {
-    el.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🎉</div><div class="empty-state-text">Nothing left on the list.<br>Brittany is going to love this.</div></div>`;
+  if (!activeTasks.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🎉</div><div class="empty-state-text">Nothing left on the list.<br>Brittany is going to love this.</div></div>';
     doneEl.innerHTML = '';
     return;
   }
 
-  const todayTasks = rest.filter(t => {
-    const d = Math.floor((Date.now() - t.created) / 86400000);
+  var todayTasks = rest.filter(function(t) {
+    var created = t.created_at ? new Date(t.created_at).getTime() : Date.now();
+    var d = Math.floor((Date.now() - created) / 86400000);
     return d <= 2 || calcRisk(t) >= 4;
   });
-  const laterTasks = rest.filter(t => !todayTasks.includes(t));
+  var laterTasks = rest.filter(function(t) { return !todayTasks.includes(t); });
 
-  let html = '';
+  var html = '';
   if (todayTasks.length) {
-    html += `<div class="group-header"><span class="group-title">the rest of your list</span><span class="group-count">${todayTasks.length} task${todayTasks.length !== 1 ? 's' : ''}</span></div>`;
-    html += `<div class="task-list">${todayTasks.map(t => taskCard(t)).join('')}</div>`;
+    html += '<div class="group-header"><span class="group-title">the rest of your list</span><span class="group-count">' + todayTasks.length + ' task' + (todayTasks.length !== 1 ? 's' : '') + '</span></div>';
+    html += '<div class="task-list">' + todayTasks.map(function(t) { return taskCard(t, false); }).join('') + '</div>';
   }
   if (laterTasks.length) {
-    html += `<div class="group-header"><span class="group-title">whenever you get to it</span><span class="group-count">${laterTasks.length}</span></div>`;
-    html += `<div class="task-list">${laterTasks.map(t => taskCard(t)).join('')}</div>`;
+    html += '<div class="group-header"><span class="group-title">whenever you get to it</span><span class="group-count">' + laterTasks.length + '</span></div>';
+    html += '<div class="task-list">' + laterTasks.map(function(t) { return taskCard(t, false); }).join('') + '</div>';
   }
-  html += `<div class="add-row" onclick="openAddModal()"><div class="add-circle">+</div>What do you need to take care of?</div>`;
+
+  html += '<div class="add-row" onclick="openAddModal()"><div class="add-circle">+</div>What do you need to take care of?</div>';
   el.innerHTML = html;
 
   if (doneTasks.length) {
-    const open = localStorage.getItem('dtm_completed_open') === 'true';
-    doneEl.innerHTML = `
-      <div class="completed-toggle" onclick="toggleCompleted(this)">
-        <span class="toggle-arrow ${open ? 'open' : ''}">▶</span>
-        <span>${doneTasks.length} completed task${doneTasks.length !== 1 ? 's' : ''}</span>
-      </div>
-      <div class="completed-list ${open ? 'visible' : ''}">
-        ${doneTasks.map(t => taskCard(t, true)).join('')}
-      </div>`;
+    var open = localStorage.getItem('dtm_completed_open') === 'true';
+    doneEl.innerHTML = '<div class="completed-toggle" onclick="toggleCompleted(this)">' +
+      '<span class="toggle-arrow ' + (open ? 'open' : '') + '">></span>' +
+      '<span>' + doneTasks.length + ' completed task' + (doneTasks.length !== 1 ? 's' : '') + '</span>' +
+      '</div>' +
+      '<div class="completed-list ' + (open ? 'visible' : '') + '">' +
+      doneTasks.map(function(t) { return taskCard(t, true); }).join('') +
+      '</div>';
   } else {
     doneEl.innerHTML = '';
   }
 }
 
-function taskCard(task, isDone = false) {
-  const risk         = calcRisk(task);
-  const duration     = estimateDuration(task.description);
-  const actions      = smartActions(task.description);
-  const hasSmartAction = actions.length > 0;
-  const wNudge       = !isDone ? weatherNudge(task) : null;
-  const scoreClass   = risk >= 8 ? 'critical' : risk >= 5 ? 'high' : '';
-  const checkClass   = isDone ? 'checked' : risk >= 6 ? 'urgent' : hasSmartAction ? 'smart-ready' : '';
+function taskCard(task, isDone) {
+  var risk = calcRisk(task);
+  var duration = estimateDuration(task.name);
+  var actions = smartActions(task.name);
+  var hasSmartAction = actions.length > 0;
+  var wNudge = !isDone ? weatherNudge(task) : null;
+  var scoreClass = risk >= 8 ? 'critical' : risk >= 5 ? 'high' : '';
+  var checkClass = isDone ? 'checked' : risk >= 6 ? 'urgent' : hasSmartAction ? 'smart-ready' : '';
+  var hasFlag = task.notes && task.notes.needs_discussion;
+  var brittanyReaction = task.brittany_reaction;
+  var brittanyNote = task.brittany_note;
+  var mentions = (task.notes && task.notes.mentions) ? parseInt(task.notes.mentions) : 1;
 
-  return `
-    <div class="task-item ${isDone ? 'done-item' : ''}" id="task-${task.id}">
-      <div class="task-check ${checkClass}" onclick="event.stopPropagation(); ${isDone ? `undoTask('${task.id}')` : `completeTask('${task.id}')`}"></div>
-      <div class="task-body" onclick="openDetail('${task.id}')">
-        <div class="task-title ${isDone ? 'done' : ''}">${escHtml(task.description)}</div>
-        <div class="task-chips">
-          <span class="task-chip">${duration.label}</span>
-          <span class="task-chip">${capitalize(task.location || 'anywhere')}</span>
-          ${risk >= 6 && !isDone ? `<span class="task-chip urgent-chip">⚡ Priority</span>` : ''}
-          ${hasSmartAction && !isDone ? `<span class="task-chip smart-chip">✦ Smart action ready</span>` : ''}
-          ${wNudge ? `<span class="task-chip" style="background:var(--gold-pale);color:#5C420A;border-color:var(--gold-border);">${wNudge}</span>` : ''}
-          ${isDone ? `<span class="task-chip">✓ Done</span>` : ''}
-        </div>
-      </div>
-      ${!isDone ? `<div class="task-score ${scoreClass}">${Math.round(risk)}</div>` : ''}
-    </div>`;
+  var reactionBubble = '';
+  if (isDone && brittanyReaction) {
+    reactionBubble = '<div class="reaction-bubble">' + brittanyReaction + (brittanyNote ? ' ' + escHtml(brittanyNote) : '') + '</div>';
+  }
+
+  return '<div class="task-item ' + (isDone ? 'done-item' : '') + (hasFlag ? ' has-flag' : '') + '" id="task-' + task.id + '">' +
+    '<div class="task-check ' + checkClass + '" onclick="event.stopPropagation(); ' + (isDone ? 'undoTask(\'' + task.id + '\')' : 'completeTask(\'' + task.id + '\')') + '"></div>' +
+    '<div class="task-body" onclick="openDetail(\'' + task.id + '\')">' +
+    '<div class="task-title ' + (isDone ? 'done' : '') + '">' + escHtml(task.name || '') + '</div>' +
+    '<div class="task-chips">' +
+    '<span class="task-chip">' + duration.label + '</span>' +
+    '<span class="task-chip">' + capitalize((task.notes && task.notes.location) || 'anywhere') + '</span>' +
+    (risk >= 6 && !isDone ? '<span class="task-chip urgent-chip">Priority</span>' : '') +
+    (hasFlag && !isDone ? '<span class="task-chip flag-chip">💬 Brittany wants to discuss</span>' : '') +
+    (hasSmartAction && !isDone ? '<span class="task-chip smart-chip">Smart action ready</span>' : '') +
+    (wNudge ? '<span class="task-chip" style="background:var(--gold-pale);color:#5C420A;border-color:var(--gold-border);">' + wNudge + '</span>' : '') +
+    (isDone ? '<span class="task-chip">Done</span>' : '') +
+    '</div>' +
+    reactionBubble +
+    '</div>' +
+    (!isDone ? '<div class="task-score ' + scoreClass + '">' + Math.round(risk) + '</div>' : '') +
+    '</div>';
 }
 
-// ─────────────────────────────────────────────
-// ACTIONS — all writes go through Supabase
-// ─────────────────────────────────────────────
-async function completeTask(id, fromFocus = false) {
-  const task = tasks.find(t => t.id === id);
+// =============================================
+// TASK ACTIONS
+// =============================================
+async function completeTask(id, fromFocus) {
+  var task = tasks.find(function(t) { return t.id === id; });
   if (!task) return;
-  const el = document.getElementById(`task-${id}`);
+  var el = document.getElementById('task-' + id);
   if (el && !fromFocus) el.classList.add('completing');
-
-  const finish = async () => {
-    const now = new Date().toISOString();
-    const { error } = await _sb.from('tasks')
-      .update({ completed: true, completed_at: now })
-      .eq('id', id);
-    if (error) { console.error('Complete error:', error); showToast('❌ Failed to complete task'); return; }
-    task.done        = true;
-    task.completedAt = Date.now();
-    completedThisWeek++;
-    render();
-    closeDetailModal();
-    showToast(task.requester === 'Brittany' ? '✓ Done! Brittany will love this 💛' : '✓ Task complete!');
-    showShareModal(id, task.description);
-  };
-
-  if (el && !fromFocus) setTimeout(finish, 300);
-  else finish();
+  setTimeout(async function() {
+    try {
+      await sbFetch('tasks?id=eq.' + id, {
+        method: 'PATCH',
+        prefer: 'return=minimal',
+        body: JSON.stringify({ completed: true, completed_at: new Date().toISOString() })
+      });
+      task.completed = true;
+      task.completed_at = new Date().toISOString();
+      render();
+      showToast((task.requester === 'Brittany' || task.requester === 'Wife') ? 'Done! Brittany will love this' : 'Task complete!');
+      closeDetailModal();
+    } catch(e) {
+      showToast('Could not save -- try again');
+      if (el) el.classList.remove('completing');
+    }
+  }, fromFocus ? 0 : 300);
 }
 
 async function undoTask(id) {
-  const task = tasks.find(t => t.id === id);
-  if (!task) return;
-  const { error } = await _sb.from('tasks')
-    .update({ completed: false, completed_at: null })
-    .eq('id', id);
-  if (error) { console.error('Undo error:', error); showToast('❌ Failed to undo'); return; }
-  task.done        = false;
-  task.completedAt = null;
-  if (completedThisWeek > 0) completedThisWeek--;
-  render();
-  showToast('Task moved back to active');
+  try {
+    await sbFetch('tasks?id=eq.' + id, {
+      method: 'PATCH',
+      prefer: 'return=minimal',
+      body: JSON.stringify({ completed: false, completed_at: null })
+    });
+    var task = tasks.find(function(t) { return t.id === id; });
+    if (task) { task.completed = false; task.completed_at = null; }
+    render();
+    showToast('Task moved back to active');
+  } catch(e) { showToast('Could not update -- try again'); }
 }
 
 async function snoozeTask(id) {
-  const task = tasks.find(t => t.id === id);
+  var task = tasks.find(function(t) { return t.id === id; });
   if (!task) return;
-  task.snoozed   = true;
-  task.snoozedAt = Date.now();
-  const meta = JSON.stringify({ location: task.location, mentions: task.mentions, snoozed: true, snoozedAt: task.snoozedAt, fromEmail: task.fromEmail || false });
-  const { error } = await _sb.from('tasks').update({ notes: meta }).eq('id', id);
-  if (error) console.error('Snooze error:', error);
-  render();
-  showToast("Snoozed — it'll come back around");
+  var updatedNotes = Object.assign({}, task.notes || {}, { snoozed: true, snoozedAt: Date.now() });
+  try {
+    await sbFetch('tasks?id=eq.' + id, {
+      method: 'PATCH',
+      prefer: 'return=minimal',
+      body: JSON.stringify({ notes: updatedNotes })
+    });
+    task.notes = updatedNotes;
+    render();
+    showToast('Snoozed -- it\'ll come back around');
+  } catch(e) { showToast('Could not snooze -- try again'); }
 }
 
 async function deleteTask(id) {
-  const { error } = await _sb.from('tasks').delete().eq('id', id);
-  if (error) { console.error('Delete error:', error); showToast('❌ Failed to remove task'); return; }
-  tasks = tasks.filter(t => t.id !== id);
-  render();
-  closeDetailModal();
-  showToast('Task removed');
+  try {
+    await sbFetch('tasks?id=eq.' + id, {
+      method: 'DELETE',
+      prefer: 'return=minimal',
+    });
+    tasks = tasks.filter(function(t) { return t.id !== id; });
+    render();
+    closeDetailModal();
+    showToast('Task removed');
+  } catch(e) { showToast('Could not remove -- try again'); }
 }
 
-// ─────────────────────────────────────────────
+async function submitReply(id) {
+  var input = document.getElementById('reply-input-' + id);
+  if (!input || !input.value.trim()) return;
+  var task = tasks.find(function(t) { return t.id === id; });
+  if (!task) return;
+  var updatedNotes = Object.assign({}, task.notes || {}, {
+    needs_discussion: false,
+    adam_reply: input.value.trim()
+  });
+  try {
+    await sbFetch('tasks?id=eq.' + id, {
+      method: 'PATCH',
+      prefer: 'return=minimal',
+      body: JSON.stringify({ notes: updatedNotes })
+    });
+    task.notes = updatedNotes;
+    render();
+    closeDetailModal();
+    showToast('Reply saved -- Brittany will see it');
+  } catch(e) { showToast('Could not save reply -- try again'); }
+}
+
+// =============================================
 // ADD TASK
-// ─────────────────────────────────────────────
+// =============================================
 function openAddModal() {
   document.getElementById('add-modal').classList.add('visible');
-  setTimeout(() => document.getElementById('task-description').focus(), 100);
+  setTimeout(function() { document.getElementById('task-description').focus(); }, 100);
 }
 function closeAddModal() {
   document.getElementById('add-modal').classList.remove('visible');
   document.getElementById('task-description').value = '';
   selectedRequester = 'Brittany';
-  document.querySelectorAll('.requester-btn').forEach(b => b.classList.toggle('selected', b.dataset.val === 'Brittany'));
+  document.querySelectorAll('.requester-btn').forEach(function(b) {
+    b.classList.toggle('selected', b.dataset.val === 'Brittany');
+  });
 }
 function selectRequester(btn) {
   selectedRequester = btn.dataset.val;
-  document.querySelectorAll('.requester-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.requester-btn').forEach(function(b) { b.classList.remove('selected'); });
   btn.classList.add('selected');
 }
-
 async function submitTask() {
-  const desc = document.getElementById('task-description').value.trim();
+  var desc = document.getElementById('task-description').value.trim();
   if (!desc) { showToast('Describe the task first'); return; }
-
-  const location = document.getElementById('task-location').value;
-  const mentions = parseInt(document.getElementById('task-mentions').value);
-  const meta     = JSON.stringify({ location, mentions, snoozed: false, fromEmail: false });
-  const priority = (mentions >= 3 && selectedRequester === 'Brittany') ? 'marital_risk'
-                 : (selectedRequester === 'Brittany' || mentions >= 2) ? 'high'
-                 : (selectedRequester === 'self') ? 'low' : 'medium';
-
-  const { data, error } = await _sb.from('tasks').insert({
-    name:              desc,
-    notes:             meta,
-    requester:         selectedRequester,
-    priority,
-    estimated_minutes: estimateDuration(desc).mins,
-    completed:         false,
-    completed_at:      null,
-  }).select().single();
-
-  if (error) { console.error('Insert error:', error); showToast('❌ Failed to add task'); return; }
-  if (!tasks.find(t => t.id === data.id)) tasks.push(rowToTask(data));
-  render();
-  closeAddModal();
-  showToast('Added to your list 👍');
+  var btn = document.getElementById('btn-add-submit');
+  btn.disabled = true; btn.textContent = 'Adding...';
+  try {
+    var result = await sbFetch('tasks', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: desc,
+        requester: selectedRequester,
+        priority: 'medium',
+        completed: false,
+        notes: {
+          location: document.getElementById('task-location').value,
+          mentions: parseInt(document.getElementById('task-mentions').value),
+          snoozed: false,
+        }
+      })
+    });
+    if (result && result[0]) tasks.push(result[0]);
+    render();
+    closeAddModal();
+    showToast('Added to your list');
+  } catch(e) {
+    showToast('Could not add task -- try again');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Add to list';
+  }
 }
 
-// ─────────────────────────────────────────────
-// RELATIONSHIP DATES  (localStorage only)
-// ─────────────────────────────────────────────
+// =============================================
+// RELATIONSHIP DATES (localStorage)
+// =============================================
+function loadRelDates() {
+  try {
+    relDates = JSON.parse(localStorage.getItem('dtm_rel') || '[]');
+    if (!relDates.length) {
+      relDates = [
+        { id: 1, title: 'Anniversary', emoji: '💍', date: nextOccurrence(6, 14), remind: 60 },
+        { id: 2, title: 'Brittany\'s birthday', emoji: '🎂', date: nextOccurrence(8, 3), remind: 30 },
+      ];
+      localStorage.setItem('dtm_rel', JSON.stringify(relDates));
+    }
+  } catch(e) { relDates = []; }
+}
+function nextOccurrence(month, day) {
+  var now = new Date();
+  var year = now.getFullYear();
+  var d = new Date(year, month - 1, day);
+  if (d <= now) d.setFullYear(year + 1);
+  return d.toISOString().split('T')[0];
+}
 function openRelModal() { document.getElementById('rel-modal').classList.add('visible'); }
 function closeRelModal() {
   document.getElementById('rel-modal').classList.remove('visible');
   document.getElementById('rel-title').value = '';
-  document.getElementById('rel-date').value  = '';
+  document.getElementById('rel-date').value = '';
 }
 function selectRelType(btn) {
   selectedRelEmoji = btn.dataset.emoji;
-  document.querySelectorAll('.rel-type-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.rel-type-btn').forEach(function(b) { b.classList.remove('selected'); });
   btn.classList.add('selected');
 }
 function submitRelDate() {
-  const title = document.getElementById('rel-title').value.trim();
-  const date  = document.getElementById('rel-date').value;
+  var title = document.getElementById('rel-title').value.trim();
+  var date = document.getElementById('rel-date').value;
   if (!title || !date) { showToast('Add a title and date'); return; }
-  relDates.push({ id: Date.now(), title, emoji: selectedRelEmoji, date, remind: parseInt(document.getElementById('rel-remind').value) });
-  save();
+  relDates.push({ id: Date.now(), title: title, emoji: selectedRelEmoji, date: date, remind: parseInt(document.getElementById('rel-remind').value) });
+  localStorage.setItem('dtm_rel', JSON.stringify(relDates));
   render();
   closeRelModal();
-  showToast('Date saved 📅');
-}
-function deleteRelDate(id) {
-  relDates = relDates.filter(r => r.id !== id);
-  save();
-  render();
-  showToast('Date removed');
+  showToast('Date saved');
 }
 
-// ─────────────────────────────────────────────
+// =============================================
 // DETAIL MODAL
-// ─────────────────────────────────────────────
+// =============================================
 function openDetail(id) {
-  const task = tasks.find(t => t.id === id);
+  var task = tasks.find(function(t) { return t.id === id; });
   if (!task) return;
   currentDetailId = id;
-  const risk     = calcRisk(task);
-  const duration = estimateDuration(task.description);
-  const actions  = smartActions(task.description);
-  const daysOld  = Math.floor((Date.now() - task.created) / 86400000);
+  var risk = calcRisk(task);
+  var duration = estimateDuration(task.name);
+  var actions = smartActions(task.name);
+  var created = task.created_at ? new Date(task.created_at).getTime() : Date.now();
+  var daysOld = Math.floor((Date.now() - created) / 86400000);
+  var mentions = (task.notes && task.notes.mentions) ? parseInt(task.notes.mentions) : 1;
+  var hasFlag = task.notes && task.notes.needs_discussion;
+  var brittanyNote = task.notes && task.notes.brittany_note;
+  var adamReply = task.notes && task.notes.adam_reply;
 
-  const smartHTML = actions.map(a => `
-    <div class="detail-smart-block">
-      <div class="detail-smart-label">✦ Smart action</div>
-      <div class="detail-smart-text">${a.text}</div>
-      <button class="detail-smart-action" onclick="showToast('Opening...')">${a.cta}</button>
-    </div>`).join('');
+  var smartHTML = actions.map(function(a) {
+    return '<div class="detail-smart-block"><div class="detail-smart-label">Smart action</div><div class="detail-smart-text">' + a.text + '</div><button class="detail-smart-action" onclick="showToast(\'Opening...\')">' + a.cta + '</button></div>';
+  }).join('');
 
-  document.getElementById('detail-content').innerHTML = `
-    <div style="font-family:'Fraunces',serif;font-size:19px;font-weight:500;line-height:1.3;margin-bottom:12px;">${escHtml(task.description)}</div>
-    <div class="detail-chips">
-      <span class="detail-chip">From: ${task.requester === 'Brittany' ? '💍 Brittany' : task.requester}</span>
-      <span class="detail-chip">${duration.label}</span>
-      <span class="detail-chip">${capitalize(task.location)}</span>
-      <span class="detail-chip">Mentioned ${task.mentions}×</span>
-      <span class="detail-chip">${daysOld === 0 ? 'Added today' : `${daysOld} day${daysOld !== 1 ? 's' : ''} on list`}</span>
-      <span class="detail-chip" style="background:var(--gold-pale);color:#5C420A;border-color:var(--gold-border);">Risk: ${Math.round(risk)}/10</span>
-    </div>
-    ${smartHTML}
-    ${!task.done ? `
-    <div class="detail-actions">
-      <button class="btn-detail-done" onclick="completeTask('${id}')">Mark it done ✓</button>
-      <button class="btn-detail-delete" onclick="deleteTask('${id}')">Remove</button>
-    </div>` : `
-    <div style="margin-top:16px;display:flex;gap:8px;">
-      <button class="btn-detail-delete" style="flex:1;color:var(--text-secondary);border-color:var(--border-mid);" onclick="undoTask('${id}');closeDetailModal()">Undo completion</button>
-      <button class="btn-detail-delete" onclick="deleteTask('${id}')">Remove</button>
-    </div>`}`;
+  var flagHTML = '';
+  if (hasFlag && !task.completed) {
+    flagHTML = '<div class="detail-flag-block">' +
+      '<div class="detail-flag-label">💬 Brittany wants to discuss</div>' +
+      (brittanyNote ? '<div class="detail-flag-text">' + escHtml(brittanyNote) + '</div>' : '<div class="detail-flag-text">She flagged this for discussion.</div>') +
+      (adamReply ? '<div style="font-size:12px;color:var(--text-secondary);margin-top:6px;">Your reply: ' + escHtml(adamReply) + '</div>' :
+        '<textarea class="detail-reply-input" id="reply-input-' + id + '" placeholder="Type a reply for Brittany..."></textarea>' +
+        '<button class="btn-reply" onclick="submitReply(\'' + id + '\')">Send reply</button>') +
+      '</div>';
+  }
+
+  var reactionHTML = '';
+  if (task.completed && task.brittany_reaction) {
+    reactionHTML = '<div style="background:var(--rose-light);border:0.5px solid var(--rose-border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:12px;">' +
+      '<div style="font-size:10px;font-weight:500;color:var(--rose);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">Brittany\'s reaction</div>' +
+      '<div style="font-size:18px;">' + task.brittany_reaction + (task.brittany_note ? ' <span style="font-size:13px;color:#6B2535;">' + escHtml(task.brittany_note) + '</span>' : '') + '</div>' +
+      '</div>';
+  }
+
+  var actionsHTML = !task.completed
+    ? '<div class="detail-actions"><button class="btn-detail-done" onclick="completeTask(\'' + id + '\')">Mark it done ✓</button><button class="btn-detail-delete" onclick="deleteTask(\'' + id + '\')">Remove</button></div>'
+    : '<div style="margin-top:16px;display:flex;gap:8px;"><button class="btn-detail-delete" style="flex:1;color:var(--text-secondary);border-color:var(--border-mid);" onclick="undoTask(\'' + id + '\');closeDetailModal()">Undo completion</button><button class="btn-detail-delete" onclick="deleteTask(\'' + id + '\')">Remove</button></div>';
+
+  document.getElementById('detail-content').innerHTML =
+    '<div style="font-family:\'Fraunces\',serif;font-size:19px;font-weight:500;line-height:1.3;margin-bottom:12px;">' + escHtml(task.name || '') + '</div>' +
+    '<div class="detail-chips">' +
+    '<span class="detail-chip">From: ' + (task.requester === 'Brittany' ? 'Brittany' : task.requester) + '</span>' +
+    '<span class="detail-chip">' + duration.label + '</span>' +
+    '<span class="detail-chip">' + capitalize((task.notes && task.notes.location) || 'anywhere') + '</span>' +
+    '<span class="detail-chip">Mentioned ' + mentions + 'x</span>' +
+    '<span class="detail-chip">' + (daysOld === 0 ? 'Added today' : daysOld + ' day' + (daysOld !== 1 ? 's' : '') + ' on list') + '</span>' +
+    '<span class="detail-chip" style="background:var(--gold-pale);color:#5C420A;border-color:var(--gold-border);">Risk: ' + Math.round(risk) + '/10</span>' +
+    '</div>' +
+    flagHTML +
+    reactionHTML +
+    smartHTML +
+    actionsHTML;
 
   document.getElementById('detail-modal').classList.add('visible');
 }
-function closeDetailModal() { document.getElementById('detail-modal').classList.remove('visible'); }
-
-// ─────────────────────────────────────────────
-// SHARE MODAL (Brittany reaction link)
-// ─────────────────────────────────────────────
-let _shareLink = '';
-function showShareModal(taskId, taskName) {
-  _shareLink = `https://dewaradam.github.io/household-os/brittany.html?task=${taskId}`;
-  document.getElementById('share-task-name').textContent = taskName;
-  document.getElementById('share-link-text').textContent = _shareLink;
-  document.getElementById('share-overlay').classList.add('open');
-}
-function closeShareModal() { document.getElementById('share-overlay').classList.remove('open'); }
-function shareOverlayClick(e) { if (e.target === document.getElementById('share-overlay')) closeShareModal(); }
-function copyShareLink() {
-  navigator.clipboard.writeText(_shareLink).then(() => {
-    const btn = document.querySelector('.share-copy-btn');
-    btn.textContent = 'Copied!';
-    setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
-  });
+function closeDetailModal() {
+  document.getElementById('detail-modal').classList.remove('visible');
 }
 
-// ─────────────────────────────────────────────
+// =============================================
 // COMPLETED TOGGLE
-// ─────────────────────────────────────────────
+// =============================================
 function toggleCompleted(el) {
-  const arrow = el.querySelector('.toggle-arrow');
-  const list  = el.nextElementSibling;
-  const open  = list.classList.toggle('visible');
+  var arrow = el.querySelector('.toggle-arrow');
+  var list = el.nextElementSibling;
+  var open = list.classList.toggle('visible');
   arrow.classList.toggle('open', open);
   localStorage.setItem('dtm_completed_open', open);
 }
 
-// ─────────────────────────────────────────────
-// UTILITIES
-// ─────────────────────────────────────────────
+// =============================================
+// UTILS
+// =============================================
 function showToast(msg) {
-  const t = document.getElementById('toast');
+  var t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
+  setTimeout(function() { t.classList.remove('show'); }, 2800);
 }
 function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
 function formatDate(dateStr) {
-  const d = new Date(dateStr + 'T12:00:00');
+  var d = new Date(dateStr + 'T12:00:00');
   return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
 }
 
-document.querySelectorAll('.modal-overlay').forEach(overlay => {
-  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('visible'); });
+document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) overlay.classList.remove('visible');
+  });
 });
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('visible'));
-    closeShareModal();
-  }
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-overlay').forEach(function(m) { m.classList.remove('visible'); });
   if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openAddModal(); }
 });
 
-// ─────────────────────────────────────────────
-// GMAIL INTEGRATION (aspirational — requires API key)
-// ─────────────────────────────────────────────
-const GMAIL_CONFIG = {
-  brittany: ['brittany.pringle22@gmail.com', 'brittany.dewar@wilsonart.com'],
-  rylee:    ['millere@milanareaschools.org'],
-  georgia:  ['noreply@kaymbu.com'],
-  school:   ['milanareaschools.org'],
-};
-const SCAN_WINDOW_HOURS = 24;
-let isScanning = false;
-let pendingGmailTasks = [];
-
-function getChildFromSender(from, subject, body) {
-  const f = (from || '').toLowerCase();
-  if (GMAIL_CONFIG.georgia.some(e => f.includes(e))) return 'Georgia';
-  if (GMAIL_CONFIG.rylee.some(e => f.includes(e)))   return 'Rylee';
-  if (GMAIL_CONFIG.school.some(d => f.includes(d))) {
-    const b = (body || '').toLowerCase();
-    if (b.includes('georgia') || b.includes('pre-k') || b.includes('preschool')) return 'Georgia';
-    if (b.includes('rylee') || b.includes('4th grade')) return 'Rylee';
-    return 'School';
-  }
-  return null;
-}
-function isBrittanyEmail(from, subject) {
-  const f = (from || '').toLowerCase();
-  const s = (subject || '').toLowerCase();
-  return GMAIL_CONFIG.brittany.some(e => f.includes(e)) && s.startsWith('task:');
-}
-
-async function runGmailScan(isAuto = false) {
-  if (isScanning) return;
-  isScanning = true;
-  const btn = document.getElementById('scan-btn');
-  if (btn) btn.classList.add('scanning');
-  renderGmailDigest('scanning');
-  // Full Gmail + Claude API integration requires a server-side API key.
-  // Stub: clears scanning state gracefully.
-  setTimeout(() => {
-    isScanning = false;
-    if (btn) btn.classList.remove('scanning');
-    pendingGmailTasks = [];
-    renderGmailDigest('error');
-    scheduleNextScan();
-  }, 1500);
-}
-
-async function addGmailTaskToList(tempId) {
-  const task = pendingGmailTasks.find(t => t.id === tempId);
-  if (!task) return;
-  task.added = true;
-  const meta = JSON.stringify({ location: task.location || 'anywhere', mentions: 1, snoozed: false, fromEmail: true });
-  const { data, error } = await _sb.from('tasks').insert({
-    name: task.description, notes: meta, requester: task.requester,
-    priority: task.requester === 'Brittany' ? 'high' : 'medium',
-    estimated_minutes: estimateDuration(task.description).mins,
-    completed: false, completed_at: null,
-  }).select().single();
-  if (error) { console.error('Insert error:', error); showToast('❌ Failed to add task'); task.added = false; return; }
-  if (!tasks.find(t => t.id === data.id)) tasks.push(rowToTask(data));
-  render();
-  renderGmailDigest('results');
-  showToast(`"${task.description.slice(0,30)}..." added to list`);
-}
-
-async function addAllGmailTasks() {
-  const unadded = pendingGmailTasks.filter(t => !t.added);
-  for (const t of unadded) await addGmailTaskToList(t.id);
-}
-
-function renderGmailDigest(state) {
-  const el = document.getElementById('gmail-digest-section');
-  if (!el) return;
-  const lastScan     = localStorage.getItem('dtm_last_scan');
-  const lastScanText = lastScan ? `Last scanned ${formatTimeAgo(parseInt(lastScan))}` : 'Never scanned';
-  const nextScanText = getNextScanText();
-
-  if (state === 'scanning') {
-    el.innerHTML = `
-      <div class="section-label">inbox</div>
-      <div class="gmail-digest">
-        <div class="gmail-digest-header">
-          <span class="gmail-digest-title">📬 Scanning Gmail...</span>
-          <span class="gmail-digest-meta">${lastScanText}</span>
-        </div>
-        <div class="gmail-scanning"><span class="spin">⟳</span> Checking for new tasks from Brittany and the kids' schools...</div>
-      </div>`;
-    return;
-  }
-  if (state === 'error') {
-    el.innerHTML = `
-      <div class="section-label">inbox</div>
-      <div class="gmail-digest">
-        <div class="gmail-digest-header">
-          <span class="gmail-digest-title">📬 Gmail</span>
-          <span class="gmail-digest-meta">${lastScanText}</span>
-        </div>
-        <div class="gmail-empty">Gmail scan requires a server-side API key. <span style="color:var(--blue-action);cursor:pointer" onclick="runGmailScan()">Try again →</span></div>
-        <div class="gmail-next-scan">${nextScanText}</div>
-      </div>`;
-    return;
-  }
-  if (!pendingGmailTasks.length) { el.innerHTML = ''; return; }
-  const unadded  = pendingGmailTasks.filter(t => !t.added);
-  const taskRows = pendingGmailTasks.map(t => `
-    <div class="gmail-task-row">
-      <span class="gmail-task-source ${t.sourceClass}">${t.sourceLabel}</span>
-      <span class="gmail-task-text">${escHtml(t.description)}</span>
-      ${t.added
-        ? `<span class="gmail-task-add added">✓ Added</span>`
-        : `<button class="gmail-task-add" onclick="addGmailTaskToList(${t.id})">Add →</button>`}
-    </div>`).join('');
-  el.innerHTML = `
-    <div class="section-label">inbox — ${pendingGmailTasks.length} task${pendingGmailTasks.length !== 1 ? 's' : ''} found</div>
-    <div class="gmail-digest">
-      <div class="gmail-digest-header">
-        <span class="gmail-digest-title">📬 Gmail digest</span>
-        <span class="gmail-digest-meta">${lastScanText}</span>
-      </div>
-      ${taskRows}
-      ${unadded.length > 1 ? `<button class="gmail-add-all" onclick="addAllGmailTasks()">Add all ${unadded.length} tasks to list</button>` : ''}
-      <div class="gmail-next-scan">${nextScanText} · <span style="color:var(--blue-action);cursor:pointer" onclick="runGmailScan()">Scan now</span></div>
-    </div>`;
-}
-
-function getNextScanTimes() {
-  const now = new Date();
-  const estOffset = isDST(now) ? -4 : -5;
-  const estNow = new Date(now.getTime() + (now.getTimezoneOffset() + estOffset * 60) * 60000);
-  return [6, 18].map(hour => {
-    const t = new Date(estNow);
-    t.setHours(hour, 0, 0, 0);
-    if (t <= estNow) t.setDate(t.getDate() + 1);
-    return new Date(t.getTime() - (now.getTimezoneOffset() + estOffset * 60) * 60000);
-  }).sort((a,b) => a - b);
-}
-function isDST(date) {
-  const jan = new Date(date.getFullYear(), 0, 1).getTimezoneOffset();
-  const jul = new Date(date.getFullYear(), 6, 1).getTimezoneOffset();
-  return date.getTimezoneOffset() < Math.max(jan, jul);
-}
-function getNextScanText() {
-  const next    = getNextScanTimes()[0];
-  const diffHrs = Math.round((next - Date.now()) / 3600000);
-  const timeStr = next.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-  if (diffHrs < 1)  return `Auto-scan in less than an hour (${timeStr} EST)`;
-  if (diffHrs === 1) return `Auto-scan in about 1 hour (${timeStr} EST)`;
-  return `Next auto-scan at ${timeStr} EST`;
-}
-function formatTimeAgo(ts) {
-  const diffMins = Math.round((Date.now() - ts) / 60000);
-  if (diffMins < 1)  return 'just now';
-  if (diffMins < 60) return `${diffMins}m ago`;
-  const diffHrs = Math.round(diffMins / 60);
-  if (diffHrs < 24)  return `${diffHrs}h ago`;
-  return `${Math.round(diffHrs / 24)}d ago`;
-}
-let scanTimer = null;
-function scheduleNextScan() {
-  if (scanTimer) clearTimeout(scanTimer);
-  const next  = getNextScanTimes()[0];
-  const delay = next - Date.now();
-  if (delay > 0 && delay < 86400000) scanTimer = setTimeout(() => runGmailScan(true), delay);
-}
-
-// ─────────────────────────────────────────────
+// =============================================
 // BOOT
-// ─────────────────────────────────────────────
-load();           // relDates from localStorage
+// =============================================
+loadRelDates();
 updateContext();
 loadWeather();
-render();         // initial render with empty tasks
-loadTasks();      // async: fetches from Supabase, re-renders on resolve
-setupRealtime();
-scheduleNextScan();
+loadTasks();
 </script>
 </body>
 </html>

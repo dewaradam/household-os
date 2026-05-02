@@ -608,10 +608,10 @@ function renderList() {
           ${noteText}
         </div>
         <div class="task-actions">
-          <button class="action-btn" onclick="requestInfo(${t.id})">💬 Need info</button>
-          <button class="action-btn btn-top" onclick="moveToTop(${t.id})">⬆️ Move up</button>
-          <button class="action-btn" onclick="openPriorityModal(${t.id}, '${escHtml(t.name || '')}')">🔄 Priority</button>
-          <button class="action-btn btn-delete" onclick="removeTask(${t.id})">🗑️ Remove</button>
+          <button class="action-btn" onclick="requestInfo('${t.id}')">💬 Need info</button>
+          <button class="action-btn btn-top" onclick="moveToTop('${t.id}')">⬆️ Move up</button>
+          <button class="action-btn" onclick="openPriorityModal('${t.id}', '${escHtml(t.name || '')}')">🔄 Priority</button>
+          <button class="action-btn btn-delete" onclick="removeTask('${t.id}')">🗑️ Remove</button>
         </div>
       </div>`;
   }).join('');
@@ -640,12 +640,12 @@ function renderDone() {
           <div class="reaction-label">Leave a reaction 💕</div>
           <div class="react-row">
             ${['😍','🥰','🙌','💛','👏','🎉','😂','🫶'].map(e =>
-              `<button class="react-btn ${rs.emoji === e ? 'selected' : ''}" onclick="selectReaction(${t.id}, '${e}')">${e}</button>`
+              `<button class="react-btn ${rs.emoji === e ? 'selected' : ''}" onclick="selectReaction('${t.id}', '${e}')">${e}</button>`
             ).join('')}
           </div>
           <textarea class="reaction-textarea" id="rnote-${t.id}" placeholder="Leave him a little note… (optional)"
             oninput="reactionState[${t.id}] = reactionState[${t.id}] || {}; reactionState[${t.id}].note = this.value;">${rs.note || ''}</textarea>
-          <button class="btn-react-submit" onclick="submitReaction(${t.id})">Send reaction 💌</button>
+          <button class="btn-react-submit" onclick="submitReaction('${t.id}')">Send reaction 💌</button>
         </div>`;
 
     return `
@@ -748,7 +748,7 @@ async function removeTask(id) {
   row.innerHTML = `
     <span style="font-size:13px;color:#8C1F1F;">Remove this task?</span>
     <div style="display:flex;gap:8px;">
-      <button onclick="confirmRemove(${id})" style="padding:6px 14px;background:var(--red);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;font-family:Lato,sans-serif;">Yes, remove</button>
+      <button onclick="confirmRemove('${id}')" style="padding:6px 14px;background:var(--red);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;font-family:Lato,sans-serif;">Yes, remove</button>
       <button onclick="this.closest('.confirm-row').remove()" style="padding:6px 12px;background:transparent;color:var(--text-soft);border:0.5px solid var(--border-mid);border-radius:6px;font-size:12px;cursor:pointer;font-family:Lato,sans-serif;">Cancel</button>
     </div>`;
   card.appendChild(row);

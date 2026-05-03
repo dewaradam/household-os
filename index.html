@@ -928,7 +928,7 @@ function render() {
   var activeTasks = getActiveTasks();
   var doneTasks = getDoneTasks();
   var critical = activeTasks.filter(function(t) { return calcRisk(t) >= 6; });
-  var rest = activeTasks.filter(function(t) { return calcRisk(t) < 6; });
+  var rest = activeTasks.slice(1); // everything except focus card task -- no tasks fall through
   var doneCount = getCompletedThisWeek();
 
   document.getElementById('stat-active').textContent = activeTasks.length;
@@ -1419,6 +1419,11 @@ updateContext();
 loadWeather();
 loadTasks();
 loadRelDates();
+
+// Auto-refresh tasks every 30 seconds to pick up Brittany's changes
+setInterval(function() {
+  loadTasks();
+}, 30000);
 </script>
 </body>
 </html>

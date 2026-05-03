@@ -1292,7 +1292,7 @@ function selectRelType(btn) {
   document.querySelectorAll('.rel-type-btn').forEach(function(b) { b.classList.remove('selected'); });
   btn.classList.add('selected');
 }
-async async function submitRelDate() {
+async function submitRelDate() {
   var title = document.getElementById('rel-title').value.trim();
   var date = document.getElementById('rel-date').value;
   if (!title || !date) { showToast('Add a title and date'); return; }

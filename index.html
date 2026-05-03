@@ -1049,7 +1049,7 @@ function renderTaskList(rest, doneTasks) {
 
   var html = '';
   if (todayTasks.length) {
-    html += '<div class="group-header"><span class="group-title">the rest of your list</span><span class="group-count">' + todayTasks.length + ' task' + (todayTasks.length !== 1 ? 's' : '') + '</span></div>';
+    html += '<div class="group-header"><span class="group-title">she's asking about these &amp; following up</span><span class="group-count">' + todayTasks.length + ' task' + (todayTasks.length !== 1 ? 's' : '') + '</span></div>';
     html += '<div class="task-list">' + todayTasks.map(function(t) { return taskCard(t, false); }).join('') + '</div>';
   }
   if (laterTasks.length) {
@@ -1181,14 +1181,15 @@ async function deleteTask(id) {
   } catch(e) { showToast('Could not remove -- try again'); }
 }
 
-async function submitReply(id) {
-  var input = document.getElementById('reply-input-' + id);
-  if (!input || !input.value.trim()) return;
+async function saveAdamNote(id) {
+  var input = document.getElementById('adam-note-' + id);
+  if (!input) return;
   var task = tasks.find(function(t) { return t.id === id; });
   if (!task) return;
   var updatedNotes = Object.assign({}, task.notes || {}, {
     needs_discussion: false,
-    adam_reply: input.value.trim()
+    adam_reply: input.value.trim(),
+    adam_note: input.value.trim()
   });
   try {
     await sbFetch('tasks?id=eq.' + id, {
@@ -1199,8 +1200,8 @@ async function submitReply(id) {
     task.notes = updatedNotes;
     render();
     closeDetailModal();
-    showToast('Reply saved -- Brittany will see it');
-  } catch(e) { showToast('Could not save reply -- try again'); }
+    showToast(input.value.trim() ? 'Note saved -- Brittany will see it' : 'Note cleared');
+  } catch(e) { showToast('Could not save -- try again'); }
 }
 
 // =============================================
@@ -1329,16 +1330,23 @@ function openDetail(id) {
     return '<div class="detail-smart-block"><div class="detail-smart-label">Smart action</div><div class="detail-smart-text">' + a.text + '</div><button class="detail-smart-action" onclick="showToast(\'Opening...\')">' + a.cta + '</button></div>';
   }).join('');
 
+  // Flag block - shown when Brittany flags for discussion
   var flagHTML = '';
   if (hasFlag && !task.completed) {
     flagHTML = '<div class="detail-flag-block">' +
-      '<div class="detail-flag-label">💬 Brittany wants to discuss</div>' +
-      (brittanyNote ? '<div class="detail-flag-text">' + escHtml(brittanyNote) + '</div>' : '<div class="detail-flag-text">She flagged this for discussion.</div>') +
-      (adamReply ? '<div style="font-size:12px;color:var(--text-secondary);margin-top:6px;">Your reply: ' + escHtml(adamReply) + '</div>' :
-        '<textarea class="detail-reply-input" id="reply-input-' + id + '" placeholder="Type a reply for Brittany..."></textarea>' +
-        '<button class="btn-reply" onclick="submitReply(\'' + id + '\')">Send reply</button>') +
+      '<div class="detail-flag-label">💬 Brittany wants to discuss this</div>' +
+      (brittanyNote ? '<div class="detail-flag-text">' + escHtml(brittanyNote) + '</div>' : '<div class="detail-flag-text">She flagged this task for discussion.</div>') +
       '</div>';
   }
+
+  // Always show notes/update field on active tasks
+  var existingNote = task.notes && task.notes.adam_note ? task.notes.adam_note : '';
+  var notesHTML = !task.completed ? '<div style="margin-top:14px;">' +
+      '<div style="font-size:11px;font-weight:500;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">Your notes / update</div>' +
+      '<textarea class="detail-reply-input" id="adam-note-' + id + '" placeholder="Add a note, update, or reply for Brittany...">' + escHtml(existingNote) + '</textarea>' +
+      '<button class="btn-reply" onclick="saveAdamNote(\'' + id + '\')">Save note</button>' +
+      (adamReply ? '<div style="font-size:11px;color:var(--text-tertiary);margin-top:6px;">Last saved: ' + escHtml(adamReply) + '</div>' : '') +
+      '</div>' : '';
 
   var reactionHTML = '';
   if (task.completed && task.brittany_reaction) {
@@ -1365,6 +1373,7 @@ function openDetail(id) {
     flagHTML +
     reactionHTML +
     smartHTML +
+    notesHTML +
     actionsHTML;
 
   document.getElementById('detail-modal').classList.add('visible');

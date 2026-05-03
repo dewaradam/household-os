@@ -218,7 +218,19 @@
     .task-item:hover { border-color: var(--border-mid); }
     .task-item:active { transform: scale(0.995); }
     .task-item.completing { opacity: 0.4; transform: scale(0.98); transition: all 0.3s; }
-    .task-item.has-flag { border-color: var(--rose-border); }
+    .task-item.has-flag { border-color: var(--rose); border-width: 1.5px; }
+
+    .task-flag-banner {
+      margin-top: 6px;
+      background: var(--rose-light);
+      border: 0.5px solid var(--rose-border);
+      border-radius: var(--radius-sm);
+      padding: 6px 10px;
+      font-size: 11px; font-weight: 500;
+      color: #6B2535;
+      display: flex; align-items: center; gap: 6px;
+      width: 100%;
+    }
 
     .task-check {
       width: 19px; height: 19px; border-radius: 50%;
@@ -1088,7 +1100,7 @@ function taskCard(task, isDone) {
     '<span class="task-chip">' + duration.label + '</span>' +
     '<span class="task-chip">' + capitalize((task.notes && task.notes.location) || 'anywhere') + '</span>' +
     (risk >= 6 && !isDone ? '<span class="task-chip urgent-chip">Priority</span>' : '') +
-    (hasFlag && !isDone ? '<span class="task-chip flag-chip">💬 Brittany wants to discuss</span>' : '') +
+    (hasFlag && !isDone ? '</div><div class="task-flag-banner">💬 <strong>Brittany wants to discuss this</strong> -- tap for details' : '') +
     (hasSmartAction && !isDone ? '<span class="task-chip smart-chip">Smart action ready</span>' : '') +
     (wNudge ? '<span class="task-chip" style="background:var(--gold-pale);color:#5C420A;border-color:var(--gold-border);">' + wNudge + '</span>' : '') +
     (isDone ? '<span class="task-chip">Done</span>' : '') +
@@ -1243,19 +1255,24 @@ async function submitTask() {
 }
 
 // =============================================
-// RELATIONSHIP DATES (localStorage)
+// RELATIONSHIP DATES (Supabase)
 // =============================================
-function loadRelDates() {
+async function loadRelDates() {
   try {
-    relDates = JSON.parse(localStorage.getItem('dtm_rel') || '[]');
+    var data = await sbFetch('rel_dates?select=*&order=date.asc');
+    relDates = data || [];
     if (!relDates.length) {
-      relDates = [
-        { id: 1, title: 'Anniversary', emoji: '💍', date: nextOccurrence(6, 14), remind: 60 },
-        { id: 2, title: 'Brittany\'s birthday', emoji: '🎂', date: nextOccurrence(8, 3), remind: 30 },
+      var defaults = [
+        { title: 'Anniversary', emoji: '💍', date: nextOccurrence(6, 14), remind: 60 },
+        { title: 'Brittany birthday', emoji: '🎂', date: nextOccurrence(8, 3), remind: 30 },
       ];
-      localStorage.setItem('dtm_rel', JSON.stringify(relDates));
+      for (var d of defaults) {
+        var result = await sbFetch('rel_dates', { method: 'POST', body: JSON.stringify(d) });
+        if (result && result[0]) relDates.push(result[0]);
+      }
     }
-  } catch(e) { relDates = []; }
+    render();
+  } catch(e) { console.error('Could not load rel dates', e); relDates = []; }
 }
 function nextOccurrence(month, day) {
   var now = new Date();
@@ -1275,15 +1292,20 @@ function selectRelType(btn) {
   document.querySelectorAll('.rel-type-btn').forEach(function(b) { b.classList.remove('selected'); });
   btn.classList.add('selected');
 }
-function submitRelDate() {
+async async function submitRelDate() {
   var title = document.getElementById('rel-title').value.trim();
   var date = document.getElementById('rel-date').value;
   if (!title || !date) { showToast('Add a title and date'); return; }
-  relDates.push({ id: Date.now(), title: title, emoji: selectedRelEmoji, date: date, remind: parseInt(document.getElementById('rel-remind').value) });
-  localStorage.setItem('dtm_rel', JSON.stringify(relDates));
-  render();
-  closeRelModal();
-  showToast('Date saved');
+  try {
+    var result = await sbFetch('rel_dates', {
+      method: 'POST',
+      body: JSON.stringify({ title: title, emoji: selectedRelEmoji, date: date, remind: parseInt(document.getElementById('rel-remind').value) })
+    });
+    if (result && result[0]) relDates.push(result[0]);
+    render();
+    closeRelModal();
+    showToast('Date saved');
+  } catch(e) { showToast('Could not save date -- try again'); }
 }
 
 // =============================================
@@ -1393,10 +1415,10 @@ document.addEventListener('keydown', function(e) {
 // =============================================
 // BOOT
 // =============================================
-loadRelDates();
 updateContext();
 loadWeather();
 loadTasks();
+loadRelDates();
 </script>
 </body>
 </html>

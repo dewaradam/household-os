@@ -492,6 +492,14 @@
     .empty-state-icon { font-size: 32px; margin-bottom: 12px; }
     .empty-state-text { font-size: 14px; line-height: 1.5; }
 
+    @keyframes bell-ring {
+      0%, 100% { transform: rotate(0deg); }
+      20% { transform: rotate(-15deg); }
+      40% { transform: rotate(15deg); }
+      60% { transform: rotate(-10deg); }
+      80% { transform: rotate(10deg); }
+    }
+
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 2px; }
@@ -1107,7 +1115,7 @@ function taskCard(task, isDone) {
     '</div>' +
     reactionBubble +
     '</div>' +
-    (!isDone ? '<div class="task-score ' + scoreClass + '">' + Math.round(risk) + '</div>' : '') +
+    (!isDone ? (hasFlag ? '<div style="display:flex;align-items:center;gap:4px;flex-shrink:0;margin-top:1px;"><span style="font-size:16px;animation:bell-ring 1s ease infinite;">🔔</span><div class="task-score ' + scoreClass + '">' + Math.round(risk) + '</div></div>' : '<div class="task-score ' + scoreClass + '">' + Math.round(risk) + '</div>') : '') +
     '</div>';
 }
 

@@ -1049,7 +1049,7 @@ function renderTaskList(rest, doneTasks) {
 
   var html = '';
   if (todayTasks.length) {
-    html += '<div class="group-header"><span class="group-title">she's asking about these &amp; following up</span><span class="group-count">' + todayTasks.length + ' task' + (todayTasks.length !== 1 ? 's' : '') + '</span></div>';
+    html += '<div class="group-header"><span class="group-title">She&#39;s asking about these &amp; following up</span><span class="group-count">' + todayTasks.length + ' task' + (todayTasks.length !== 1 ? 's' : '') + '</span></div>';
     html += '<div class="task-list">' + todayTasks.map(function(t) { return taskCard(t, false); }).join('') + '</div>';
   }
   if (laterTasks.length) {

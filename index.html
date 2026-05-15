@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <style>
     :root {
       --navy: #0F1F35;
@@ -26,9 +27,6 @@
       --teal-light: #E1F5EE;
       --amber: #D4880A;
       --amber-light: #FEF3DC;
-      --rose: #C96B7A;
-      --rose-light: #F7E8EB;
-      --rose-border: rgba(201,107,122,0.25);
       --page-bg: #F4F6F9;
       --card-bg: #FFFFFF;
       --text-primary: #1A1A2E;
@@ -52,6 +50,7 @@
       overflow-x: hidden;
     }
 
+    /* ── TOP BAR ── */
     .topbar {
       background: var(--navy);
       padding: 20px 20px 18px;
@@ -62,7 +61,8 @@
     .topbar-inner { max-width: 600px; margin: 0 auto; display: flex; align-items: flex-start; justify-content: space-between; }
     .topbar-context { font-size: 12px; color: var(--gold-light); font-weight: 300; letter-spacing: 0.03em; margin-bottom: 3px; }
     .topbar-title { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 500; color: #fff; line-height: 1.1; }
-    .topbar-actions { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
+    .topbar-actions { display: flex; gap: 8px; align-items: center; margin-top: 4px; flex-direction: column; align-items: flex-end; }
+    .topbar-btn-row { display: flex; gap: 8px; }
     .icon-btn {
       width: 34px; height: 34px; border-radius: 50%;
       border: 1px solid rgba(196,154,42,0.4);
@@ -74,6 +74,23 @@
     }
     .icon-btn:hover { background: rgba(196,154,42,0.2); border-color: rgba(196,154,42,0.6); }
 
+    /* ── NOTIFICATION PILL ── */
+    .notify-pill {
+      display: none;
+      align-items: center; gap: 5px;
+      background: var(--red); color: #fff;
+      padding: 4px 11px; border-radius: 20px;
+      font-size: 11px; font-weight: 500; cursor: pointer;
+      animation: notifyPulse 2.5s infinite;
+      white-space: nowrap;
+    }
+    .notify-pill.visible { display: flex; }
+    @keyframes notifyPulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(226,75,74,0.5); }
+      50% { box-shadow: 0 0 0 5px rgba(226,75,74,0); }
+    }
+
+    /* ── MOMENTUM BANNER ── */
     .momentum {
       max-width: 600px; margin: 0 auto;
       background: var(--navy-mid);
@@ -85,8 +102,10 @@
     .momentum-text { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.5; }
     .momentum-text strong { color: var(--gold-light); font-weight: 500; }
 
+    /* ── MAIN SCROLL ── */
     .main { max-width: 600px; margin: 0 auto; padding: 20px 16px 120px; }
 
+    /* ── SECTION LABELS ── */
     .section-label {
       font-size: 10px; font-weight: 500; letter-spacing: 0.1em;
       text-transform: uppercase; color: var(--text-tertiary);
@@ -94,7 +113,7 @@
     }
     .section-label:first-child { margin-top: 0; }
 
-    /* Focus card */
+    /* ── FOCUS CARD ── */
     .focus-card {
       background: var(--card-bg);
       border: 1.5px solid var(--red);
@@ -165,19 +184,7 @@
     }
     .btn-snooze:hover { background: var(--page-bg); }
 
-    /* Brittany flag */
-    .brittany-flag {
-      background: var(--rose-light);
-      border: 0.5px solid var(--rose-border);
-      border-radius: var(--radius-sm);
-      padding: 8px 11px;
-      margin-bottom: 10px;
-      display: flex; align-items: flex-start; gap: 8px;
-    }
-    .brittany-flag-text { font-size: 12px; color: #6B2535; line-height: 1.4; flex: 1; }
-    .brittany-flag-text strong { font-weight: 500; }
-
-    /* Relationship card */
+    /* ── RELATIONSHIP CARD ── */
     .relationship-card {
       background: var(--gold-pale);
       border: 0.5px solid var(--gold-border);
@@ -204,7 +211,7 @@
     }
     .rel-add-btn:hover { background: rgba(196,154,42,0.08); }
 
-    /* Task list */
+    /* ── TASK LIST ── */
     .task-list { display: flex; flex-direction: column; gap: 1px; }
     .task-item {
       background: var(--card-bg);
@@ -218,19 +225,7 @@
     .task-item:hover { border-color: var(--border-mid); }
     .task-item:active { transform: scale(0.995); }
     .task-item.completing { opacity: 0.4; transform: scale(0.98); transition: all 0.3s; }
-    .task-item.has-flag { border-color: var(--rose); border-width: 1.5px; }
-
-    .task-flag-banner {
-      margin-top: 6px;
-      background: var(--rose-light);
-      border: 0.5px solid var(--rose-border);
-      border-radius: var(--radius-sm);
-      padding: 6px 10px;
-      font-size: 11px; font-weight: 500;
-      color: #6B2535;
-      display: flex; align-items: center; gap: 6px;
-      width: 100%;
-    }
+    .task-item.flagged { border-color: var(--red); border-width: 1.5px; }
 
     .task-check {
       width: 19px; height: 19px; border-radius: 50%;
@@ -242,7 +237,7 @@
     }
     .task-check:hover { border-color: var(--teal); }
     .task-check.checked { background: var(--teal); border-color: var(--teal); }
-    .task-check.checked::after { content: '\2713'; font-size: 11px; color: #fff; font-weight: 500; }
+    .task-check.checked::after { content: '✓'; font-size: 11px; color: #fff; font-weight: 500; }
     .task-check.urgent { border-color: var(--amber); }
     .task-check.smart-ready { border-color: var(--blue-action); }
 
@@ -257,7 +252,17 @@
     }
     .task-chip.smart-chip { background: var(--blue-light); color: #1A4A62; border-color: var(--blue-border); }
     .task-chip.urgent-chip { background: var(--amber-light); color: #7A4A05; border-color: rgba(212,136,10,0.3); }
-    .task-chip.flag-chip { background: var(--rose-light); color: #6B2535; border-color: var(--rose-border); }
+
+    /* ── TASK FLAG BANNER ── */
+    .task-flag-banner {
+      width: 100%; margin-top: 7px;
+      background: var(--red-light);
+      border: 1px solid var(--red-border);
+      border-radius: var(--radius-sm);
+      padding: 7px 10px;
+      font-size: 11px; font-weight: 500; color: #7A1F1F;
+      display: flex; align-items: center; gap: 6px;
+    }
 
     .task-score {
       font-family: 'Fraunces', serif;
@@ -267,7 +272,7 @@
     .task-score.high { color: var(--amber); }
     .task-score.critical { color: var(--red); }
 
-    /* Completed section */
+    /* ── COMPLETED SECTION ── */
     .completed-toggle {
       display: flex; align-items: center; gap: 8px;
       padding: 12px 4px; cursor: pointer; color: var(--text-tertiary);
@@ -281,18 +286,7 @@
     .task-item.done-item { opacity: 0.55; }
     .task-item.done-item:hover { opacity: 0.75; }
 
-    /* Brittany reaction on completed */
-    .reaction-bubble {
-      margin-top: 6px;
-      background: var(--rose-light);
-      border: 0.5px solid var(--rose-border);
-      border-radius: var(--radius-sm);
-      padding: 5px 9px;
-      font-size: 11px; color: #6B2535;
-      display: inline-flex; align-items: center; gap: 5px;
-    }
-
-    /* Group header */
+    /* ── GROUP HEADER ── */
     .group-header {
       display: flex; align-items: center; justify-content: space-between;
       padding: 18px 4px 8px;
@@ -300,7 +294,7 @@
     .group-title { font-size: 12px; font-weight: 500; color: var(--text-secondary); }
     .group-count { font-size: 11px; color: var(--text-tertiary); }
 
-    /* Add row */
+    /* ── ADD ROW ── */
     .add-row {
       background: var(--card-bg);
       border: 0.5px dashed var(--border-mid);
@@ -321,7 +315,7 @@
     }
     .add-row:hover .add-circle { border-color: var(--gold); }
 
-    /* Stats */
+    /* ── STATS ROW ── */
     .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 4px; }
     .stat-card {
       background: var(--navy); border-radius: var(--radius-md);
@@ -335,7 +329,7 @@
     .stat-num.red { color: #F09595; }
     .stat-label { font-size: 11px; color: rgba(255,255,255,0.45); }
 
-    /* Modal */
+    /* ── MODAL ── */
     .modal-overlay {
       display: none;
       position: fixed; inset: 0; z-index: 200;
@@ -349,8 +343,7 @@
       width: 100%; max-width: 600px;
       padding: 24px 20px 36px;
       animation: slideUp 0.22s ease-out;
-      max-height: 90vh;
-      overflow-y: auto;
+      max-height: 90vh; overflow-y: auto;
     }
     @keyframes slideUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     .modal-handle { width: 36px; height: 4px; background: var(--border-mid); border-radius: 2px; margin: 0 auto 20px; }
@@ -370,7 +363,7 @@
     .form-textarea { resize: vertical; min-height: 70px; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-    .requester-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .requester-row { display: flex; gap: 8px; }
     .requester-btn {
       flex: 1; padding: 8px; border-radius: var(--radius-sm);
       border: 0.5px solid var(--border-mid); background: transparent;
@@ -389,7 +382,7 @@
       margin-top: 8px;
     }
     .btn-submit:hover { opacity: 0.88; }
-    .btn-submit:disabled { opacity: 0.5; cursor: default; }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
     .btn-cancel {
       width: 100%; padding: 10px;
       background: transparent; color: var(--text-tertiary);
@@ -397,6 +390,7 @@
       cursor: pointer; margin-top: 6px;
     }
 
+    /* ── RELATIONSHIP MODAL ── */
     .rel-type-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; }
     .rel-type-btn {
       padding: 6px 12px; border-radius: 20px;
@@ -407,7 +401,59 @@
     }
     .rel-type-btn.selected { background: var(--gold-pale); border-color: var(--gold-border); color: #5C420A; }
 
-    /* Detail modal extras */
+    /* ── DISCUSSION BLOCK (for task detail) ── */
+    .discussion-block {
+      background: var(--red-light);
+      border: 1.5px solid var(--red);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+    .discussion-block-title {
+      font-size: 13px; font-weight: 600; color: #7A1F1F;
+      margin-bottom: 4px; display: flex; align-items: center; gap: 6px;
+    }
+    .discussion-block-sub {
+      font-size: 12px; color: #A32D2D; margin-bottom: 12px; line-height: 1.4;
+    }
+    .btn-send-update {
+      width: 100%; padding: 10px;
+      background: var(--red); color: #fff;
+      border: none; border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+      cursor: pointer; margin-top: 8px; transition: opacity 0.15s;
+    }
+    .btn-send-update:hover { opacity: 0.88; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: var(--navy); color: #fff;
+      padding: 10px 18px; border-radius: 30px;
+      font-size: 13px; z-index: 300;
+      border: 1px solid var(--gold-border);
+      transition: transform 0.25s ease-out, opacity 0.25s;
+      opacity: 0; pointer-events: none; white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    /* ── LOADING STATE ── */
+    .loading-state {
+      text-align: center; padding: 60px 20px; color: var(--text-tertiary);
+    }
+    .loading-spinner {
+      width: 28px; height: 28px; border: 2px solid var(--border-mid);
+      border-top-color: var(--gold); border-radius: 50%;
+      animation: spin 0.7s linear infinite; margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── EMPTY STATE ── */
+    .empty-state { text-align: center; padding: 40px 20px; color: var(--text-tertiary); }
+    .empty-state-icon { font-size: 32px; margin-bottom: 12px; }
+    .empty-state-text { font-size: 14px; line-height: 1.5; }
+
+    /* ── TASK DETAIL ── */
     .detail-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
     .detail-chip {
       font-size: 12px; padding: 4px 10px; border-radius: 20px;
@@ -442,64 +488,7 @@
       font-family: 'DM Sans', sans-serif;
     }
 
-    /* Brittany needs info block in detail */
-    .detail-flag-block {
-      background: var(--rose-light);
-      border: 1px solid var(--rose-border);
-      border-radius: var(--radius-md);
-      padding: 12px 14px;
-      margin-bottom: 12px;
-    }
-    .detail-flag-label {
-      font-size: 11px; font-weight: 500; color: var(--rose);
-      text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px;
-    }
-    .detail-flag-text { font-size: 13px; color: #6B2535; margin-bottom: 10px; line-height: 1.4; }
-    .detail-reply-input {
-      width: 100%; padding: 8px 10px;
-      border: 0.5px solid var(--rose-border);
-      border-radius: var(--radius-sm);
-      background: #fff; font-family: 'DM Sans', sans-serif;
-      font-size: 13px; color: var(--text-primary);
-      outline: none; resize: none; min-height: 52px;
-      transition: border-color 0.15s;
-    }
-    .detail-reply-input:focus { border-color: var(--rose); }
-    .btn-reply {
-      margin-top: 8px; padding: 8px 16px;
-      background: var(--rose); color: #fff;
-      border: none; border-radius: var(--radius-sm);
-      font-family: 'DM Sans', sans-serif; font-size: 13px;
-      font-weight: 500; cursor: pointer;
-      transition: opacity 0.15s;
-    }
-    .btn-reply:hover { opacity: 0.88; }
-
-    /* Toast */
-    .toast {
-      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
-      background: var(--navy); color: #fff;
-      padding: 10px 18px; border-radius: 30px;
-      font-size: 13px; z-index: 300;
-      border: 1px solid var(--gold-border);
-      transition: transform 0.25s ease-out, opacity 0.25s;
-      opacity: 0; pointer-events: none; white-space: nowrap;
-    }
-    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-
-    /* Empty state */
-    .empty-state { text-align: center; padding: 40px 20px; color: var(--text-tertiary); }
-    .empty-state-icon { font-size: 32px; margin-bottom: 12px; }
-    .empty-state-text { font-size: 14px; line-height: 1.5; }
-
-    @keyframes bell-ring {
-      0%, 100% { transform: rotate(0deg); }
-      20% { transform: rotate(-15deg); }
-      40% { transform: rotate(15deg); }
-      60% { transform: rotate(-10deg); }
-      80% { transform: rotate(10deg); }
-    }
-
+    /* ── SCROLLBAR ── */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 2px; }
@@ -507,6 +496,7 @@
 </head>
 <body>
 
+<!-- TOP BAR -->
 <div id="topbar-wrap" style="background:var(--navy);">
   <div class="topbar" style="padding-bottom:14px;">
     <div class="topbar-inner">
@@ -515,8 +505,13 @@
         <div class="topbar-title">Hey Adam 👋</div>
       </div>
       <div class="topbar-actions">
-        <div class="icon-btn" onclick="openRelModal()" title="Add date to remember">📅</div>
-        <div class="icon-btn" onclick="openAddModal()" title="Add task">+</div>
+        <div class="topbar-btn-row">
+          <div class="icon-btn" onclick="openRelModal()" title="Add date to remember">📅</div>
+          <div class="icon-btn" onclick="openAddModal()" title="Add task">+</div>
+        </div>
+        <div class="notify-pill" id="notify-pill" onclick="scrollToFlagged()">
+          💬 <span id="notify-count">1</span> update needed
+        </div>
       </div>
     </div>
   </div>
@@ -526,25 +521,42 @@
   </div>
 </div>
 
+<!-- MAIN -->
 <div class="main" id="main-content">
+
+  <!-- STATS -->
   <div class="stats-row" id="stats-row">
     <div class="stat-card">
-      <div class="stat-num gold" id="stat-active">0</div>
+      <div class="stat-num gold" id="stat-active">—</div>
       <div class="stat-label">Active</div>
     </div>
     <div class="stat-card">
-      <div class="stat-num red" id="stat-critical">0</div>
+      <div class="stat-num red" id="stat-critical">—</div>
       <div class="stat-label">Needs attention</div>
     </div>
     <div class="stat-card">
-      <div class="stat-num gold" id="stat-done">0</div>
+      <div class="stat-num gold" id="stat-done">—</div>
       <div class="stat-label">Done this week</div>
     </div>
   </div>
+
+  <!-- FOCUS CARD -->
   <div id="focus-section"></div>
+
+  <!-- RELATIONSHIP MOMENTS -->
   <div id="relationship-section"></div>
-  <div id="task-list-section"></div>
+
+  <!-- TASK LIST -->
+  <div id="task-list-section">
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      <div style="font-size:13px;">Loading your list...</div>
+    </div>
+  </div>
+
+  <!-- COMPLETED -->
   <div id="completed-section"></div>
+
 </div>
 
 <!-- ADD TASK MODAL -->
@@ -552,10 +564,12 @@
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title">What needs doing?</div>
+
     <div class="form-group">
       <label class="form-label">Describe the task</label>
       <textarea class="form-textarea" id="task-description" placeholder="e.g. Get the HVAC looked at before summer heats up"></textarea>
     </div>
+
     <div class="form-group">
       <label class="form-label">Who asked for this?</label>
       <div class="requester-row">
@@ -565,6 +579,7 @@
         <button class="requester-btn" data-val="other" onclick="selectRequester(this)">📋 Other</button>
       </div>
     </div>
+
     <div class="form-row">
       <div class="form-group">
         <label class="form-label">Where does it happen?</label>
@@ -586,7 +601,8 @@
         </select>
       </div>
     </div>
-    <button class="btn-submit" id="btn-add-submit" onclick="submitTask()">Add to list</button>
+
+    <button class="btn-submit" id="add-submit-btn" onclick="submitTask()">Add to list</button>
     <button class="btn-cancel" onclick="closeAddModal()">Cancel</button>
   </div>
 </div>
@@ -596,10 +612,12 @@
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title">Add a date to remember</div>
+
     <div class="form-group">
       <label class="form-label">What's the occasion?</label>
-      <input class="form-input" id="rel-title" placeholder="e.g. Anniversary, Brittany's birthday">
+      <input class="form-input" id="rel-title" placeholder="e.g. Anniversary, Brittany's birthday, Mom's birthday">
     </div>
+
     <div class="form-group">
       <label class="form-label">Type</label>
       <div class="rel-type-row" id="rel-type-row">
@@ -610,10 +628,12 @@
         <button class="rel-type-btn" data-emoji="⭐" onclick="selectRelType(this)">⭐ Other</button>
       </div>
     </div>
+
     <div class="form-group">
       <label class="form-label">Date</label>
       <input class="form-input" id="rel-date" type="date">
     </div>
+
     <div class="form-group">
       <label class="form-label">Remind me how far in advance?</label>
       <select class="form-select" id="rel-remind">
@@ -624,6 +644,7 @@
         <option value="90">3 months before</option>
       </select>
     </div>
+
     <button class="btn-submit" onclick="submitRelDate()">Save date</button>
     <button class="btn-cancel" onclick="closeRelModal()">Cancel</button>
   </div>
@@ -637,48 +658,73 @@
   </div>
 </div>
 
+<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-// =============================================
-// SUPABASE
-// =============================================
-const SUPABASE_URL = 'https://lcghspaeauqyssrkhizu.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjZ2hzcGFlYXVxeXNzcmtoaXp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNTY0ODksImV4cCI6MjA5MjczMjQ4OX0._D6C8MpPpo8hG41BHLEh_7Ahgcdu89AYNvUGPHuEiYY';
+// ─────────────────────────────────────────────
+// CONFIG
+// ─────────────────────────────────────────────
+const SB_URL  = 'https://lcghspaeauqyssrkhizu.supabase.co';
+const SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjZ2hzcGFlYXVxeXNzcmtoaXp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNTY0ODksImV4cCI6MjA5MjczMjQ4OX0._D6C8MpPpo8hG41BHLEh_7Ahgcdu89AYNvUGPHuEiYY';
+const EDGE_FN = `${SB_URL}/functions/v1/skylight-sync`;
 
-async function sbFetch(path, opts = {}) {
-  const res = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
-    headers: {
-      'apikey': SUPABASE_KEY,
-      'Authorization': 'Bearer ' + SUPABASE_KEY,
-      'Content-Type': 'application/json',
-      'Prefer': opts.prefer || 'return=representation',
-      ...(opts.headers || {}),
-    },
-    method: opts.method || 'GET',
-    body: opts.body || undefined,
-  });
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error('Supabase error: ' + err);
-  }
-  const text = await res.text();
-  return text ? JSON.parse(text) : null;
-}
+const { createClient } = window.supabase;
+const db = createClient(SB_URL, SB_KEY);
 
-// =============================================
+// ─────────────────────────────────────────────
 // STATE
-// =============================================
+// ─────────────────────────────────────────────
 let tasks = [];
 let relDates = [];
-let weatherData = null;
 let selectedRequester = 'Brittany';
 let selectedRelEmoji = '💍';
+let weatherData = null;
 let currentDetailId = null;
 
-// =============================================
-// DURATION + SMART ACTIONS
-// =============================================
+// ─────────────────────────────────────────────
+// DATA MAPPING
+// ─────────────────────────────────────────────
+function rowToTask(row) {
+  return {
+    id: row.id,
+    description: row.name || row.description || '',
+    requester: row.requester || 'Brittany',
+    location: row.location || 'anywhere',
+    mentions: parseInt(row.mentions) || 1,
+    created: row.created_at ? new Date(row.created_at).getTime() : Date.now(),
+    done: row.completed || false,
+    completedAt: row.completed_at ? new Date(row.completed_at).getTime() : null,
+    snoozed: row.snoozed || false,
+    snoozedAt: row.snoozed_at ? new Date(row.snoozed_at).getTime() : null,
+    needs_discussion: row.needs_discussion || false,
+    adam_update: row.adam_update || null,
+    brittany_reaction: row.brittany_reaction || null,
+    brittany_note: row.brittany_note || null,
+    skylight_item_id: row.skylight_item_id || null,
+  };
+}
+
+// ─────────────────────────────────────────────
+// SUPABASE DATA LAYER
+// ─────────────────────────────────────────────
+async function loadTasks() {
+  try {
+    const { data, error } = await db
+      .from('tasks')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    tasks = (data || []).map(rowToTask);
+  } catch(e) {
+    console.error('loadTasks failed:', e);
+    tasks = tasks.length ? tasks : []; // keep existing if reload fails
+  }
+}
+
+// ─────────────────────────────────────────────
+// DURATION / SMART ACTIONS (unchanged)
+// ─────────────────────────────────────────────
 const DURATION_MAP = [
   { words: ['hvac','furnace','ac','air condition','heat pump','boiler'], mins: 15, label: '~15 min (scheduling)' },
   { words: ['faucet','leak','drip','plumb','pipe','toilet','clog','drain'], mins: 45, label: '~45 min' },
@@ -686,7 +732,7 @@ const DURATION_MAP = [
   { words: ['grocery','groceries','shop','restock','snack','food'], mins: 45, label: '~45 min' },
   { words: ['call','phone','schedule','appoint','book'], mins: 10, label: '~10 min' },
   { words: ['email','text','message','send'], mins: 5, label: '~5 min' },
-  { words: ['garage','attic','basement','cleanout','clean out'], mins: 120, label: '~1-2 hrs' },
+  { words: ['garage','attic','basement','cleanout','clean out'], mins: 120, label: '~1–2 hrs' },
   { words: ['paint','repaint','wall'], mins: 180, label: '~3 hrs' },
   { words: ['mow','lawn','garden','yard','landscap'], mins: 60, label: '~1 hr' },
   { words: ['clean','vacuum','sweep','mop','dust'], mins: 30, label: '~30 min' },
@@ -695,60 +741,79 @@ const DURATION_MAP = [
 ];
 
 function estimateDuration(desc) {
-  const lower = (desc || '').toLowerCase();
+  const lower = desc.toLowerCase();
   for (const entry of DURATION_MAP) {
-    if (entry.words.some(function(w) { return lower.includes(w); })) {
-      return { mins: entry.mins, label: entry.label };
-    }
+    if (entry.words.some(w => lower.includes(w))) return { mins: entry.mins, label: entry.label };
   }
   return { mins: 30, label: '~30 min' };
 }
 
 function smartActions(desc) {
-  const lower = (desc || '').toLowerCase();
+  const lower = desc.toLowerCase();
   const actions = [];
   if (/hvac|furnace|ac\b|air condition|heat pump|boiler|heating|cooling/.test(lower)) {
-    actions.push({ text: 'Found <strong>AirPro HVAC</strong> from your last invoice. Open in 30 min.', cta: 'Call now', type: 'call' });
+    actions.push({ text: 'Found <strong>AirPro HVAC</strong> from your last invoice. Open in 30 min.', cta: 'Call now →', type: 'call' });
+    actions.push({ text: 'Their site has online booking. You\'re free Tue 10am–12pm.', cta: 'Book it →', type: 'book' });
   } else if (/faucet|drip|leak|plumb|pipe|toilet/.test(lower)) {
-    actions.push({ text: 'Found <strong>Westland Plumbing</strong> in your email from last year.', cta: 'Call', type: 'call' });
+    actions.push({ text: 'Found <strong>Westland Plumbing</strong> in your email from last year.', cta: 'Call →', type: 'call' });
   } else if (/oil change|car service|auto service/.test(lower)) {
-    actions.push({ text: 'Quick Lane at Ford Westland has next-day appointments.', cta: 'Book online', type: 'book' });
+    actions.push({ text: 'Quick Lane at Ford Westland has next-day appointments.', cta: 'Book online →', type: 'book' });
+  } else if (/pediatric|doctor|dentist|appoint/.test(lower)) {
+    actions.push({ text: 'Found Dr. Chen\'s number in your contacts.', cta: 'Call →', type: 'call' });
   } else if (/grocery|groceries|restock/.test(lower)) {
-    actions.push({ text: 'Add these items to your Kroger pickup order.', cta: 'Open Kroger', type: 'link' });
+    actions.push({ text: 'Add these items to your Kroger pickup order.', cta: 'Open Kroger →', type: 'link' });
   }
   return actions;
 }
 
-// =============================================
-// RISK SCORING
-// =============================================
 function calcRisk(task) {
-  var score = 0;
-  if (task.requester === 'Brittany' || task.requester === 'Wife') score += 3;
-  var created = task.created_at ? new Date(task.created_at).getTime() : Date.now();
-  var daysOld = Math.floor((Date.now() - created) / 86400000);
+  let score = 0;
+  if (task.requester === 'Brittany') score += 3;
+  const daysOld = Math.floor((Date.now() - task.created) / 86400000);
   score += Math.min(daysOld * 0.4, 3);
-  var mentions = (task.notes && task.notes.mentions) ? parseInt(task.notes.mentions) : 1;
-  score += Math.min((mentions - 1) * 1.2, 3);
-  var snoozed = task.notes && task.notes.snoozed;
-  if (snoozed) score += 0.5;
-  // Priority boost
-  var p = task.priority;
-  if (p === 'critical') score += 3;
-  else if (p === 'high') score += 2;
-  else if (p === 'low') score -= 1;
+  score += Math.min((task.mentions - 1) * 1.2, 3);
+  if (task.snoozed) score += 0.5;
+  if (task.needs_discussion) score += 1.5; // flagged tasks bubble up
   score += weatherScoreAdjust(task);
   return Math.min(Math.round(score * 10) / 10, 10);
 }
 
-// =============================================
+// ─────────────────────────────────────────────
+// RELATIONSHIP DATES (localStorage)
+// ─────────────────────────────────────────────
+function saveRelDates() {
+  try { localStorage.setItem('dtm_rel', JSON.stringify(relDates)); } catch(e) {}
+}
+
+function loadRelDates() {
+  try {
+    relDates = JSON.parse(localStorage.getItem('dtm_rel') || '[]');
+    if (!relDates.length) {
+      relDates = [
+        { id: 1, title: "Anniversary", emoji: "💍", date: nextOccurrence(6, 14), remind: 60 },
+        { id: 2, title: "Brittany's birthday", emoji: "🎂", date: nextOccurrence(8, 3), remind: 30 },
+      ];
+      saveRelDates();
+    }
+  } catch(e) { relDates = []; }
+}
+
+function nextOccurrence(month, day) {
+  const now = new Date();
+  let year = now.getFullYear();
+  const d = new Date(year, month - 1, day);
+  if (d <= now) d.setFullYear(year + 1);
+  return d.toISOString().split('T')[0];
+}
+
+// ─────────────────────────────────────────────
 // WEATHER
-// =============================================
+// ─────────────────────────────────────────────
 async function loadWeather() {
   try {
-    var r = await fetch('https://wttr.in/Westland+MI?format=j1');
-    var d = await r.json();
-    var cur = d.current_condition[0];
+    const r = await fetch('https://wttr.in/Westland+MI?format=j1');
+    const d = await r.json();
+    const cur = d.current_condition[0];
     weatherData = {
       temp: Math.round(parseInt(cur.temp_F)),
       feelsLike: Math.round(parseInt(cur.FeelsLikeF)),
@@ -764,9 +829,9 @@ async function loadWeather() {
 }
 
 function deriveWeatherProfile(cur) {
-  var desc = (cur.weatherDesc[0].value || '').toLowerCase();
-  var temp = parseInt(cur.temp_F);
-  var feels = parseInt(cur.FeelsLikeF);
+  const desc = (cur.weatherDesc[0].value || '').toLowerCase();
+  const temp = parseInt(cur.temp_F);
+  const feels = parseInt(cur.FeelsLikeF);
   if (desc.includes('storm') || desc.includes('thunder')) return 'storm';
   if (desc.includes('snow') || desc.includes('blizzard') || temp <= 25) return 'snow';
   if (desc.includes('rain') || desc.includes('drizzle') || desc.includes('shower')) return 'rain';
@@ -785,512 +850,531 @@ function isOutdoorOk() {
 
 function weatherNudge(task) {
   if (!weatherData || !weatherData.profile) return null;
-  var loc = ((task.notes && task.notes.location) || '').toLowerCase();
-  var desc = (task.name || '').toLowerCase();
-  var p = weatherData.profile;
-  var temp = weatherData.temp;
-  var feels = weatherData.feelsLike;
+  const loc = (task.location || '').toLowerCase();
+  const desc = task.description.toLowerCase();
+  const p = weatherData.profile;
+  const temp = weatherData.temp;
+  const feels = weatherData.feelsLike;
   if (loc === 'outdoors' && !isOutdoorOk()) {
-    if (p === 'rain') return 'Raining today -- save for a dry day';
-    if (p === 'storm') return 'Storm outside -- indoor day';
-    if (p === 'snow') return 'Snow on the ground -- not ideal today';
-    if (p === 'cold') return temp + 'F out there -- bundle up or wait';
+    if (p === 'rain') return '🌧️ Raining today — save this for a dry day';
+    if (p === 'storm') return '⛈️ Storm outside — indoor day';
+    if (p === 'snow') return '❄️ Snow on the ground — not ideal today';
+    if (p === 'cold') return `🥶 ${temp}°F out there — bundle up or wait`;
   }
-  if (loc === 'outdoors' && (p === 'gorgeous' || p === 'nice')) {
-    return temp + 'F and clear -- perfect day for this';
-  }
-  if (/hvac|furnace|heat|ac|air condition|cooling/.test(desc)) {
-    if (p === 'hot') return 'Feels like ' + feels + 'F -- HVAC is urgent right now';
-    if (p === 'cold' || p === 'snow') return temp + 'F outside -- heating tasks matter today';
+  if (loc === 'outdoors' && (p === 'gorgeous' || p === 'nice')) return `☀️ ${temp}°F and clear — perfect day for this`;
+  if (desc.includes('hvac') || desc.includes('furnace') || desc.includes('heat') || desc.includes('ac') || desc.includes('air condition') || desc.includes('cooling')) {
+    if (p === 'hot') return `🌡️ Feels like ${feels}°F — HVAC is urgent right now`;
+    if (p === 'cold' || p === 'snow') return `🥶 ${temp}°F outside — heating tasks matter today`;
   }
   if (loc === 'errand' && !isOutdoorOk()) {
-    if (p === 'rain') return 'Raining -- grab an umbrella';
-    if (p === 'snow') return 'Snowy roads -- plan extra time';
+    if (p === 'rain') return '🌧️ Raining — grab an umbrella or push to tomorrow';
+    if (p === 'snow') return '❄️ Snowy roads — plan extra time';
+    if (p === 'storm') return '⛈️ Storm warning — hold errands if you can';
   }
   return null;
 }
 
 function weatherScoreAdjust(task) {
   if (!weatherData || !weatherData.profile) return 0;
-  var loc = ((task.notes && task.notes.location) || '').toLowerCase();
-  var desc = (task.name || '').toLowerCase();
-  var p = weatherData.profile;
+  const loc = (task.location || '').toLowerCase();
+  const desc = task.description.toLowerCase();
+  const p = weatherData.profile;
   if (['storm','rain','snow'].includes(p)) {
-    if (loc === 'indoors' || loc === 'online') return 1.5;
+    if (loc === 'indoors' || loc === 'online') return +1.5;
     if (loc === 'outdoors') return -2.5;
     if (loc === 'errand') return -1;
   }
-  if (p === 'gorgeous' || p === 'nice') {
-    if (loc === 'outdoors') return 2;
-  }
+  if (p === 'gorgeous' || p === 'nice') { if (loc === 'outdoors') return +2; }
   if (p === 'hot') {
-    if (/hvac|ac|air condition|cooling/.test(desc)) return 2.5;
+    if (desc.includes('hvac') || desc.includes('ac') || desc.includes('air condition') || desc.includes('cooling')) return +2.5;
   }
   if (p === 'cold' || p === 'snow') {
-    if (/furnace|heat|hvac/.test(desc)) return 2;
+    if (desc.includes('furnace') || desc.includes('heat') || desc.includes('hvac')) return +2;
   }
   return 0;
 }
 
 function updateContext() {
-  var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  var day = days[new Date().getDay()];
-  var ctx = day;
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const day = days[new Date().getDay()];
+  let ctx = day;
   if (weatherData && weatherData.temp) {
-    var icon = getWeatherEmoji(weatherData.description);
-    var feel = (weatherData.feelsLike && weatherData.feelsLike !== weatherData.temp)
-      ? ' (feels ' + weatherData.feelsLike + 'F)' : '';
-    ctx += ' - ' + icon + ' ' + weatherData.temp + 'F' + feel;
+    const icon = getWeatherEmoji(weatherData.description);
+    const feel = weatherData.feelsLike && weatherData.feelsLike !== weatherData.temp
+      ? ` (feels ${weatherData.feelsLike}°)` : '';
+    ctx += ` · ${icon} ${weatherData.temp}°F${feel}`;
   }
   document.getElementById('top-context').textContent = ctx;
 }
 
 function getWeatherEmoji(desc) {
-  var d = (desc || '').toLowerCase();
-  if (d.includes('storm') || d.includes('thunder')) return 'Storm';
-  if (d.includes('snow') || d.includes('blizzard')) return 'Snow';
-  if (d.includes('rain') || d.includes('drizzle') || d.includes('shower')) return 'Rain';
-  if (d.includes('fog') || d.includes('mist')) return 'Fog';
-  if (d.includes('overcast')) return 'Cloudy';
-  if (d.includes('cloud')) return 'P.Cloudy';
-  if (d.includes('clear') || d.includes('sunny')) return 'Sunny';
-  return 'Clear';
+  const d = (desc || '').toLowerCase();
+  if (d.includes('storm') || d.includes('thunder')) return '⛈️';
+  if (d.includes('snow') || d.includes('blizzard')) return '❄️';
+  if (d.includes('rain') || d.includes('drizzle') || d.includes('shower')) return '🌧️';
+  if (d.includes('fog') || d.includes('mist')) return '🌫️';
+  if (d.includes('overcast')) return '☁️';
+  if (d.includes('cloud')) return '⛅';
+  if (d.includes('clear') || d.includes('sunny')) return '☀️';
+  if (d.includes('partly')) return '⛅';
+  return '🌤️';
 }
 
-// =============================================
-// LOAD FROM SUPABASE
-// =============================================
-async function loadTasks() {
-  try {
-    var data = await sbFetch('tasks?select=*&order=created_at.asc');
-    tasks = data || [];
-    render();
-  } catch(e) {
-    console.error('Load error', e);
-    showToast('Could not load tasks -- check connection');
+// ─────────────────────────────────────────────
+// MOMENTUM
+// ─────────────────────────────────────────────
+function getMomentumMessage() {
+  const active = tasks.filter(t => !t.done);
+  const critical = active.filter(t => calcRisk(t) >= 7);
+  const done = getCompletedThisWeek();
+  const p = weatherData && weatherData.profile;
+  const temp = weatherData && weatherData.temp;
+  const flagged = active.filter(t => t.needs_discussion);
+
+  const weatherPrefix = (() => {
+    if (!p || p === 'neutral') return '';
+    if (p === 'gorgeous') return `${temp}°F and gorgeous outside. `;
+    if (p === 'nice') return `Nice day out there. `;
+    if (p === 'hot') return `Hot one today at ${temp}°F. `;
+    if (p === 'rain') return `Rainy day — perfect for indoor tasks. `;
+    if (p === 'snow') return `Snow day. `;
+    if (p === 'storm') return `Storm outside — stay in and knock something out. `;
+    if (p === 'cold') return `Cold out at ${temp}°F. `;
+    return '';
+  })();
+
+  if (flagged.length > 0) {
+    return { icon: '💬', msg: `Brittany is waiting on <strong>${flagged.length === 1 ? 'an update' : flagged.length + ' updates'}</strong>. Tap the notification above to reply — she'll notice.` };
   }
-}
-
-// =============================================
-// COMPUTED VALUES
-// =============================================
-function getActiveTasks() {
-  return tasks
-    .filter(function(t) { return !t.completed; })
-    .sort(function(a, b) { return calcRisk(b) - calcRisk(a); });
-}
-
-function getDoneTasks() {
-  return tasks
-    .filter(function(t) { return t.completed; })
-    .sort(function(a, b) { return new Date(b.completed_at || 0) - new Date(a.completed_at || 0); });
+  if (done === 0 && active.length === 0) {
+    return { icon: '✨', msg: 'Your list is clear. <strong>Legend.</strong>' };
+  }
+  if (done >= 5) {
+    return { icon: '🔥', msg: `${weatherPrefix}You've knocked out <strong>${done} tasks this week</strong> — Brittany notices the effort. Keep it rolling.` };
+  }
+  if (done >= 2) {
+    return { icon: '💪', msg: `${weatherPrefix}<strong>${done} tasks done this week.</strong> You're building real momentum. One more today?` };
+  }
+  if (done === 1) {
+    return { icon: '✅', msg: `${weatherPrefix}Got one done already. <strong>Every task is a deposit</strong> in your relationship bank.` };
+  }
+  if (critical.length > 0) {
+    return { icon: '💛', msg: `${weatherPrefix}Fresh start today. <strong>One focused task</strong> can change the whole vibe at home.` };
+  }
+  return { icon: '✨', msg: `${weatherPrefix}Your list is looking manageable. <strong>Good time to make a dent.</strong>` };
 }
 
 function getCompletedThisWeek() {
-  var weekAgo = Date.now() - (7 * 86400000);
-  return tasks.filter(function(t) {
-    return t.completed && t.completed_at && new Date(t.completed_at).getTime() > weekAgo;
-  }).length;
+  const weekAgo = Date.now() - 7 * 86400000;
+  return tasks.filter(t => t.done && t.completedAt && t.completedAt > weekAgo).length;
 }
 
-// =============================================
-// MOMENTUM
-// =============================================
-function getMomentumMessage() {
-  var active = getActiveTasks();
-  var done = getCompletedThisWeek();
-  var p = weatherData && weatherData.profile;
-  var temp = weatherData && weatherData.temp;
-
-  var weatherPrefix = '';
-  if (p && p !== 'neutral') {
-    if (p === 'gorgeous') weatherPrefix = temp + 'F and gorgeous outside. ';
-    else if (p === 'nice') weatherPrefix = 'Nice day out there. ';
-    else if (p === 'hot') weatherPrefix = 'Hot one today at ' + temp + 'F. ';
-    else if (p === 'rain') weatherPrefix = 'Rainy day -- perfect for indoor tasks. ';
-    else if (p === 'snow') weatherPrefix = 'Snow day. ';
-    else if (p === 'storm') weatherPrefix = 'Storm outside -- stay in and knock something out. ';
-    else if (p === 'cold') weatherPrefix = 'Cold out at ' + temp + 'F. ';
+// ─────────────────────────────────────────────
+// NOTIFICATION SYSTEM
+// ─────────────────────────────────────────────
+function updateNotificationBadge() {
+  const flagged = tasks.filter(t => !t.done && t.needs_discussion);
+  const pill = document.getElementById('notify-pill');
+  const count = document.getElementById('notify-count');
+  if (!pill) return;
+  if (flagged.length > 0) {
+    pill.classList.add('visible');
+    count.textContent = flagged.length;
+  } else {
+    pill.classList.remove('visible');
   }
-
-  if (done === 0 && active.length === 0) return { icon: '✨', msg: 'Your list is clear. <strong>Legend.</strong>' };
-  if (done >= 5) return { icon: '🔥', msg: weatherPrefix + 'You\'ve knocked out <strong>' + done + ' tasks this week</strong> -- Brittany notices. Keep it rolling.' };
-  if (done >= 2) return { icon: '💪', msg: weatherPrefix + '<strong>' + done + ' tasks done this week.</strong> You\'re building real momentum. One more today?' };
-  if (done === 1) return { icon: '✅', msg: weatherPrefix + 'Got one done already. <strong>Every task is a deposit</strong> in your relationship bank.' };
-
-  var outdoorTasks = active.filter(function(t) { return ((t.notes && t.notes.location) || '').toLowerCase() === 'outdoors'; });
-  if ((p === 'gorgeous' || p === 'nice') && outdoorTasks.length) {
-    return { icon: '☀️', msg: '<strong>Great day for outdoor tasks</strong> -- you\'ve got ' + outdoorTasks.length + ' waiting.' };
-  }
-  var indoorTasks = active.filter(function(t) { return ['indoors','online'].includes(((t.notes && t.notes.location) || '').toLowerCase()); });
-  if ((p === 'rain' || p === 'storm' || p === 'snow') && indoorTasks.length) {
-    return { icon: '🏠', msg: '<strong>Good day to tackle indoor tasks</strong> -- ' + indoorTasks.length + ' lined up.' };
-  }
-  return { icon: '✨', msg: weatherPrefix + 'Your list is looking manageable. <strong>Good time to make a dent.</strong>' };
 }
 
-// =============================================
+function scrollToFlagged() {
+  const flagged = tasks.filter(t => !t.done && t.needs_discussion);
+  if (!flagged.length) return;
+  const el = document.getElementById(`task-${flagged[0].id}`);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el.style.transition = 'box-shadow 0.3s';
+    el.style.boxShadow = '0 0 0 3px rgba(226,75,74,0.5)';
+    setTimeout(() => { el.style.boxShadow = ''; }, 1800);
+  }
+}
+
+// ─────────────────────────────────────────────
+// SKYLIGHT SYNC
+// ─────────────────────────────────────────────
+async function syncToSkylight(action, taskName, taskDbId, skylightItemId) {
+  try {
+    const body = { action, task_name: taskName };
+    if (skylightItemId) body.skylight_item_id = skylightItemId;
+
+    const res = await fetch(EDGE_FN, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SB_KEY}`,
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!res.ok) {
+      console.warn('Skylight sync responded:', res.status);
+      return;
+    }
+
+    const data = await res.json();
+
+    // Save returned Skylight item ID back to the task row
+    if (data.item_id && taskDbId) {
+      await db.from('tasks').update({ skylight_item_id: data.item_id }).eq('id', taskDbId);
+      const t = tasks.find(t => t.id === taskDbId);
+      if (t) t.skylight_item_id = data.item_id;
+    }
+  } catch(e) {
+    console.warn('Skylight sync failed (non-critical):', e.message);
+  }
+}
+
+// ─────────────────────────────────────────────
 // RENDER
-// =============================================
+// ─────────────────────────────────────────────
 function render() {
-  var activeTasks = getActiveTasks();
-  var doneTasks = getDoneTasks();
-  var critical = activeTasks.filter(function(t) { return calcRisk(t) >= 6; });
-  var rest = activeTasks.slice(1); // everything except focus card task -- no tasks fall through
-  var doneCount = getCompletedThisWeek();
+  const activeTasks = tasks.filter(t => !t.done).sort((a,b) => calcRisk(b) - calcRisk(a));
+  const doneTasks = tasks.filter(t => t.done).sort((a,b) => b.completedAt - a.completedAt);
+  const critical = activeTasks.filter(t => calcRisk(t) >= 6);
+  const rest = activeTasks.filter(t => calcRisk(t) < 6);
+  const completedThisWeek = getCompletedThisWeek();
 
   document.getElementById('stat-active').textContent = activeTasks.length;
   document.getElementById('stat-critical').textContent = critical.length;
-  document.getElementById('stat-done').textContent = doneCount;
+  document.getElementById('stat-done').textContent = completedThisWeek;
 
-  var m = getMomentumMessage();
-  document.getElementById('momentum-bar').querySelector('.momentum-icon').textContent = m.icon;
-  document.getElementById('momentum-text').innerHTML = m.msg;
+  const { icon, msg } = getMomentumMessage();
+  document.getElementById('momentum-bar').querySelector('.momentum-icon').textContent = icon;
+  document.getElementById('momentum-text').innerHTML = msg;
 
   renderFocusSection(activeTasks[0]);
   renderRelationshipSection();
   renderTaskList(rest, doneTasks);
+  updateNotificationBadge();
 }
 
 function renderFocusSection(topTask) {
-  var el = document.getElementById('focus-section');
+  const el = document.getElementById('focus-section');
   if (!topTask) { el.innerHTML = ''; return; }
 
-  var risk = calcRisk(topTask);
-  var isCritical = risk >= 7;
-  var duration = estimateDuration(topTask.name);
-  var actions = smartActions(topTask.name);
-  var created = topTask.created_at ? new Date(topTask.created_at).getTime() : Date.now();
-  var daysOld = Math.floor((Date.now() - created) / 86400000);
-  var wNudge = weatherNudge(topTask);
-  var mentions = (topTask.notes && topTask.notes.mentions) ? parseInt(topTask.notes.mentions) : 1;
-  var hasFlag = topTask.notes && topTask.notes.needs_discussion;
-  var brittanyNote = topTask.notes && topTask.notes.brittany_note;
+  const risk = calcRisk(topTask);
+  const isCritical = risk >= 7;
+  const duration = estimateDuration(topTask.description);
+  const actions = smartActions(topTask.description);
+  const daysOld = Math.floor((Date.now() - topTask.created) / 86400000);
+  const wNudge = weatherNudge(topTask);
 
-  var whyText = '';
-  if (topTask.requester === 'Brittany' || topTask.requester === 'Wife') {
-    if (mentions >= 3) whyText = 'Brittany has mentioned this ' + mentions + ' times -- it\'s on her mind.';
-    else if (daysOld >= 3) whyText = 'This has been waiting ' + daysOld + ' days. Brittany will notice when it\'s done.';
-    else whyText = 'Brittany asked for this. Handling it shows you\'re listening.';
+  let whyText = '';
+  if (topTask.needs_discussion) {
+    whyText = `Brittany is waiting on an update for this one. Tap to reply.`;
+  } else if (topTask.requester === 'Brittany') {
+    if (topTask.mentions >= 3) whyText = `Brittany has mentioned this ${topTask.mentions} times — it's on her mind.`;
+    else if (daysOld >= 3) whyText = `This has been waiting ${daysOld} days. Brittany will notice when it's done.`;
+    else whyText = `Brittany asked for this. Handling it shows you're listening.`;
   } else {
-    whyText = 'Highest priority right now based on age and conditions today.';
+    whyText = `Highest priority right now based on age and conditions today.`;
   }
 
-  var flagHTML = hasFlag ? '<div class="brittany-flag"><span>💬</span><div class="brittany-flag-text"><strong>Brittany wants to discuss this</strong>' + (brittanyNote ? ' -- ' + escHtml(brittanyNote) : '') + '</div></div>' : '';
+  let smartHTML = actions.map(a => `
+    <div class="smart-block">
+      <span class="smart-star">✦</span>
+      <span class="smart-text">${a.text}</span>
+      <span class="smart-cta" onclick="showToast('Opening...')">${a.cta}</span>
+    </div>`).join('');
 
-  var smartHTML = actions.map(function(a) {
-    return '<div class="smart-block"><span class="smart-star">*</span><span class="smart-text">' + a.text + '</span><span class="smart-cta" onclick="showToast(\'Opening...\')">' + a.cta + '</span></div>';
-  }).join('');
+  const flagBanner = topTask.needs_discussion ? `
+    <div class="task-flag-banner" style="margin-bottom:10px;">
+      💬 Brittany needs an update — tap "Open task" to reply
+    </div>` : '';
 
-  el.innerHTML = '<div class="section-label">needs your attention</div>' +
-    '<div class="focus-card ' + (isCritical ? '' : 'amber-mode') + '">' +
-    '<div class="focus-header">' +
-    '<span class="focus-header-label">' + (isCritical ? 'Partnership trust -- worth doing today' : 'Up next for you') + '</span>' +
-    (mentions > 1 ? '<span class="mention-badge">mentioned ' + mentions + 'x</span>' : '') +
-    '</div>' +
-    '<div class="focus-body">' +
-    '<div class="focus-task-title">' + escHtml(topTask.name || '') + '</div>' +
-    '<div class="focus-why">' + whyText + '</div>' +
-    flagHTML +
-    '<div class="chips-row">' +
-    '<span class="chip">' + duration.label + '</span>' +
-    '<span class="chip">' + capitalize((topTask.notes && topTask.notes.location) || 'anywhere') + '</span>' +
-    (daysOld > 0 ? '<span class="chip">' + (daysOld === 1 ? 'Added yesterday' : daysOld + ' days on the list') + '</span>' : '') +
-    (wNudge ? '<span class="chip" style="background:var(--gold-pale);color:#5C420A;border-color:var(--gold-border);">' + wNudge + '</span>' : '') +
-    '</div>' +
-    smartHTML +
-    '<div class="focus-btns">' +
-    '<button class="btn-done" onclick="completeTask(\'' + topTask.id + '\', true)">Done ✓</button>' +
-    '<button class="btn-snooze" onclick="snoozeTask(\'' + topTask.id + '\')">Not now</button>' +
-    '</div>' +
-    '</div></div>';
+  el.innerHTML = `
+    <div class="section-label">needs your attention</div>
+    <div class="focus-card ${isCritical ? '' : 'amber-mode'}">
+      <div class="focus-header">
+        <span class="focus-header-label">${isCritical ? 'Partnership trust — worth doing today' : 'Up next for you'}</span>
+        ${topTask.mentions > 1 ? `<span class="mention-badge">mentioned ${topTask.mentions}×</span>` : ''}
+      </div>
+      <div class="focus-body">
+        ${flagBanner}
+        <div class="focus-task-title">${escHtml(topTask.description)}</div>
+        <div class="focus-why">${whyText}</div>
+        <div class="chips-row">
+          <span class="chip">${duration.label}</span>
+          <span class="chip">${capitalize(topTask.location || 'anywhere')}</span>
+          ${daysOld > 0 ? `<span class="chip">${daysOld === 1 ? 'Added yesterday' : `${daysOld} days on the list`}</span>` : ''}
+          ${wNudge ? `<span class="chip" style="background:var(--gold-pale);color:#5C420A;border-color:var(--gold-border);">${wNudge}</span>` : ''}
+        </div>
+        ${smartHTML}
+        <div class="focus-btns">
+          ${topTask.needs_discussion
+            ? `<button class="btn-done" style="background:var(--red);" onclick="openDetail('${topTask.id}')">Open task — reply 💬</button>`
+            : `<button class="btn-done" onclick="completeTask('${topTask.id}', true)">Done ✓</button>`
+          }
+          <button class="btn-snooze" onclick="snoozeTask('${topTask.id}')">Not now</button>
+        </div>
+      </div>
+    </div>`;
 }
 
 function renderRelationshipSection() {
-  var el = document.getElementById('relationship-section');
-  var now = new Date();
-  var upcoming = relDates
-    .map(function(r) {
-      var d = new Date(r.date);
-      var daysLeft = Math.round((d - now) / 86400000);
-      return Object.assign({}, r, { daysLeft: daysLeft });
+  const el = document.getElementById('relationship-section');
+  const now = new Date();
+  const upcoming = relDates
+    .map(r => {
+      const d = new Date(r.date);
+      const daysLeft = Math.round((d - now) / 86400000);
+      return { ...r, daysLeft };
     })
-    .filter(function(r) { return r.daysLeft >= 0 && r.daysLeft <= (r.remind || 60); })
-    .sort(function(a, b) { return a.daysLeft - b.daysLeft; });
+    .filter(r => r.daysLeft >= 0 && r.daysLeft <= (r.remind || 60))
+    .sort((a,b) => a.daysLeft - b.daysLeft);
 
   if (!upcoming.length) { el.innerHTML = ''; return; }
 
-  var rows = upcoming.map(function(r) {
-    return '<div class="rel-row">' +
-      '<div class="rel-icon">' + r.emoji + '</div>' +
-      '<div class="rel-info">' +
-      '<div class="rel-title">' + escHtml(r.title) + '</div>' +
-      '<div class="rel-sub">' + formatDate(r.date) + ' - ' + (r.daysLeft <= 7 ? 'soon!' : 'start planning now') + '</div>' +
-      '</div>' +
-      '<div class="rel-days"><div class="rel-days-num">' + r.daysLeft + '</div><div class="rel-days-label">days</div></div>' +
-      '</div>';
-  }).join('');
+  const rows = upcoming.map(r => `
+    <div class="rel-row">
+      <div class="rel-icon">${r.emoji}</div>
+      <div class="rel-info">
+        <div class="rel-title">${escHtml(r.title)}</div>
+        <div class="rel-sub">${formatDate(r.date)} · ${r.daysLeft <= 7 ? '⚡ soon!' : 'start planning now'}</div>
+      </div>
+      <div class="rel-days">
+        <div class="rel-days-num">${r.daysLeft}</div>
+        <div class="rel-days-label">days</div>
+      </div>
+    </div>`).join('');
 
-  el.innerHTML = '<div class="section-label" style="margin-top:24px;">coming up -- just for you</div>' +
-    '<div class="relationship-card">' + rows +
-    '<button class="rel-add-btn" onclick="openRelModal()">+ Add another date</button>' +
-    '</div>';
+  el.innerHTML = `
+    <div class="section-label" style="margin-top:24px;">coming up — just for you</div>
+    <div class="relationship-card">
+      ${rows}
+      <button class="rel-add-btn" onclick="openRelModal()">+ Add another date</button>
+    </div>`;
 }
 
 function renderTaskList(rest, doneTasks) {
-  var el = document.getElementById('task-list-section');
-  var doneEl = document.getElementById('completed-section');
-  var activeTasks = getActiveTasks();
+  const el = document.getElementById('task-list-section');
+  const doneEl = document.getElementById('completed-section');
 
+  const activeTasks = tasks.filter(t => !t.done);
   if (!activeTasks.length) {
-    el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🎉</div><div class="empty-state-text">Nothing left on the list.<br>Brittany is going to love this.</div></div>';
+    el.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🎉</div><div class="empty-state-text">Nothing left on the list.<br>Brittany is going to love this.</div></div>`;
     doneEl.innerHTML = '';
     return;
   }
 
-  var todayTasks = rest.filter(function(t) {
-    var created = t.created_at ? new Date(t.created_at).getTime() : Date.now();
-    var d = Math.floor((Date.now() - created) / 86400000);
+  const todayTasks = rest.filter(t => {
+    const d = Math.floor((Date.now() - t.created) / 86400000);
     return d <= 2 || calcRisk(t) >= 4;
   });
-  var laterTasks = rest.filter(function(t) { return !todayTasks.includes(t); });
+  const laterTasks = rest.filter(t => !todayTasks.includes(t));
 
-  var html = '';
+  let html = '';
   if (todayTasks.length) {
-    html += '<div class="group-header"><span class="group-title">She&#39;s asking about these &amp; following up</span><span class="group-count">' + todayTasks.length + ' task' + (todayTasks.length !== 1 ? 's' : '') + '</span></div>';
-    html += '<div class="task-list">' + todayTasks.map(function(t) { return taskCard(t, false); }).join('') + '</div>';
+    html += `<div class="group-header"><span class="group-title">the rest of your list</span><span class="group-count">${todayTasks.length} task${todayTasks.length !== 1 ? 's' : ''}</span></div>`;
+    html += `<div class="task-list">${todayTasks.map(t => taskCard(t)).join('')}</div>`;
   }
   if (laterTasks.length) {
-    html += '<div class="group-header"><span class="group-title">whenever you get to it</span><span class="group-count">' + laterTasks.length + '</span></div>';
-    html += '<div class="task-list">' + laterTasks.map(function(t) { return taskCard(t, false); }).join('') + '</div>';
+    html += `<div class="group-header"><span class="group-title">whenever you get to it</span><span class="group-count">${laterTasks.length}</span></div>`;
+    html += `<div class="task-list">${laterTasks.map(t => taskCard(t)).join('')}</div>`;
   }
 
-  html += '<div class="add-row" onclick="openAddModal()"><div class="add-circle">+</div>What do you need to take care of?</div>';
+  html += `<div class="add-row" onclick="openAddModal()"><div class="add-circle">+</div>What do you need to take care of?</div>`;
   el.innerHTML = html;
 
   if (doneTasks.length) {
-    var open = localStorage.getItem('dtm_completed_open') === 'true';
-    doneEl.innerHTML = '<div class="completed-toggle" onclick="toggleCompleted(this)">' +
-      '<span class="toggle-arrow ' + (open ? 'open' : '') + '">></span>' +
-      '<span>' + doneTasks.length + ' completed task' + (doneTasks.length !== 1 ? 's' : '') + '</span>' +
-      '</div>' +
-      '<div class="completed-list ' + (open ? 'visible' : '') + '">' +
-      doneTasks.map(function(t) { return taskCard(t, true); }).join('') +
-      '</div>';
+    const open = localStorage.getItem('dtm_completed_open') === 'true';
+    doneEl.innerHTML = `
+      <div class="completed-toggle" onclick="toggleCompleted(this)">
+        <span class="toggle-arrow ${open ? 'open' : ''}">▶</span>
+        <span>${doneTasks.length} completed task${doneTasks.length !== 1 ? 's' : ''}</span>
+      </div>
+      <div class="completed-list ${open ? 'visible' : ''}">
+        ${doneTasks.map(t => taskCard(t, true)).join('')}
+      </div>`;
   } else {
     doneEl.innerHTML = '';
   }
 }
 
-function taskCard(task, isDone) {
-  var risk = calcRisk(task);
-  var duration = estimateDuration(task.name);
-  var actions = smartActions(task.name);
-  var hasSmartAction = actions.length > 0;
-  var wNudge = !isDone ? weatherNudge(task) : null;
-  var scoreClass = risk >= 8 ? 'critical' : risk >= 5 ? 'high' : '';
-  var checkClass = isDone ? 'checked' : risk >= 6 ? 'urgent' : hasSmartAction ? 'smart-ready' : '';
-  var hasFlag = task.notes && task.notes.needs_discussion;
-  var brittanyReaction = task.brittany_reaction;
-  var brittanyNote = task.brittany_note;
-  var mentions = (task.notes && task.notes.mentions) ? parseInt(task.notes.mentions) : 1;
+function taskCard(task, isDone = false) {
+  const risk = calcRisk(task);
+  const duration = estimateDuration(task.description);
+  const actions = smartActions(task.description);
+  const hasSmartAction = actions.length > 0;
+  const wNudge = !isDone ? weatherNudge(task) : null;
+  const scoreClass = risk >= 8 ? 'critical' : risk >= 5 ? 'high' : '';
+  const checkClass = isDone ? 'checked' : risk >= 6 ? 'urgent' : hasSmartAction ? 'smart-ready' : '';
+  const isFlagged = !isDone && task.needs_discussion;
 
-  var reactionBubble = '';
-  if (isDone && brittanyReaction) {
-    reactionBubble = '<div class="reaction-bubble">' + brittanyReaction + (brittanyNote ? ' ' + escHtml(brittanyNote) : '') + '</div>';
-  }
-
-  return '<div class="task-item ' + (isDone ? 'done-item' : '') + (hasFlag ? ' has-flag' : '') + '" id="task-' + task.id + '">' +
-    '<div class="task-check ' + checkClass + '" onclick="event.stopPropagation(); ' + (isDone ? 'undoTask(\'' + task.id + '\')' : 'completeTask(\'' + task.id + '\')') + '"></div>' +
-    '<div class="task-body" onclick="openDetail(\'' + task.id + '\')">' +
-    '<div class="task-title ' + (isDone ? 'done' : '') + '">' + escHtml(task.name || '') + '</div>' +
-    '<div class="task-chips">' +
-    '<span class="task-chip">' + duration.label + '</span>' +
-    '<span class="task-chip">' + capitalize((task.notes && task.notes.location) || 'anywhere') + '</span>' +
-    (risk >= 6 && !isDone ? '<span class="task-chip urgent-chip">Priority</span>' : '') +
-    (hasFlag && !isDone ? '</div><div class="task-flag-banner">💬 <strong>Brittany wants to discuss this</strong> -- tap for details' : '') +
-    (hasSmartAction && !isDone ? '<span class="task-chip smart-chip">Smart action ready</span>' : '') +
-    (wNudge ? '<span class="task-chip" style="background:var(--gold-pale);color:#5C420A;border-color:var(--gold-border);">' + wNudge + '</span>' : '') +
-    (isDone ? '<span class="task-chip">Done</span>' : '') +
-    '</div>' +
-    reactionBubble +
-    '</div>' +
-    (!isDone ? (hasFlag ? '<div style="display:flex;align-items:center;gap:4px;flex-shrink:0;margin-top:1px;"><span style="font-size:16px;animation:bell-ring 1s ease infinite;">🔔</span><div class="task-score ' + scoreClass + '">' + Math.round(risk) + '</div></div>' : '<div class="task-score ' + scoreClass + '">' + Math.round(risk) + '</div>') : '') +
-    '</div>';
+  // Safe ID for DOM (UUIDs are safe for element IDs)
+  return `
+    <div class="task-item ${isDone ? 'done-item' : ''} ${isFlagged ? 'flagged' : ''}" id="task-${task.id}">
+      <div class="task-check ${checkClass}" onclick="event.stopPropagation(); ${isDone ? `undoTask('${task.id}')` : `completeTask('${task.id}')`}"></div>
+      <div class="task-body" onclick="openDetail('${task.id}')">
+        <div class="task-title ${isDone ? 'done' : ''}">${escHtml(task.description)}</div>
+        <div class="task-chips">
+          <span class="task-chip">${duration.label}</span>
+          <span class="task-chip">${capitalize(task.location || 'anywhere')}</span>
+          ${risk >= 6 && !isDone ? `<span class="task-chip urgent-chip">⚡ Priority</span>` : ''}
+          ${hasSmartAction && !isDone ? `<span class="task-chip smart-chip">✦ Smart action ready</span>` : ''}
+          ${wNudge ? `<span class="task-chip" style="background:var(--gold-pale);color:#5C420A;border-color:var(--gold-border);">${wNudge}</span>` : ''}
+          ${isDone ? `<span class="task-chip">✓ Done</span>` : ''}
+        </div>
+        ${isFlagged ? `<div class="task-flag-banner">💬 Brittany needs an update — tap to reply</div>` : ''}
+      </div>
+      ${!isDone ? `<div class="task-score ${scoreClass}">${Math.round(risk)}</div>` : ''}
+    </div>`;
 }
 
-// =============================================
-// TASK ACTIONS
-// =============================================
-async function completeTask(id, fromFocus) {
-  var task = tasks.find(function(t) { return t.id === id; });
+// ─────────────────────────────────────────────
+// ACTIONS
+// ─────────────────────────────────────────────
+async function completeTask(id, fromFocus = false) {
+  const task = tasks.find(t => t.id === id);
   if (!task) return;
-  var el = document.getElementById('task-' + id);
+  const el = document.getElementById(`task-${id}`);
   if (el && !fromFocus) el.classList.add('completing');
-  setTimeout(async function() {
-    try {
-      await sbFetch('tasks?id=eq.' + id, {
-        method: 'PATCH',
-        prefer: 'return=minimal',
-        body: JSON.stringify({ completed: true, completed_at: new Date().toISOString() })
-      });
-      task.completed = true;
-      task.completed_at = new Date().toISOString();
-      render();
-      showToast((task.requester === 'Brittany' || task.requester === 'Wife') ? 'Done! Brittany will love this' : 'Task complete!');
-      closeDetailModal();
-    } catch(e) {
-      showToast('Could not save -- try again');
-      if (el) el.classList.remove('completing');
+
+  await new Promise(r => setTimeout(r, fromFocus ? 0 : 300));
+
+  try {
+    await db.from('tasks').update({
+      completed: true,
+      completed_at: new Date().toISOString(),
+    }).eq('id', id);
+
+    // Skylight: mark done (fire and forget)
+    if (task.skylight_item_id) {
+      syncToSkylight('complete', task.description, id, task.skylight_item_id);
     }
-  }, fromFocus ? 0 : 300);
+
+    await loadTasks();
+    render();
+    showToast(task.requester === 'Brittany' ? '✓ Done! Brittany will love this 💛' : '✓ Task complete!');
+    closeDetailModal();
+  } catch(e) {
+    if (el) el.classList.remove('completing');
+    showToast('Couldn\'t save — try again');
+  }
 }
 
 async function undoTask(id) {
   try {
-    await sbFetch('tasks?id=eq.' + id, {
-      method: 'PATCH',
-      prefer: 'return=minimal',
-      body: JSON.stringify({ completed: false, completed_at: null })
-    });
-    var task = tasks.find(function(t) { return t.id === id; });
-    if (task) { task.completed = false; task.completed_at = null; }
+    await db.from('tasks').update({ completed: false, completed_at: null }).eq('id', id);
+    await loadTasks();
     render();
     showToast('Task moved back to active');
-  } catch(e) { showToast('Could not update -- try again'); }
+  } catch(e) { showToast('Couldn\'t undo — try again'); }
 }
 
 async function snoozeTask(id) {
-  var task = tasks.find(function(t) { return t.id === id; });
-  if (!task) return;
-  var updatedNotes = Object.assign({}, task.notes || {}, { snoozed: true, snoozedAt: Date.now() });
   try {
-    await sbFetch('tasks?id=eq.' + id, {
-      method: 'PATCH',
-      prefer: 'return=minimal',
-      body: JSON.stringify({ notes: updatedNotes })
-    });
-    task.notes = updatedNotes;
+    await db.from('tasks').update({ snoozed: true, snoozed_at: new Date().toISOString() }).eq('id', id);
+    await loadTasks();
     render();
-    showToast('Snoozed -- it\'ll come back around');
-  } catch(e) { showToast('Could not snooze -- try again'); }
+    showToast('Snoozed — it\'ll come back around');
+  } catch(e) { showToast('Couldn\'t snooze'); }
 }
 
 async function deleteTask(id) {
   try {
-    await sbFetch('tasks?id=eq.' + id, {
-      method: 'DELETE',
-      prefer: 'return=minimal',
-    });
-    tasks = tasks.filter(function(t) { return t.id !== id; });
+    await db.from('tasks').delete().eq('id', id);
+    await loadTasks();
     render();
     closeDetailModal();
     showToast('Task removed');
-  } catch(e) { showToast('Could not remove -- try again'); }
+  } catch(e) { showToast('Couldn\'t delete — try again'); }
 }
 
-async function saveAdamNote(id) {
-  var input = document.getElementById('adam-note-' + id);
-  if (!input) return;
-  var task = tasks.find(function(t) { return t.id === id; });
-  if (!task) return;
-  var updatedNotes = Object.assign({}, task.notes || {}, {
-    needs_discussion: false,
-    adam_reply: input.value.trim(),
-    adam_note: input.value.trim()
-  });
+async function sendUpdate(id) {
+  const input = document.getElementById('adam-reply-input');
+  const update = input ? input.value.trim() : '';
+  if (!update) { showToast('Type your update first'); return; }
+
+  const btn = document.getElementById('send-update-btn');
+  if (btn) { btn.textContent = 'Sending...'; btn.disabled = true; }
+
   try {
-    await sbFetch('tasks?id=eq.' + id, {
-      method: 'PATCH',
-      prefer: 'return=minimal',
-      body: JSON.stringify({ notes: updatedNotes })
-    });
-    task.notes = updatedNotes;
+    await db.from('tasks').update({
+      adam_update: update,
+      adam_updated_at: new Date().toISOString(),
+      needs_discussion: false,
+    }).eq('id', id);
+
+    await loadTasks();
     render();
+    updateNotificationBadge();
     closeDetailModal();
-    showToast(input.value.trim() ? 'Note saved -- Brittany will see it' : 'Note cleared');
-  } catch(e) { showToast('Could not save -- try again'); }
+    showToast('Update sent to Brittany 💬');
+  } catch(e) {
+    if (btn) { btn.textContent = 'Send update to Brittany 💬'; btn.disabled = false; }
+    showToast('Couldn\'t send — try again');
+  }
 }
 
-// =============================================
+// ─────────────────────────────────────────────
 // ADD TASK
-// =============================================
+// ─────────────────────────────────────────────
 function openAddModal() {
   document.getElementById('add-modal').classList.add('visible');
-  setTimeout(function() { document.getElementById('task-description').focus(); }, 100);
+  setTimeout(() => document.getElementById('task-description').focus(), 100);
 }
 function closeAddModal() {
   document.getElementById('add-modal').classList.remove('visible');
   document.getElementById('task-description').value = '';
+  const btn = document.getElementById('add-submit-btn');
+  if (btn) { btn.textContent = 'Add to list'; btn.disabled = false; }
   selectedRequester = 'Brittany';
-  document.querySelectorAll('.requester-btn').forEach(function(b) {
-    b.classList.toggle('selected', b.dataset.val === 'Brittany');
-  });
+  document.querySelectorAll('.requester-btn').forEach(b => b.classList.toggle('selected', b.dataset.val === 'Brittany'));
 }
 function selectRequester(btn) {
   selectedRequester = btn.dataset.val;
-  document.querySelectorAll('.requester-btn').forEach(function(b) { b.classList.remove('selected'); });
+  document.querySelectorAll('.requester-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
 }
+
 async function submitTask() {
-  var desc = document.getElementById('task-description').value.trim();
+  const desc = document.getElementById('task-description').value.trim();
   if (!desc) { showToast('Describe the task first'); return; }
-  var btn = document.getElementById('btn-add-submit');
-  btn.disabled = true; btn.textContent = 'Adding...';
+
+  const btn = document.getElementById('add-submit-btn');
+  btn.textContent = 'Adding...';
+  btn.disabled = true;
+
   try {
-    var result = await sbFetch('tasks', {
-      method: 'POST',
-      body: JSON.stringify({
-        name: desc,
-        requester: selectedRequester,
-        priority: 'medium',
-        completed: false,
-        notes: {
-          location: document.getElementById('task-location').value,
-          mentions: parseInt(document.getElementById('task-mentions').value),
-          snoozed: false,
-        }
-      })
-    });
-    if (result && result[0]) tasks.push(result[0]);
+    const { data, error } = await db.from('tasks').insert([{
+      name: desc,
+      requester: selectedRequester,
+      location: document.getElementById('task-location').value,
+      mentions: parseInt(document.getElementById('task-mentions').value),
+    }]).select().single();
+
+    if (error) throw error;
+
+    // Skylight sync (background — doesn't block the UI)
+    syncToSkylight('add', desc, data.id, null);
+
+    await loadTasks();
     render();
     closeAddModal();
-    showToast('Added to your list');
+    showToast('Added to your list 👍');
   } catch(e) {
-    showToast('Could not add task -- try again');
-  } finally {
-    btn.disabled = false; btn.textContent = 'Add to list';
+    console.error(e);
+    showToast('Couldn\'t save — check your connection');
+    btn.textContent = 'Add to list';
+    btn.disabled = false;
   }
 }
 
-// =============================================
-// RELATIONSHIP DATES (Supabase)
-// =============================================
-async function loadRelDates() {
-  try {
-    var data = await sbFetch('rel_dates?select=*&order=date.asc');
-    relDates = data || [];
-    if (!relDates.length) {
-      var defaults = [
-        { title: 'Anniversary', emoji: '💍', date: nextOccurrence(6, 14), remind: 60 },
-        { title: 'Brittany birthday', emoji: '🎂', date: nextOccurrence(8, 3), remind: 30 },
-      ];
-      for (var d of defaults) {
-        var result = await sbFetch('rel_dates', { method: 'POST', body: JSON.stringify(d) });
-        if (result && result[0]) relDates.push(result[0]);
-      }
-    }
-    render();
-  } catch(e) { console.error('Could not load rel dates', e); relDates = []; }
+// ─────────────────────────────────────────────
+// RELATIONSHIP DATES
+// ─────────────────────────────────────────────
+function openRelModal() {
+  document.getElementById('rel-modal').classList.add('visible');
 }
-function nextOccurrence(month, day) {
-  var now = new Date();
-  var year = now.getFullYear();
-  var d = new Date(year, month - 1, day);
-  if (d <= now) d.setFullYear(year + 1);
-  return d.toISOString().split('T')[0];
-}
-function openRelModal() { document.getElementById('rel-modal').classList.add('visible'); }
 function closeRelModal() {
   document.getElementById('rel-modal').classList.remove('visible');
   document.getElementById('rel-title').value = '';
@@ -1298,149 +1382,163 @@ function closeRelModal() {
 }
 function selectRelType(btn) {
   selectedRelEmoji = btn.dataset.emoji;
-  document.querySelectorAll('.rel-type-btn').forEach(function(b) { b.classList.remove('selected'); });
+  document.querySelectorAll('.rel-type-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
 }
-async function submitRelDate() {
-  var title = document.getElementById('rel-title').value.trim();
-  var date = document.getElementById('rel-date').value;
+function submitRelDate() {
+  const title = document.getElementById('rel-title').value.trim();
+  const date = document.getElementById('rel-date').value;
   if (!title || !date) { showToast('Add a title and date'); return; }
-  try {
-    var result = await sbFetch('rel_dates', {
-      method: 'POST',
-      body: JSON.stringify({ title: title, emoji: selectedRelEmoji, date: date, remind: parseInt(document.getElementById('rel-remind').value) })
-    });
-    if (result && result[0]) relDates.push(result[0]);
-    render();
-    closeRelModal();
-    showToast('Date saved');
-  } catch(e) { showToast('Could not save date -- try again'); }
+  relDates.push({
+    id: Date.now(),
+    title,
+    emoji: selectedRelEmoji,
+    date,
+    remind: parseInt(document.getElementById('rel-remind').value),
+  });
+  saveRelDates();
+  render();
+  closeRelModal();
+  showToast('Date saved 📅');
 }
 
-// =============================================
+// ─────────────────────────────────────────────
 // DETAIL MODAL
-// =============================================
+// ─────────────────────────────────────────────
 function openDetail(id) {
-  var task = tasks.find(function(t) { return t.id === id; });
+  const task = tasks.find(t => t.id === id);
   if (!task) return;
   currentDetailId = id;
-  var risk = calcRisk(task);
-  var duration = estimateDuration(task.name);
-  var actions = smartActions(task.name);
-  var created = task.created_at ? new Date(task.created_at).getTime() : Date.now();
-  var daysOld = Math.floor((Date.now() - created) / 86400000);
-  var mentions = (task.notes && task.notes.mentions) ? parseInt(task.notes.mentions) : 1;
-  var hasFlag = task.notes && task.notes.needs_discussion;
-  var brittanyNote = task.notes && task.notes.brittany_note;
-  var adamReply = task.notes && task.notes.adam_reply;
+  const risk = calcRisk(task);
+  const duration = estimateDuration(task.description);
+  const actions = smartActions(task.description);
+  const daysOld = Math.floor((Date.now() - task.created) / 86400000);
 
-  var smartHTML = actions.map(function(a) {
-    return '<div class="detail-smart-block"><div class="detail-smart-label">Smart action</div><div class="detail-smart-text">' + a.text + '</div><button class="detail-smart-action" onclick="showToast(\'Opening...\')">' + a.cta + '</button></div>';
-  }).join('');
+  // Discussion block if flagged
+  const discussionHTML = task.needs_discussion ? `
+    <div class="discussion-block">
+      <div class="discussion-block-title">💬 Brittany needs to hear from you</div>
+      <div class="discussion-block-sub">She flagged this task for an update. Type a quick message below and hit send — she'll see it on her app.</div>
+      <textarea class="form-textarea" id="adam-reply-input" placeholder="e.g. Got the parts ordered, should be done by Friday..." style="min-height:80px;"></textarea>
+      <button id="send-update-btn" class="btn-send-update" onclick="sendUpdate('${id}')">Send update to Brittany 💬</button>
+    </div>` : '';
 
-  // Flag block - shown when Brittany flags for discussion
-  var flagHTML = '';
-  if (hasFlag && !task.completed) {
-    flagHTML = '<div class="detail-flag-block">' +
-      '<div class="detail-flag-label">💬 Brittany wants to discuss this</div>' +
-      (brittanyNote ? '<div class="detail-flag-text">' + escHtml(brittanyNote) + '</div>' : '<div class="detail-flag-text">She flagged this task for discussion.</div>') +
-      '</div>';
-  }
+  // Smart actions
+  let smartHTML = actions.map(a => `
+    <div class="detail-smart-block">
+      <div class="detail-smart-label">✦ Smart action</div>
+      <div class="detail-smart-text">${a.text}</div>
+      <button class="detail-smart-action" onclick="showToast('Opening...')">${a.cta}</button>
+    </div>`).join('');
 
-  // Always show notes/update field on active tasks
-  var existingNote = task.notes && task.notes.adam_note ? task.notes.adam_note : '';
-  var notesHTML = !task.completed ? '<div style="margin-top:14px;">' +
-      '<div style="font-size:11px;font-weight:500;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">Your notes / update</div>' +
-      '<textarea class="detail-reply-input" id="adam-note-' + id + '" placeholder="Add a note, update, or reply for Brittany...">' + escHtml(existingNote) + '</textarea>' +
-      '<button class="btn-reply" onclick="saveAdamNote(\'' + id + '\')">Save note</button>' +
-      (adamReply ? '<div style="font-size:11px;color:var(--text-tertiary);margin-top:6px;">Last saved: ' + escHtml(adamReply) + '</div>' : '') +
-      '</div>' : '';
+  // Brittany's reaction if done
+  const reactionHTML = task.brittany_reaction ? `
+    <div style="background:var(--gold-pale);border:0.5px solid var(--gold-border);border-radius:var(--radius-sm);padding:10px 12px;margin-top:8px;">
+      <div style="font-size:10px;font-weight:500;color:#8A6015;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">Brittany's reaction</div>
+      <div style="font-size:22px;margin-bottom:4px;">${task.brittany_reaction}</div>
+      ${task.brittany_note ? `<div style="font-size:12px;color:#5C420A;line-height:1.4;">"${escHtml(task.brittany_note)}"</div>` : ''}
+    </div>` : '';
 
-  var reactionHTML = '';
-  if (task.completed && task.brittany_reaction) {
-    reactionHTML = '<div style="background:var(--rose-light);border:0.5px solid var(--rose-border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:12px;">' +
-      '<div style="font-size:10px;font-weight:500;color:var(--rose);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">Brittany\'s reaction</div>' +
-      '<div style="font-size:18px;">' + task.brittany_reaction + (task.brittany_note ? ' <span style="font-size:13px;color:#6B2535;">' + escHtml(task.brittany_note) + '</span>' : '') + '</div>' +
-      '</div>';
-  }
-
-  var actionsHTML = !task.completed
-    ? '<div class="detail-actions"><button class="btn-detail-done" onclick="completeTask(\'' + id + '\')">Mark it done ✓</button><button class="btn-detail-delete" onclick="deleteTask(\'' + id + '\')">Remove</button></div>'
-    : '<div style="margin-top:16px;display:flex;gap:8px;"><button class="btn-detail-delete" style="flex:1;color:var(--text-secondary);border-color:var(--border-mid);" onclick="undoTask(\'' + id + '\');closeDetailModal()">Undo completion</button><button class="btn-detail-delete" onclick="deleteTask(\'' + id + '\')">Remove</button></div>';
-
-  document.getElementById('detail-content').innerHTML =
-    '<div style="font-family:\'Fraunces\',serif;font-size:19px;font-weight:500;line-height:1.3;margin-bottom:12px;">' + escHtml(task.name || '') + '</div>' +
-    '<div class="detail-chips">' +
-    '<span class="detail-chip">From: ' + (task.requester === 'Brittany' ? 'Brittany' : task.requester) + '</span>' +
-    '<span class="detail-chip">' + duration.label + '</span>' +
-    '<span class="detail-chip">' + capitalize((task.notes && task.notes.location) || 'anywhere') + '</span>' +
-    '<span class="detail-chip">Mentioned ' + mentions + 'x</span>' +
-    '<span class="detail-chip">' + (daysOld === 0 ? 'Added today' : daysOld + ' day' + (daysOld !== 1 ? 's' : '') + ' on list') + '</span>' +
-    '<span class="detail-chip" style="background:var(--gold-pale);color:#5C420A;border-color:var(--gold-border);">Risk: ' + Math.round(risk) + '/10</span>' +
-    '</div>' +
-    flagHTML +
-    reactionHTML +
-    smartHTML +
-    notesHTML +
-    actionsHTML;
+  document.getElementById('detail-content').innerHTML = `
+    ${discussionHTML}
+    <div style="font-family:'Fraunces',serif;font-size:19px;font-weight:500;line-height:1.3;margin-bottom:12px;">${escHtml(task.description)}</div>
+    <div class="detail-chips">
+      <span class="detail-chip">From: ${task.requester === 'Brittany' ? '💍 Brittany' : task.requester}</span>
+      <span class="detail-chip">${duration.label}</span>
+      <span class="detail-chip">${capitalize(task.location)}</span>
+      <span class="detail-chip">Mentioned ${task.mentions}×</span>
+      <span class="detail-chip">${daysOld === 0 ? 'Added today' : `${daysOld} day${daysOld !== 1 ? 's' : ''} on list`}</span>
+      <span class="detail-chip" style="background:var(--gold-pale);color:#5C420A;border-color:var(--gold-border);">Risk: ${Math.round(risk)}/10</span>
+    </div>
+    ${smartHTML}
+    ${reactionHTML}
+    ${!task.done ? `
+    <div class="detail-actions">
+      <button class="btn-detail-done" onclick="completeTask('${id}')">Mark it done ✓</button>
+      <button class="btn-detail-delete" onclick="deleteTask('${id}')">Remove</button>
+    </div>` : `
+    <div style="margin-top:16px;display:flex;gap:8px;">
+      <button class="btn-detail-delete" style="flex:1;color:var(--text-secondary);border-color:var(--border-mid);" onclick="undoTask('${id}');closeDetailModal()">Undo completion</button>
+      <button class="btn-detail-delete" onclick="deleteTask('${id}')">Remove</button>
+    </div>`}`;
 
   document.getElementById('detail-modal').classList.add('visible');
+
+  // Auto-focus reply input if flagged
+  if (task.needs_discussion) {
+    setTimeout(() => {
+      const input = document.getElementById('adam-reply-input');
+      if (input) input.focus();
+    }, 200);
+  }
 }
+
 function closeDetailModal() {
   document.getElementById('detail-modal').classList.remove('visible');
 }
 
-// =============================================
+// ─────────────────────────────────────────────
 // COMPLETED TOGGLE
-// =============================================
+// ─────────────────────────────────────────────
 function toggleCompleted(el) {
-  var arrow = el.querySelector('.toggle-arrow');
-  var list = el.nextElementSibling;
-  var open = list.classList.toggle('visible');
+  const arrow = el.querySelector('.toggle-arrow');
+  const list = el.nextElementSibling;
+  const open = list.classList.toggle('visible');
   arrow.classList.toggle('open', open);
   localStorage.setItem('dtm_completed_open', open);
 }
 
-// =============================================
-// UTILS
-// =============================================
+// ─────────────────────────────────────────────
+// UTILITIES
+// ─────────────────────────────────────────────
 function showToast(msg) {
-  var t = document.getElementById('toast');
+  const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(function() { t.classList.remove('show'); }, 2800);
+  setTimeout(() => t.classList.remove('show'), 2800);
 }
 function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+function capitalize(s) {
+  return s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
+}
 function formatDate(dateStr) {
-  var d = new Date(dateStr + 'T12:00:00');
+  const d = new Date(dateStr + 'T12:00:00');
   return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
 }
 
-document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
-  overlay.addEventListener('click', function(e) {
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
     if (e.target === overlay) overlay.classList.remove('visible');
   });
 });
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') document.querySelectorAll('.modal-overlay').forEach(function(m) { m.classList.remove('visible'); });
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('visible'));
   if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openAddModal(); }
 });
 
-// =============================================
+// ─────────────────────────────────────────────
 // BOOT
-// =============================================
-updateContext();
-loadWeather();
-loadTasks();
-loadRelDates();
+// ─────────────────────────────────────────────
+async function init() {
+  loadRelDates();
+  updateContext();
+  loadWeather(); // async, runs in background
 
-// Auto-refresh tasks every 30 seconds to pick up Brittany's changes
-setInterval(function() {
-  loadTasks();
-}, 30000);
+  await loadTasks();
+  render();
+
+  // Poll every 30s for Brittany's flags and any updates
+  setInterval(async () => {
+    await loadTasks();
+    render();
+  }, 30000);
+}
+
+init();
 </script>
 </body>
 </html>
